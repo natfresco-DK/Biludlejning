@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ek.dk</groupId>
-    <artifactId>Oenskeskyen</artifactId>
+    <artifactId>Biludlejning</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Oenskeskyen</name>
-    <description>Oenskeskyen</description>
+    <name>Biludlejning</name>
+    <description>Biludlejning</description>
     <url/>
     <licenses>
         <license/>
