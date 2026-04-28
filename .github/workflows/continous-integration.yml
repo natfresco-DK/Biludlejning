@@ -32,16 +32,7 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
-
+      - name: Run the Maven verify phase
+        run: mvn --batch-mode --update-snapshots verify
       - name: Build with Maven
-        env:
-          DB_URL: ${{secrets.PROD_DATABASE_URL}}
-          DB_USER: ${{secrets.PROD_DATABASE_USERNAME}}
-          DB_PASSWORD: ${{secrets.PROD_DATABASE_PASSWORD}}
-        run: mvn clean install
-
-      - name: Upload Maven artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: maven-build
-          path: target/*.jar
+        run: mvn -B package --file pom.xml
