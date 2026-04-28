@@ -1,6 +1,7 @@
 package ek.dk.biludlejning.repository;
 
 import ek.dk.biludlejning.model.User;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.sql.ResultSet;
@@ -59,7 +60,7 @@ public class UserRepository implements IUserRepository {
                     this::mapUser,
                     data
             ));
-        } catch (Exception e) {
+        } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
     }
