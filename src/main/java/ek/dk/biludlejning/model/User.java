@@ -9,10 +9,12 @@ public class User {
         protected String email;
         protected String phone;
         protected String role;
+        protected boolean active;
 
-        public User(){}
 
-        public User(int id, String firstname, String lastname, String username, String password, String email, String phone, String role) {
+    public User(){}
+
+        public User(int id, String firstname, String lastname, String username, String password, String email, String phone, String role,  boolean active) {
             this.id = id;
             this.firstname = firstname;
             this.lastname = lastname;
@@ -78,4 +80,12 @@ public class User {
         public void setPhone(String phone) {
             this.phone = phone;
     }
+
+        public boolean isActive() {
+            return active;
+        }
+
+        public void setActive(boolean active) {
+            this.active = active;
+        }
 }

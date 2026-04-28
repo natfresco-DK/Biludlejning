@@ -11,11 +11,13 @@ public class Customer {
     protected String streetAddress;
     protected int zipCode;
     protected String city;
+    protected boolean active;
+
 
 
     public Customer(){}
 
-    public Customer(String customerId, String firstName, String lastName, String email, String phone, int licenseNo, String streetAddress, int zipCode, String city) {
+    public Customer(String customerId, String firstName, String lastName, String email, String phone, int licenseNo, String streetAddress, int zipCode, String city, boolean active) {
         this.customerId = customerId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -97,5 +99,13 @@ public class Customer {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

@@ -9,10 +9,11 @@ public class Car {
     protected String location;
     protected int odometer;
     protected String status;
+    protected boolean active;
 
     public Car(){}
 
-    public Car(int carId, String regNr, String vin, String brand, String model, String location, int odometer, String status) {
+    public Car(int carId, String regNr, String vin, String brand, String model, String location, int odometer, String status,  boolean active) {
         this.carId = carId;
         this.regNr = regNr;
         this.vin = vin;
@@ -85,5 +86,13 @@ public class Car {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
