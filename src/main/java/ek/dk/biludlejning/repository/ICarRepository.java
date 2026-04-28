@@ -16,6 +16,6 @@ public interface ICarRepository {
     void update(Car car);
 
     //delete car by ID in table
-    void deleteById(int id);
+    int deleteById(int id);
 
 }

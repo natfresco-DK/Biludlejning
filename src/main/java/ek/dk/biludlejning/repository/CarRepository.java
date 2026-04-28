@@ -101,8 +101,8 @@ public class CarRepository implements ICarRepository {
     }
 
     @Override
-    public void deleteById(int id) {
+    public int deleteById(int id) {
         String sql = "DELETE FROM cars WHERE car_id = ?";
-        jdbctemplate.update(sql, id);
+        return jdbctemplate.update(sql, id);
     }
 }
