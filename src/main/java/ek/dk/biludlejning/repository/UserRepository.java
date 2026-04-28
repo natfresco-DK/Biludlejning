@@ -48,7 +48,7 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public Optional<User> findByXY(String attribute, Object data){
-        Set<String> allowedAttributes = Set.of("first_name", "last_name", "username", "email", "phone", "role", "active", "id");
+        Set<String> allowedAttributes = Set.of("first_name", "last_name", "username", "email", "phone", "role", "active", "user_id");
         if (!allowedAttributes.contains(attribute)) {
             throw new IllegalArgumentException("Invalid attribute: " + attribute);
         }
@@ -83,7 +83,7 @@ public class UserRepository implements IUserRepository {
     @Override
     public void deleteUser(int id) {
         try {
-            jdbcTemplate.update("DELETE FROM rentals WHERE user_id = ?", id);
+            jdbcTemplate.update("DELETE FROM users WHERE user_id = ?", id);
         } catch (Exception e) {
             System.out.println("Error deleting user_id " + id + ": " + e.getMessage());
         }
