@@ -82,11 +82,12 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public void deleteUser(int id) {
+    public int deleteUser(int id) {
         try {
             jdbcTemplate.update("DELETE FROM users WHERE user_id = ?", id);
         } catch (Exception e) {
             System.out.println("Error deleting user_id " + id + ": " + e.getMessage());
         }
+        return id;
     }
 }
