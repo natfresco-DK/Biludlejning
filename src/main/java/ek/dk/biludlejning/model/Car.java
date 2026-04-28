@@ -8,12 +8,13 @@ public class Car {
     protected String model;
     protected String location;
     protected int odometer;
+    protected String carDescription;
     protected String status;
-    protected boolean active;
+    protected boolean active = true;
 
     public Car(){}
 
-    public Car(int carId, String regNr, String vin, String brand, String model, String location, int odometer, String status,  boolean active) {
+    public Car(int carId, String regNr, String vin, String brand, String model, String location, int odometer,String carDescription, String status) {
         this.carId = carId;
         this.regNr = regNr;
         this.vin = vin;
@@ -21,7 +22,21 @@ public class Car {
         this.model = model;
         this.location = location;
         this.odometer = odometer;
+        this.carDescription = carDescription;
         this.status = status;
+    }
+
+    public Car(int carId, String regNr, String vin, String brand, String model, String location, int odometer,String carDescription, String status,  boolean active) {
+        this.carId = carId;
+        this.regNr = regNr;
+        this.vin = vin;
+        this.brand = brand;
+        this.model = model;
+        this.location = location;
+        this.odometer = odometer;
+        this.carDescription = carDescription;
+        this.status = status;
+        this.active = active;
     }
 
     public String getRegNr() {
@@ -78,6 +93,14 @@ public class Car {
 
     public void setOdometer(int odometer) {
         this.odometer = odometer;
+    }
+
+    public String getCarDescription() {
+        return carDescription;
+    }
+
+    public void setCarDescription(String carDescription) {
+        this.carDescription = carDescription;
     }
 
     public String getStatus() {
