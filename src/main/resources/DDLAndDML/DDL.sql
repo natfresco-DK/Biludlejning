@@ -25,7 +25,8 @@ CREATE TABLE IF NOT EXISTS customers
     licence_no     VARCHAR(50),
     street_address VARCHAR(150),
     zip_code       INT,
-    city           VARCHAR(100)
+    city           VARCHAR(100),
+    active         BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE IF NOT EXISTS cars
