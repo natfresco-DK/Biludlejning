@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS rental_agreements
     downpayment     DECIMAL(10, 2) NOT NULL,
     monthly_payment DECIMAL(10, 2) NOT NULL,
     max_km          INT            NOT NULL,
-    created_by      INT,
+    created_by      INT            NOT NULL,
     car_id          INT            NOT NULL,
     customer_id     INT            NOT NULL,
 
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS damage_reports
     odometer         INT  NOT NULL,
 
     agreement_id     INT  NOT NULL,
-    registered_by    INT,
+    registered_by    INT  NOT NULL,
 
     CONSTRAINT fk_report_agreement
         FOREIGN KEY (agreement_id)
