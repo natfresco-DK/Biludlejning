@@ -13,7 +13,7 @@ public interface IRentalAgreementRepository {
 
     RentalAgreement mapRentalAgreement(ResultSet rs, int rowNum) throws SQLException;
 
-    Optional<User> findByXY(String attribute, Object data) throws Exception;
+    Optional<RentalAgreement> findByXY(String attribute, Object data) throws Exception;
 
 
     void updateRentalAgreement(RentalAgreement rentalAgreement);
