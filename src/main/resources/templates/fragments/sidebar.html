@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<nav th:fragment="sidebar" class="sidebar">
+    <div class="sidebar-header">
+        <img th:src="@{/images/logo.png}" alt="logo" />
+        <div>
+            <strong>Bilabonnement.dk</strong><br>
+        </div>
+    </div>
+
+    <a th:href="@{/}" class="nav-item"
+       th:classappend="${activePage == '/'} ? ' active'">
+        <i class="fa-solid fa-house"></i>
+        Dashboard
+    </a>
+
+    <a th:href="@{lease-agreements}" class="nav-item"
+       th:classappend="${activePage == 'lease-agreements'} ? ' active'">
+    <i class="fa-regular fa-calendar-check"></i>
+        Lejeaftaler
+    </a>
+
+    <a th:href="@{/damage-reports}" class="nav-item"
+       th:classappend="${activePage == 'damage-reports'} ? ' active'">
+    <i class="fa-solid fa-triangle-exclamation"></i>
+        Skader
+    </a>
+
+    <a th:href="@{/cars}" class="nav-item"
+       th:classappend="${activePage == 'cars'} ? ' active'">
+    <i class="fa-solid fa-car"></i>
+        Biler
+    </a>
+
+    <a th:href="@{/reports}" class="nav-item"
+       th:classappend="${activePage == 'reports'} ? ' active'">
+    <i class="fa-solid fa-chart-simple"></i>
+        Rapporter
+    </a>
+
+    <a th:href="@{/users}" class="nav-item"
+       th:classappend="${activePage == 'users'} ? ' active'">
+    <i class="fa-solid fa-users"></i>
+        Brugere
+    </a>
+</nav>
+
+</body>
+</html>
