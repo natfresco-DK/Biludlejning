@@ -10,19 +10,31 @@ public class DamageReport {
     protected LocalDate reportDate;
     protected double cost;
     protected int odometer;
-    protected RentalAgreement rentalAgreement;
+    protected int rentalAgreementId;
+    protected int registeredBy;
     protected List<DamageItem> damages;
 
     public DamageReport() {}
 
-    public DamageReport(int damgeReportId, List<DamageItem> damages, RentalAgreement rentalAgreement, int odometer, double cost, LocalDate reportDate, LocalDate returnDate) {
-        this.damgeReportId = damgeReportId;
+    public DamageReport(LocalDate reportDate, LocalDate returnDate, double cost, int odometer, int rentalAgreementId, int registeredBy, List<DamageItem> damages) {
         this.damages = damages;
-        this.rentalAgreement = rentalAgreement;
+        this.rentalAgreementId = rentalAgreementId;
         this.odometer = odometer;
         this.cost = cost;
         this.reportDate = reportDate;
         this.returnDate = returnDate;
+        this.registeredBy = registeredBy;
+    }
+
+    public DamageReport(int damgeReportId, LocalDate reportDate, LocalDate returnDate, double cost, int odometer, int rentalAgreementId, int registeredBy, List<DamageItem> damages) {
+        this.damgeReportId = damgeReportId;
+        this.damages = damages;
+        this.rentalAgreementId = rentalAgreementId;
+        this.odometer = odometer;
+        this.cost = cost;
+        this.reportDate = reportDate;
+        this.returnDate = returnDate;
+        this.registeredBy = registeredBy;
     }
 
     public int getDamgeReportId() {
@@ -41,12 +53,12 @@ public class DamageReport {
         this.damages = damages;
     }
 
-    public RentalAgreement getRentalAgreement() {
-        return rentalAgreement;
+    public int getRentalAgreementId() {
+        return rentalAgreementId;
     }
 
-    public void setRentalAgreement(RentalAgreement rentalAgreement) {
-        this.rentalAgreement = rentalAgreement;
+    public void setRentalAgreementId(int rentalAgreementId) {
+        this.rentalAgreementId = rentalAgreementId;
     }
 
     public int getOdometer() {
@@ -79,5 +91,13 @@ public class DamageReport {
 
     public void setReturnDate(LocalDate returnDate) {
         this.returnDate = returnDate;
+    }
+
+    public int getRegisteredBy() {
+        return registeredBy;
+    }
+
+    public void setRegisteredBy(int registeredBy) {
+        this.registeredBy = registeredBy;
     }
 }
