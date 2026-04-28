@@ -2,38 +2,51 @@ package ek.dk.biludlejning.model;
 
 public class Customer {
 
-    protected String customerId;
+    protected int customerId;
     protected String firstName;
     protected String lastName;
     protected String email;
     protected String phone;
-    protected int licenseNo;
+    protected String licenceNo;
     protected String streetAddress;
     protected int zipCode;
     protected String city;
-    protected boolean active;
+    protected boolean active = true;
 
 
 
     public Customer(){}
 
-    public Customer(String customerId, String firstName, String lastName, String email, String phone, int licenseNo, String streetAddress, int zipCode, String city, boolean active) {
+    public Customer(int customerId, String firstName, String lastName, String email, String phone, String licenceNo, String streetAddress, int zipCode, String city) {
         this.customerId = customerId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
-        this.licenseNo = licenseNo;
+        this.licenceNo = licenceNo;
         this.streetAddress = streetAddress;
         this.zipCode = zipCode;
         this.city = city;
     }
 
-    public String getCustomerId() {
+    public Customer(int customerId, String firstName, String lastName, String email, String phone, String licenceNo, String streetAddress, int zipCode, String city, boolean active) {
+        this.customerId = customerId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+        this.licenceNo = licenceNo;
+        this.streetAddress = streetAddress;
+        this.zipCode = zipCode;
+        this.city = city;
+        this.active = active;
+    }
+
+    public int getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(String customerId) {
+    public void setCustomerId(int customerId) {
         this.customerId = customerId;
     }
 
@@ -69,12 +82,12 @@ public class Customer {
         this.phone = phone;
     }
 
-    public int getLicenseNo() {
-        return licenseNo;
+    public String getLicenceNo() {
+        return licenceNo;
     }
 
-    public void setLicenseNo(int licenseNo) {
-        this.licenseNo = licenseNo;
+    public void setLicenceNo(String licenceNo) {
+        this.licenceNo = licenceNo;
     }
 
     public String getStreetAddress() {

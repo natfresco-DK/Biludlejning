@@ -1,6 +1,7 @@
 package ek.dk.biludlejning.repository;
 
 import ek.dk.biludlejning.model.User;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.ResultSet;
 import java.util.Optional;
