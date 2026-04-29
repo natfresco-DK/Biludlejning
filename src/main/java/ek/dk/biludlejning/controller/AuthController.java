@@ -4,6 +4,7 @@ import ek.dk.biludlejning.model.User;
 import ek.dk.biludlejning.service.AuthService;
 import ek.dk.biludlejning.service.AuthenticationException;
 import ek.dk.biludlejning.service.CarService;
+import ek.dk.biludlejning.service.RentalAgreementService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -18,10 +19,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AuthController {
     private final AuthService authService;
     private final CarService carService;
+    private final RentalAgreementService rentalAgreementService;
 
-    public AuthController(AuthService authService, CarService carService) {
+    public AuthController(AuthService authService, CarService carService, RentalAgreementService rentalAgreementService) {
         this.authService = authService;
         this.carService = carService;
+        this.rentalAgreementService = rentalAgreementService;
     }
 
 
@@ -74,6 +77,14 @@ public class AuthController {
 
         int rentedCarsCount = carService.getAllRentedCarsCount();
         model.addAttribute("rentedCarsCount", rentedCarsCount);
+
+
+        double totalActiveRevenue = rentalAgreementService.getTotalActiveRevenue();
+        model.addAttribute("totalActiveRevenue", totalActiveRevenue);
+
+
+
+
         return "dashboard";
     }
 

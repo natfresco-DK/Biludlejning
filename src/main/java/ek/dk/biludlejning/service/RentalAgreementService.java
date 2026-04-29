@@ -2,6 +2,7 @@ package ek.dk.biludlejning.service;
 
 import ek.dk.biludlejning.model.RentalAgreement;
 import ek.dk.biludlejning.repository.IRentalAgreementRepository;
+import ek.dk.biludlejning.repository.RentalAgreementRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,7 @@ public class RentalAgreementService {
 
     private final IRentalAgreementRepository rentalAgreementRepository;
     private final CarService carService;
+
 
     public RentalAgreementService(IRentalAgreementRepository rentalAgreementRepository, CarService carService) {
         this.rentalAgreementRepository = rentalAgreementRepository;
@@ -52,4 +54,10 @@ public class RentalAgreementService {
         }
         return Optional.empty();
     }
+
+    public Double getTotalActiveRevenue() {
+        return rentalAgreementRepository.getTotalActiveRevenue();
+    }
+
+
 }

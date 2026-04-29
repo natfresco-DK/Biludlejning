@@ -17,4 +17,6 @@ public interface IRentalAgreementRepository {
     void updateRentalAgreement(RentalAgreement rentalAgreement);
     int deleteRentalAgreementById(int id);
 
+    double getTotalActiveRevenue();
+
 }
