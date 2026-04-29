@@ -28,24 +28,12 @@ public class RentalAgreementRepository {
         rentalAgreement.setAgreementId(rs.getInt("agreement_id"));
         rentalAgreement.setStartDate(rs.getDate("start_date").toLocalDate());
         rentalAgreement.setEndDate(rs.getDate("end_date").toLocalDate());
-
-        rentalAgreement.setPrice(rs.getInt("downpayment")); //Er price og downpayment det samme?
-        // Der er ingen monthly_payment i rentalAgreement. Tilføjes?
-
+        rentalAgreement.setDownpayment(rs.getInt("downpayment"));
+        rentalAgreement.setMonthly_payment(rs.getInt("monthly_payment"));
         rentalAgreement.setMaxKm(rs.getInt("max_km"));
-
-        User createdBy = new User();
-        createdBy.setId(rs.getInt("created_by"));
-        rentalAgreement.setCreatedBy(createdBy);
-
-        Car car = new Car();
-        car.setCarId(rs.getInt("car_id"));
-        rentalAgreement.setCar(car);
-
-        Customer customer = new Customer();
-        customer.setCustomerId(String.valueOf(rs.getInt("customer_id")));
-        rentalAgreement.setCustomer(customer);
-
+        rentalAgreement.setCreatedBy(rs.getInt("created_by"));
+        rentalAgreement.setCar(rs.getInt("car_id"));
+        rentalAgreement.setCustomer(rs.getInt("customer_id"));
         return rentalAgreement;
     }
 
@@ -56,12 +44,12 @@ public class RentalAgreementRepository {
                 rentalAgreement.getAgreementId(),
                 rentalAgreement.getStartDate(),
                 rentalAgreement.getEndDate(),
-                rentalAgreement.getPrice(), // Var dette downpayment?
-                //rentalAgreement.getMonthlyPayment(), // Ikke lavet endnu - men hvis vi skulle have det.
+                rentalAgreement.getDownpayment(),
+                rentalAgreement.getMonthly_payment(),
                 rentalAgreement.getMaxKm(),
-                rentalAgreement.getCreatedBy().getId(),
-                rentalAgreement.getCar().getCarId(),
-                Integer.parseInt(rentalAgreement.getCustomer().getCustomerId())
+                rentalAgreement.getCreatedBy(),
+                rentalAgreement.getCar(),
+                rentalAgreement.getCustomer()
         );
     }
 
@@ -88,8 +76,8 @@ public class RentalAgreementRepository {
                 "UPDATE rental_agreements SET start_date = ?, end_date = ?, downpayment = ?, monthly_payment = ?, max_km = ?, created_by = ?, car_id = ?, customer_id = ? WHERE agreement_id = ?",
                 rentalAgreement.getStartDate(),
                 rentalAgreement.getEndDate(),
-                rentalAgreement.getPrice(),
-                //Monthly payment
+                rentalAgreement.getDownpayment(),
+                rentalAgreement.getMonthly_payment(),
                 rentalAgreement.getMaxKm(),
                 rentalAgreement.getCreatedBy(),
                 rentalAgreement.getCar(),
@@ -98,11 +86,7 @@ public class RentalAgreementRepository {
     }
 
     public int deleteRentalAgreementById(int id) {
-        return jdbcTemplate.update("DELETE FROM rental_agreements WHERE user_id = ?", id);
+        return jdbcTemplate.update("DELETE FROM rental_agreements WHERE created_by = ?", id);
     }
-
-
-
-
 
 }
