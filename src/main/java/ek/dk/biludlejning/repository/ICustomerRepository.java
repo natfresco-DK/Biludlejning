@@ -2,8 +2,8 @@ package ek.dk.biludlejning.repository;
 
 import ek.dk.biludlejning.model.Customer;
 
+import java.util.List;
 import java.util.Optional;
-
 public interface ICustomerRepository {
     //create a car in the table
     void createCustomer(Customer customer);
@@ -13,6 +13,8 @@ public interface ICustomerRepository {
 
     //update existing car in table
     void update(Customer customer);
+
+    List<Customer> findAllActive();
 
     //delete customer by ID in table
     int deleteById(int id);

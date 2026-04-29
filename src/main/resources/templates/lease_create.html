@@ -1,15 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Opret lejeaftale</title>
     <link rel="stylesheet" th:href="@{/style.css}">
-
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
 </head>
 <body>
+
+<section class="layout">
+    <div th:replace="fragments/sidebar :: sidebar"></div>
+
+    <main class="content">
+        <h1>Opret lejeaftale</h1>
+
+        <p th:if="${successMessage}" th:text="${successMessage}" class="success-message"></p>
+        <p th:if="${errorMessage}" th:text="${errorMessage}" class="error-message"></p>
+
+        <form th:action="@{/lease-create}" th:object="${rentalAgreement}" method="post">
+            <div>
+                <label for="customer">Kunde:</label>
+                <select id="customer" th:field="*{customer}" required>
+                    <option value="0" disabled selected>-- Vælg kunde --</option>
+                    <option th:each="customer : ${customers}"
+                            th:value="${customer.customerId}"
+                            th:text="${customer.firstName + ' ' + customer.lastName}">
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label for="car">Bil:</label>
+                <select id="car" th:field="*{car}" required>
+                    <option value="0" disabled selected>-- Vælg bil --</option>
+                    <option th:each="car : ${cars}"
+                            th:value="${car.carId}"
+                            th:text="${car.brand + ' ' + car.model + ' (' + car.regNr + ')'}">
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label for="startDate">Startdato:</label>
+                <input type="date" id="startDate" th:field="*{startDate}" required>
+            </div>
+
+            <div>
+                <label for="endDate">Slutdato:</label>
+                <input type="date" id="endDate" th:field="*{endDate}" required>
+            </div>
+
+            <div>
+                <label for="downpayment">Udbetaling:</label>
+                <input type="number" id="downpayment" th:field="*{downpayment}" min="0" step="1" required>
+            </div>
+
+            <div>
+                <label for="monthly_payment">Månedlig betaling:</label>
+                <input type="number" id="monthly_payment" th:field="*{monthly_payment}" min="0" step="1" required>
+            </div>
+
+            <div>
+                <label for="maxKm">Maks km:</label>
+                <input type="number" id="maxKm" th:field="*{maxKm}" min="0" step="1" required>
+            </div>
+
+            <button type="submit">Opret lejeaftale</button>
+        </form>
+    </main>
+</section>
 
 </body>
 </html>

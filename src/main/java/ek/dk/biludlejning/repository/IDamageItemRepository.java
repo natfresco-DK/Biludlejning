@@ -5,7 +5,6 @@ package ek.dk.biludlejning.repository;
 import ek.dk.biludlejning.model.DamageItem;
 
 import java.util.Optional;
-
 public interface IDamageItemRepository {
     //create a car in the table
     void createCar(DamageItem damageItem);

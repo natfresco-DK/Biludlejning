@@ -1,12 +1,10 @@
 package ek.dk.biludlejning.repository;
 
 import ek.dk.biludlejning.model.RentalAgreement;
-import ek.dk.biludlejning.model.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
-
 public interface IRentalAgreementRepository {
 
     void createRentalAgreement(RentalAgreement rentalAgreement);

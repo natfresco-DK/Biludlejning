@@ -13,6 +13,7 @@ public class RentalAgreement {
     protected int createdBy;
     protected int car;
     protected int customer;
+    protected Boolean active = true;
 
     public RentalAgreement() {}
 
@@ -26,6 +27,19 @@ public class RentalAgreement {
         this.car = car;
         this.customer = customer;
         this.monthly_payment = monthly_payment;
+    }
+
+    public RentalAgreement(int agreementId, LocalDate startDate, LocalDate endDate, int downpayment, int maxKm, int createdBy, int car, int customer, int monthly_payment, Boolean active) {
+        this.agreementId = agreementId;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.downpayment = downpayment;
+        this.maxKm = maxKm;
+        this.createdBy = createdBy;
+        this.car = car;
+        this.customer = customer;
+        this.monthly_payment = monthly_payment;
+        this.active = active;
     }
 
     public int getAgreementId() {
@@ -99,5 +113,13 @@ public class RentalAgreement {
 
     public void setCustomer(int customer) {
         this.customer = customer;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Repository
-public class RentalAgreementRepository {
+public class RentalAgreementRepository implements IRentalAgreementRepository{
 
 
     private final JdbcTemplate jdbcTemplate;
@@ -34,14 +34,14 @@ public class RentalAgreementRepository {
         rentalAgreement.setCreatedBy(rs.getInt("created_by"));
         rentalAgreement.setCar(rs.getInt("car_id"));
         rentalAgreement.setCustomer(rs.getInt("customer_id"));
+        rentalAgreement.setActive(rs.getBoolean("active"));
         return rentalAgreement;
     }
 
 
     public void createRentalAgreement(RentalAgreement rentalAgreement) {
             jdbcTemplate.update(
-                "INSERT INTO rental_agreements (agreement_id, start_date, end_date, downpayment, monthly_payment, max_km, created_by, car_id, customer_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                rentalAgreement.getAgreementId(),
+                "INSERT INTO rental_agreements (start_date, end_date, downpayment, monthly_payment, max_km, created_by, car_id, customer_id, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 rentalAgreement.getStartDate(),
                 rentalAgreement.getEndDate(),
                 rentalAgreement.getDownpayment(),
@@ -49,13 +49,14 @@ public class RentalAgreementRepository {
                 rentalAgreement.getMaxKm(),
                 rentalAgreement.getCreatedBy(),
                 rentalAgreement.getCar(),
-                rentalAgreement.getCustomer()
+                rentalAgreement.getCustomer(),
+                    rentalAgreement.getActive()
         );
     }
 
 
     public Optional<RentalAgreement> findByXY(String attribute, Object data){
-        Set<String> allowedAttributes = Set.of("agreement_id", "start_date", "end_date", "downpayment", "monthly_payment", "max_km", "created_by", "car_id", "customer_id");
+        Set<String> allowedAttributes = Set.of("agreement_id", "start_date", "end_date", "downpayment", "monthly_payment", "max_km", "created_by", "car_id", "customer_id","active");
         if (!allowedAttributes.contains(attribute)) {
             throw new IllegalArgumentException("Invalid attribute: " + attribute);
         }
@@ -73,7 +74,17 @@ public class RentalAgreementRepository {
 
     public void updateRentalAgreement(RentalAgreement rentalAgreement) {
         jdbcTemplate.update(
-                "UPDATE rental_agreements SET start_date = ?, end_date = ?, downpayment = ?, monthly_payment = ?, max_km = ?, created_by = ?, car_id = ?, customer_id = ? WHERE agreement_id = ?",
+                "UPDATE rental_agreements SET " +
+                        "start_date = ?, " +
+                        "end_date = ?, " +
+                        "downpayment = ?, " +
+                        "monthly_payment = ?, " +
+                        "max_km = ?, " +
+                        "created_by = ?, " +
+                        "car_id = ?, " +
+                        "customer_id = ?, " +
+                        "active = ? " +
+                        "WHERE agreement_id = ?",
                 rentalAgreement.getStartDate(),
                 rentalAgreement.getEndDate(),
                 rentalAgreement.getDownpayment(),
@@ -81,12 +92,14 @@ public class RentalAgreementRepository {
                 rentalAgreement.getMaxKm(),
                 rentalAgreement.getCreatedBy(),
                 rentalAgreement.getCar(),
-                rentalAgreement.getCustomer()
+                rentalAgreement.getCustomer(),
+                rentalAgreement.getActive(),
+                rentalAgreement.getAgreementId()
         );
     }
 
     public int deleteRentalAgreementById(int id) {
-        return jdbcTemplate.update("DELETE FROM rental_agreements WHERE created_by = ?", id);
+        return jdbcTemplate.update("DELETE FROM rental_agreements WHERE agreement_id = ?", id);
     }
 
 }
