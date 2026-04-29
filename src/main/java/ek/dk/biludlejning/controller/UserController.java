@@ -1,7 +1,8 @@
 package ek.dk.biludlejning.controller;
 
 import ek.dk.biludlejning.model.User;
-import ek.dk.biludlejning.repository.UserRepository;
+import ek.dk.biludlejning.service.UserService;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -11,12 +12,14 @@ import org.springframework.ui.Model;
 
 import java.security.MessageDigest;
 import java.util.Base64;
+import java.util.Optional;
 
 @Controller
 public class UserController {
-    private final UserRepository userRepository;
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/users")
@@ -45,23 +48,10 @@ public class UserController {
             return "users";
         }
 
-        if (userRepository.findByXY("username", user.getUsername()).isPresent()) {
+        Optional<String> validationError = userService.validateUser(user);
+        if (validationError.isPresent()){
             model.addAttribute("activePage", "users");
-            model.addAttribute("errorMessage", "Brugernavnet findes allerede");
-            model.addAttribute("user", user);
-            return "users";
-        }
-
-        if (userRepository.findByXY("email", user.getEmail()).isPresent()) {
-            model.addAttribute("activePage", "users");
-            model.addAttribute("errorMessage", "Emailen findes allerede");
-            model.addAttribute("user", user);
-            return "users";
-        }
-
-        if  (userRepository.findByXY("phone", user.getPhone()).isPresent()) {
-            model.addAttribute("activePage", "users");
-            model.addAttribute("errorMessage", "Telefonnummeret findes allerede");
+            model.addAttribute("errorMessage", validationError.get());
             model.addAttribute("user", user);
             return "users";
         }
@@ -72,8 +62,7 @@ public class UserController {
         user.setPassword(hashedInput);
         System.out.println("password after set af hash" +  user.getPassword());
 
-
-        userRepository.createUser(user);
+        userService.createUser(user);
         redirectAttributes.addFlashAttribute("successMessage", "Brugeren blev oprettet");
         System.out.println("Brugeren blev oprettet korrekt");
         return "redirect:/users";
