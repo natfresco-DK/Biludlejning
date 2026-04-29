@@ -15,11 +15,11 @@ import java.util.Set;
 @Repository
 public class CarRepository implements ICarRepository {
 
-    private final JdbcTemplate jdbctemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public CarRepository(JdbcTemplate jdbctemplate) {
-        this.jdbctemplate = jdbctemplate;
+    public CarRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     private final RowMapper<Car> carRowMapper = new RowMapper<Car>() {
@@ -44,7 +44,7 @@ public class CarRepository implements ICarRepository {
     public void createCar(Car car) {
         String sql = "INSERT INTO cars (reg_nr, vin, brand, model, location, odometer, car_description, status) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        jdbctemplate.update(sql,
+        jdbcTemplate.update(sql,
                 car.getRegNr(),
                 car.getVin(),
                 car.getBrand(),
@@ -75,7 +75,7 @@ public class CarRepository implements ICarRepository {
         }
         String sql = "SELECT * FROM cars WHERE " + attribute + " = ?";
         try {
-            Car car = jdbctemplate.queryForObject(sql, carRowMapper, data);
+            Car car = jdbcTemplate.queryForObject(sql, carRowMapper, data);
             return Optional.ofNullable(car);
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
@@ -86,7 +86,7 @@ public class CarRepository implements ICarRepository {
     public void update(Car car) {
         String sql = "UPDATE cars SET reg_nr = ?, vin = ?, brand = ?, model = ?, location = ?, odometer = ?, car_description = ?, status = ?, active = ? " +
                 "WHERE car_id = ?";
-        jdbctemplate.update(sql,
+        jdbcTemplate.update(sql,
                 car.getRegNr(),
                 car.getVin(),
                 car.getBrand(),
@@ -103,6 +103,6 @@ public class CarRepository implements ICarRepository {
     @Override
     public int deleteById(int id) {
         String sql = "DELETE FROM cars WHERE car_id = ?";
-        return jdbctemplate.update(sql, id);
+        return jdbcTemplate.update(sql, id);
     }
 }
