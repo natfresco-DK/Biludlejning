@@ -1,6 +1,7 @@
 package ek.dk.biludlejning.controller;
 
 import ek.dk.biludlejning.model.RentalAgreement;
+import ek.dk.biludlejning.model.User;
 import ek.dk.biludlejning.service.CarService;
 import ek.dk.biludlejning.service.CustomerService;
 import ek.dk.biludlejning.service.RentalAgreementService;
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -27,20 +29,29 @@ public class LeaseController {
     }
 
     @GetMapping("/lease-agreements")
-    public String leaseAgreements(Model model) {
+    public String leaseAgreements(Model model, @SessionAttribute(name = "currentUser", required = false) User currentUser) {
+        if(canAccessLeasePages(currentUser)){
+            return "redirect:/login";
+        }
         model.addAttribute("activePage", "lease-agreements");
         model.addAttribute("rentalAgreementList", rentalAgreementService.getAllRentalAgreements());
         return "lease_agreements";
     }
 
     @GetMapping("/reports")
-    public String reports(Model model) {
+    public String reports(Model model, @SessionAttribute(name = "currentUser", required = false) User currentUser) {
+        if(canAccessLeasePages(currentUser)){
+            return "redirect:/login";
+        }
         model.addAttribute("activePage", "reports");
         return "reports";
     }
 
     @GetMapping("/lease-create")
-    public String leaseCreate(Model model) {
+    public String leaseCreate(Model model, @SessionAttribute(name = "currentUser", required = false) User currentUser) {
+        if(canAccessLeasePages(currentUser)){
+            return "redirect:/login";
+        }
         model.addAttribute("activePage", "lease-agreements");
 
         if (!model.containsAttribute("rentalAgreement")) {
@@ -55,12 +66,14 @@ public class LeaseController {
 
     @PostMapping("/lease-create")
     public String createLease(@ModelAttribute RentalAgreement rentalAgreement,
+                              @SessionAttribute(name = "currentUser", required = false) User currentUser,
                               Model model,
                               RedirectAttributes redirectAttributes) {
+        if(canAccessLeasePages(currentUser)){
+            return "redirect:/login";
+        }
 
-        int createdBy = 1; // midlertidigt, indtil login/session er på plads
-
-        var validationError = rentalAgreementService.createRentalAgreement(rentalAgreement, createdBy);
+        var validationError = rentalAgreementService.createRentalAgreement(rentalAgreement, currentUser.getId());
 
         if (validationError.isPresent()) {
             model.addAttribute("activePage", "lease-agreements");
@@ -73,5 +86,10 @@ public class LeaseController {
 
         redirectAttributes.addFlashAttribute("successMessage", "Lejeaftalen blev oprettet");
         return "redirect:/lease-agreements";
+    }
+
+    private boolean canAccessLeasePages(User currentUser) {
+        return currentUser != null &&
+                ("DATAREGISTRERING".equals(currentUser.getRole()) || "ADMIN".equals(currentUser.getRole()));
     }
 }
