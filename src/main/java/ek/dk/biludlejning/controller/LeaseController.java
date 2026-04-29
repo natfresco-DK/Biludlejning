@@ -30,8 +30,9 @@ public class LeaseController {
 
     @GetMapping("/lease-agreements")
     public String leaseAgreements(Model model, @SessionAttribute(name = "currentUser", required = false) User currentUser) {
-        if(!canAccessLeasePages(currentUser)){
-            return "redirect:/login";
+        String accessCheck = checkAccess(currentUser);
+        if (accessCheck != null) {
+            return accessCheck;
         }
         model.addAttribute("activePage", "lease-agreements");
         model.addAttribute("rentalAgreementList", rentalAgreementService.getAllRentalAgreements());
@@ -40,8 +41,9 @@ public class LeaseController {
 
     @GetMapping("/reports")
     public String reports(Model model, @SessionAttribute(name = "currentUser", required = false) User currentUser) {
-        if(!canAccessLeasePages(currentUser)){
-            return "redirect:/login";
+        String accessCheck = checkAccess(currentUser);
+        if (accessCheck != null) {
+            return accessCheck;
         }
         model.addAttribute("activePage", "reports");
         return "reports";
@@ -49,8 +51,9 @@ public class LeaseController {
 
     @GetMapping("/lease-create")
     public String leaseCreate(Model model, @SessionAttribute(name = "currentUser", required = false) User currentUser) {
-        if(!canAccessLeasePages(currentUser)){
-            return "redirect:/login";
+        String accessCheck = checkAccess(currentUser);
+        if (accessCheck != null) {
+            return accessCheck;
         }
         model.addAttribute("activePage", "lease-agreements");
 
@@ -69,8 +72,9 @@ public class LeaseController {
                               @SessionAttribute(name = "currentUser", required = false) User currentUser,
                               Model model,
                               RedirectAttributes redirectAttributes) {
-        if(!canAccessLeasePages(currentUser)){
-            return "redirect:/login";
+        String accessCheck = checkAccess(currentUser);
+        if (accessCheck != null) {
+            return accessCheck;
         }
 
         var validationError = rentalAgreementService.createRentalAgreement(rentalAgreement, currentUser.getId());
@@ -88,8 +92,13 @@ public class LeaseController {
         return "redirect:/lease-agreements";
     }
 
-    private boolean canAccessLeasePages(User currentUser) {
-        return currentUser != null &&
-                ("DATAREGISTRERING".equals(currentUser.getRole()) || "ADMIN".equals(currentUser.getRole()));
+    private String checkAccess(User currentUser) {
+        if (currentUser == null) {
+            return "redirect:/login";
+        }
+        if (!("DATAREGISTRERING".equals(currentUser.getRole()) || "ADMIN".equals(currentUser.getRole()))) {
+            return "redirect:/access-denied";
+        }
+        return null; // adgang ok
     }
 }
