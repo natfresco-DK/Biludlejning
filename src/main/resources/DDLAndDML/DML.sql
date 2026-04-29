@@ -23,7 +23,7 @@ VALUES ('AB12345', 'VIN00000000000001', 'Toyota', 'Yaris', 'København', 45000, 
 
 
 INSERT INTO rental_agreements
-(from_date, to_date, downpayment, monthly_payment, max_km, created_by, car_id, customer_id)
+(start_date, end_date, downpayment, monthly_payment, max_km, created_by, car_id, customer_id)
 VALUES ('2026-01-01', '2026-06-30', 5000.00, 3200.00, 15000, 1, 2, 1),
        ('2026-02-15', '2026-08-15', 7000.00, 4500.00, 18000, 2, 3, 2),
        ('2026-03-01', '2026-09-01', 4000.00, 2900.00, 12000, 3, 1, 3);

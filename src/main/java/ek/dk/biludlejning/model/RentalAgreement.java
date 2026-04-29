@@ -7,23 +7,25 @@ public class RentalAgreement {
     protected int agreementId;
     protected LocalDate startDate;
     protected LocalDate endDate;
-    protected int price;
+    protected int downpayment;
+    protected int monthly_payment;
     protected int maxKm;
-    protected User createdBy;
-    protected Car car;
-    protected Customer customer;
+    protected int createdBy;
+    protected int car;
+    protected int customer;
 
     public RentalAgreement() {}
 
-    public RentalAgreement(int agreementId, LocalDate startDate, LocalDate endDate, int price, int maxKm, User createdBy, Car car, Customer customer) {
+    public RentalAgreement(int agreementId, LocalDate startDate, LocalDate endDate, int downpayment, int maxKm, int createdBy, int car, int customer, int monthly_payment) {
         this.agreementId = agreementId;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.price = price;
+        this.downpayment = downpayment;
         this.maxKm = maxKm;
         this.createdBy = createdBy;
         this.car = car;
         this.customer = customer;
+        this.monthly_payment = monthly_payment;
     }
 
     public int getAgreementId() {
@@ -50,13 +52,22 @@ public class RentalAgreement {
         this.endDate = endDate;
     }
 
-    public int getPrice() {
-        return price;
+    public int getDownpayment() {
+        return downpayment;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setDownpayment(int downpayment) {
+        this.downpayment = downpayment;
     }
+
+    public int  getMonthly_payment() {
+        return monthly_payment;
+    }
+
+    public void setMonthly_payment(int monthly_payment) {
+        this.monthly_payment = monthly_payment;
+    }
+
 
     public int getMaxKm() {
         return maxKm;
@@ -66,27 +77,27 @@ public class RentalAgreement {
         this.maxKm = maxKm;
     }
 
-    public User getCreatedBy() {
+    public int getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(User createdBy) {
+    public void setCreatedBy(int createdBy) {
         this.createdBy = createdBy;
     }
 
-    public Car getCar() {
+    public int getCar() {
         return car;
     }
 
-    public void setCar(Car car) {
+    public void setCar(int car) {
         this.car = car;
     }
 
-    public Customer getCustomer() {
+    public int getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(int customer) {
         this.customer = customer;
     }
 }
