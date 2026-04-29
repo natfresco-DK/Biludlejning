@@ -29,7 +29,9 @@ public class LeaseController {
     }
 
     @GetMapping("/lease-agreements")
-    public String leaseAgreements(Model model, @SessionAttribute(name = "currentUser", required = false) User currentUser) {
+    public String leaseAgreements(Model model,
+                                  @SessionAttribute(name = "currentUser", required = false) User currentUser) {
+        model.addAttribute("currentUser", currentUser);
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
             return accessCheck;
@@ -40,7 +42,9 @@ public class LeaseController {
     }
 
     @GetMapping("/reports")
-    public String reports(Model model, @SessionAttribute(name = "currentUser", required = false) User currentUser) {
+    public String reports(Model model,
+                          @SessionAttribute(name = "currentUser", required = false) User currentUser) {
+        model.addAttribute("currentUser", currentUser);
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
             return accessCheck;
@@ -50,7 +54,9 @@ public class LeaseController {
     }
 
     @GetMapping("/lease-create")
-    public String leaseCreate(Model model, @SessionAttribute(name = "currentUser", required = false) User currentUser) {
+    public String leaseCreate(Model model,
+                              @SessionAttribute(name = "currentUser", required = false) User currentUser) {
+        model.addAttribute("currentUser", currentUser);
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
             return accessCheck;
@@ -72,6 +78,7 @@ public class LeaseController {
                               @SessionAttribute(name = "currentUser", required = false) User currentUser,
                               Model model,
                               RedirectAttributes redirectAttributes) {
+        model.addAttribute("currentUser", currentUser);
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
             return accessCheck;
@@ -99,6 +106,6 @@ public class LeaseController {
         if (!("DATAREGISTRERING".equals(currentUser.getRole()) || "ADMIN".equals(currentUser.getRole()))) {
             return "redirect:/access-denied";
         }
-        return null; // adgang ok
+        return null;
     }
 }
