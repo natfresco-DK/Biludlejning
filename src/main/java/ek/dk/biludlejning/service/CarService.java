@@ -30,4 +30,9 @@ public class CarService {
         car.setStatus("RENTED");
         carRepository.update(car);
     }
+
+    public int getAllRentedCarsCount() {
+        return carRepository.findAllRentedCars();
+    }
+
 }

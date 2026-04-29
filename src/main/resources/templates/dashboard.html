@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" th:href="@{/style.css}">
 
     <link rel="stylesheet"
@@ -15,6 +15,39 @@
 
     <main class="content">
         <h1>Velkommen til dashboard / index</h1>
+
+
+        <section class="cards">
+
+            <section class="card">
+                <div class="card-content">
+                    <h2>Udlejede biler</h2>
+                    <p>
+                        <i class="fa fa-car"></i>
+                        <span th:text="${rentedCarsCount}">0</span>
+                    </p>
+                    <span>Aktive lejeaftaler</span>
+                </div>
+            </section>
+
+            <section class="card">
+                <div class="card-content">
+                    <h2>Samlet pris</h2>
+                    <p>
+                        <i class="fa fa-wallet"></i>
+                        <span th:text="${totalSumCount}">0</span>
+                    </p>
+                </div>
+            </section>
+
+
+
+
+
+
+        </section>
+
+
 
     </main>
 </section>

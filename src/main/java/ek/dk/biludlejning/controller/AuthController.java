@@ -3,6 +3,7 @@ package ek.dk.biludlejning.controller;
 import ek.dk.biludlejning.model.User;
 import ek.dk.biludlejning.service.AuthService;
 import ek.dk.biludlejning.service.AuthenticationException;
+import ek.dk.biludlejning.service.CarService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -16,9 +17,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class AuthController {
     private final AuthService authService;
+    private final CarService carService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, CarService carService) {
         this.authService = authService;
+        this.carService = carService;
     }
 
 
@@ -68,9 +71,14 @@ public class AuthController {
         }
         model.addAttribute("currentUser",currentUser);
         model.addAttribute("activePage", "dashboard");
+
+        int rentedCarsCount = carService.getAllRentedCarsCount();
+        model.addAttribute("rentedCarsCount", rentedCarsCount);
+
+
+
         return "dashboard";
     }
-
 
 
 
