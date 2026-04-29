@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -38,7 +39,6 @@ public class RentalAgreementRepository implements IRentalAgreementRepository{
         return rentalAgreement;
     }
 
-
     public void createRentalAgreement(RentalAgreement rentalAgreement) {
             jdbcTemplate.update(
                 "INSERT INTO rental_agreements (start_date, end_date, downpayment, monthly_payment, max_km, created_by, car_id, customer_id, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -54,7 +54,7 @@ public class RentalAgreementRepository implements IRentalAgreementRepository{
         );
     }
 
-
+    //finders
     public Optional<RentalAgreement> findByXY(String attribute, Object data){
         Set<String> allowedAttributes = Set.of("agreement_id", "start_date", "end_date", "downpayment", "monthly_payment", "max_km", "created_by", "car_id", "customer_id","active");
         if (!allowedAttributes.contains(attribute)) {
@@ -72,6 +72,12 @@ public class RentalAgreementRepository implements IRentalAgreementRepository{
         }
     }
 
+    public List<RentalAgreement> getAllRentalAgreements(){
+        String sql = "SELECT * FROM rental_agreements";
+        return jdbcTemplate.query(sql, this::mapRentalAgreement);
+    }
+
+    //updater
     public void updateRentalAgreement(RentalAgreement rentalAgreement) {
         jdbcTemplate.update(
                 "UPDATE rental_agreements SET " +
@@ -98,6 +104,7 @@ public class RentalAgreementRepository implements IRentalAgreementRepository{
         );
     }
 
+    //deleter
     public int deleteRentalAgreementById(int id) {
         return jdbcTemplate.update("DELETE FROM rental_agreements WHERE agreement_id = ?", id);
     }

@@ -4,6 +4,7 @@ import ek.dk.biludlejning.model.RentalAgreement;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 public interface IRentalAgreementRepository {
 
@@ -13,8 +14,10 @@ public interface IRentalAgreementRepository {
 
     Optional<RentalAgreement> findByXY(String attribute, Object data) throws Exception;
 
+    List<RentalAgreement> getAllRentalAgreements();
 
     void updateRentalAgreement(RentalAgreement rentalAgreement);
+
     int deleteRentalAgreementById(int id);
 
 }
