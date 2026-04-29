@@ -1,7 +1,8 @@
 package ek.dk.biludlejning.controller;
 
 import ek.dk.biludlejning.model.User;
-import ek.dk.biludlejning.service.UserService;
+import ek.dk.biludlejning.service.AuthService;
+import ek.dk.biludlejning.service.AuthenticationException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -12,23 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.naming.AuthenticationException;
-import java.util.Optional;
-
 @Controller
 public class AuthController {
+    private final AuthService authService;
 
-    /*
-    @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("activePage", "/");
-        return "index";
-    }
-     */
-
-    private final UserService userService;
-    public AuthController(UserService userService) {
-        this.userService = userService;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
 
@@ -56,22 +46,6 @@ public class AuthController {
                           HttpServletRequest request,
                           RedirectAttributes attrs) {
         try {
-
-
-
-/*
-            Optional<String> validationError = userService.validateUser(user);
-            if (validationError.isPresent()){
-                model.addAttribute("activePage", "users");
-                model.addAttribute("errorMessage", validationError.get());
-                model.addAttribute("user", user);
-                return "users";
-            }
-
- */
-
-
-
             User user = authService.authenticate(email, password);
             HttpSession session = request.getSession(true);
             session.setAttribute("currentUser", user);
@@ -93,7 +67,8 @@ public class AuthController {
             return "redirect:/login";
         }
         model.addAttribute("currentUser",currentUser);
-        return "success";
+        model.addAttribute("activePage", "dashboard");
+        return "dashboard";
     }
 
 

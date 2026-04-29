@@ -5,7 +5,6 @@ import ek.dk.biludlejning.repository.IUserRepository;
 import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
-import java.sql.SQLException;
 import java.util.Base64;
 import java.util.Optional;
 
@@ -27,8 +26,8 @@ public class AuthService {
         String trimmedEmail = email.trim();
         System.out.println("AuthService: Authenticate called for email='" + trimmedEmail + "'");
         try {
-            Optional<User> opt = userRepository.findByXY(email, trimmedEmail);
-            if (!opt.isPresent()) {
+            Optional<User> opt = userRepository.findByXY("email", trimmedEmail);
+            if (opt.isEmpty()) {
                 System.out.println("AuthService: No user found with email='" + trimmedEmail + "'");
                 throw new AuthenticationException("Ugyldig email");
             }
@@ -47,9 +46,8 @@ public class AuthService {
             }
             System.out.println("AuthService: Authentication successful for user id=" + user.getId());
             return user;
-        } catch (SQLException e) {
-            System.out.println("AuthService: SQLException while finding user: " + e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("AuthService: Error while finding user: " + e.getMessage());
             throw new AuthenticationException("Database fejl", e);
         }
     }
