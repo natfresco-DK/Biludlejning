@@ -30,7 +30,7 @@ public class LeaseController {
 
     @GetMapping("/lease-agreements")
     public String leaseAgreements(Model model, @SessionAttribute(name = "currentUser", required = false) User currentUser) {
-        if(canAccessLeasePages(currentUser)){
+        if(!canAccessLeasePages(currentUser)){
             return "redirect:/login";
         }
         model.addAttribute("activePage", "lease-agreements");
@@ -40,7 +40,7 @@ public class LeaseController {
 
     @GetMapping("/reports")
     public String reports(Model model, @SessionAttribute(name = "currentUser", required = false) User currentUser) {
-        if(canAccessLeasePages(currentUser)){
+        if(!canAccessLeasePages(currentUser)){
             return "redirect:/login";
         }
         model.addAttribute("activePage", "reports");
@@ -49,7 +49,7 @@ public class LeaseController {
 
     @GetMapping("/lease-create")
     public String leaseCreate(Model model, @SessionAttribute(name = "currentUser", required = false) User currentUser) {
-        if(canAccessLeasePages(currentUser)){
+        if(!canAccessLeasePages(currentUser)){
             return "redirect:/login";
         }
         model.addAttribute("activePage", "lease-agreements");
@@ -69,7 +69,7 @@ public class LeaseController {
                               @SessionAttribute(name = "currentUser", required = false) User currentUser,
                               Model model,
                               RedirectAttributes redirectAttributes) {
-        if(canAccessLeasePages(currentUser)){
+        if(!canAccessLeasePages(currentUser)){
             return "redirect:/login";
         }
 
