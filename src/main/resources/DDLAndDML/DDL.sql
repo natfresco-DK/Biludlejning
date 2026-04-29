@@ -46,14 +46,15 @@ CREATE TABLE IF NOT EXISTS cars
 CREATE TABLE IF NOT EXISTS rental_agreements
 (
     agreement_id    INT AUTO_INCREMENT PRIMARY KEY,
-    start_date       DATE           NOT NULL,
-    end_date         DATE           NOT NULL,
+    start_date      DATE           NOT NULL,
+    end_date        DATE           NOT NULL,
     downpayment     DECIMAL(10, 2) NOT NULL,
     monthly_payment DECIMAL(10, 2) NOT NULL,
     max_km          INT            NOT NULL,
     created_by      INT            NOT NULL,
     car_id          INT            NOT NULL,
     customer_id     INT            NOT NULL,
+    active          BOOLEAN        NOT NULL DEFAULT TRUE,
 
     CONSTRAINT fk_agreement_user
         FOREIGN KEY (created_by)

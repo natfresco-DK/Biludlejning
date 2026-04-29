@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -98,6 +99,12 @@ public class CarRepository implements ICarRepository {
                 car.isActive(),
                 car.getCarId()
         );
+    }
+    @Override
+    public List<Car> findAvailableCars(){
+        String sql = "SELECT * FROM cars WHERE active = true AND UPPER(status) = ?";
+        return jdbcTemplate.query(sql, carRowMapper,
+                "AVAILABLE");
     }
 
     @Override

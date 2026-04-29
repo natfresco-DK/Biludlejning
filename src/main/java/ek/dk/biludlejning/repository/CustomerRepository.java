@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -108,6 +109,12 @@ public class CustomerRepository implements ICustomerRepository {
                 customer.isActive(),
                 customer.getCustomerId()
         );
+    }
+
+    @Override
+    public List<Customer> findAllActive() {
+        String sql = "SELECT * FROM customers WHERE active = true";
+        return jdbctemplate.query(sql, customerRowMapper);
     }
 
     @Override

@@ -3,8 +3,8 @@ package ek.dk.biludlejning.repository;
 
 import ek.dk.biludlejning.model.Car;
 
+import java.util.List;
 import java.util.Optional;
-
 public interface ICarRepository {
     //create a car in the table
     void createCar(Car car);
@@ -14,6 +14,8 @@ public interface ICarRepository {
 
     //update existing car in table
     void update(Car car);
+
+    List<Car> findAvailableCars();
 
     //delete car by ID in table
     int deleteById(int id);

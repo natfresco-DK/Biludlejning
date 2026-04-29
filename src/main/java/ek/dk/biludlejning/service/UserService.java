@@ -1,7 +1,7 @@
 package ek.dk.biludlejning.service;
 
 import ek.dk.biludlejning.model.User;
-import ek.dk.biludlejning.repository.UserRepository;
+import ek.dk.biludlejning.repository.IUserRepository;
 
 import org.springframework.stereotype.Service;
 
@@ -9,8 +9,8 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-    private final UserRepository userRepository;
-    public UserService(UserRepository userRepository) {
+    private final IUserRepository userRepository;
+    public UserService(IUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
