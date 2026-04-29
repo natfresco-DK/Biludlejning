@@ -37,6 +37,7 @@ public class UserController {
                 (user.getLastname().isEmpty()) ||
                 (user.getUsername().isEmpty()) ||
                 (user.getPassword().isEmpty()) ||
+                (user.getPhone().isEmpty()) ||
                 (user.getEmail()).isEmpty()) {
             model.addAttribute("activePage", "users");
             model.addAttribute("errorMessage", "Udfyld venligst alle felter");
@@ -54,6 +55,13 @@ public class UserController {
         if (userRepository.findByXY("email", user.getEmail()).isPresent()) {
             model.addAttribute("activePage", "users");
             model.addAttribute("errorMessage", "Emailen findes allerede");
+            model.addAttribute("user", user);
+            return "users";
+        }
+
+        if  (userRepository.findByXY("phone", user.getPhone()).isPresent()) {
+            model.addAttribute("activePage", "users");
+            model.addAttribute("errorMessage", "Telefonnummeret findes allerede");
             model.addAttribute("user", user);
             return "users";
         }
