@@ -45,6 +45,10 @@
     <i class="fa-solid fa-users"></i>
         Brugere
     </a>
+    <div th:if="${currentUser != null}">
+        Bruger: <span th:text="${currentUser.firstname}">User Name</span>
+    </div>
+    <form th:action="@{/logout}" method="post"><button type="submit">Log ud</button></form>
 </nav>
 
 </body>

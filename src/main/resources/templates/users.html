@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -10,8 +10,8 @@
 
 </head>
 <body>
-<section class ="layout">
-    <div th:replace="fragments/sidebar :: sidebar"></div>
+<section class="layout">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
     <main class="content">
         <h1>Velkommen til brugere</h1>
@@ -43,6 +43,13 @@
             <label for="phone">Telefon: </label>
             <input type="tel" id="phone" th:field="*{phone}" required>
             <br>
+            <select th:field="*{role}">
+                <option value="">Vælg rolle</option>
+                <option th:each="role : ${roles}"
+                        th:value="${role}"
+                        th:text="${role}">
+                </option>
+            </select>
 
             <button type="submit">Opret bruger</button>
         </form>
