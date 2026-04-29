@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<section class ="layout">
+<section class="layout">
     <div th:replace="fragments/sidebar :: sidebar"></div>
 
     <main class="content">
@@ -20,6 +20,39 @@
                 + Opret lejeaftale
             </a>
         </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Aftale ID</th>
+                <th>Kunde ID</th>
+                <th>Bil ID</th>
+                <th>Startdato</th>
+                <th>Slutdato</th>
+                <th>Udbetaling</th>
+                <th>Månedlig betaling</th>
+                <th>Maks km</th>
+                <th>Oprettet af</th>
+                <th>Aktiv</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(rentalAgreementList)}">
+                <td colspan="10">Ingen lejeaftaler fundet</td>
+            </tr>
+            <tr th:each="agreement : ${rentalAgreementList}">
+                <td th:text="${agreement.agreementId}"></td>
+                <td th:text="${agreement.customer}"></td>
+                <td th:text="${agreement.car}"></td>
+                <td th:text="${agreement.startDate}"></td>
+                <td th:text="${agreement.endDate}"></td>
+                <td th:text="${agreement.downpayment}"></td>
+                <td th:text="${agreement.monthly_payment}"></td>
+                <td th:text="${agreement.maxKm}"></td>
+                <td th:text="${agreement.createdBy}"></td>
+                <td th:text="${agreement.active}"></td>
+            </tr>
+            </tbody>
+        </table>
 
     </main>
 </section>

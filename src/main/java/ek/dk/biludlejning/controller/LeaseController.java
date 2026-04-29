@@ -29,6 +29,7 @@ public class LeaseController {
     @GetMapping("/lease-agreements")
     public String leaseAgreements(Model model) {
         model.addAttribute("activePage", "lease-agreements");
+        model.addAttribute("rentalAgreementList", rentalAgreementService.getAllRentalAgreements());
         return "lease_agreements";
     }
 

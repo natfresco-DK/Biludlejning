@@ -5,6 +5,7 @@ import ek.dk.biludlejning.repository.IRentalAgreementRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,6 +33,11 @@ public class RentalAgreementService {
         rentalAgreementRepository.createRentalAgreement(rentalAgreement);
 
         return Optional.empty();
+    }
+
+    public List<RentalAgreement> getAllRentalAgreements(){
+        List<RentalAgreement> rentalAgreementList = rentalAgreementRepository.getAllRentalAgreements();
+        return rentalAgreementList;
     }
 
     private Optional<String> validateRentalAgreement(RentalAgreement rentalAgreement) {

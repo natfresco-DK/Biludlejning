@@ -69,3 +69,19 @@ body {
 .btn-primary:hover {
     background: #1859be;
 }
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 0.75rem;
+    text-align: left;
+}
+
+.table th {
+    background: #f4f4f4;
+}
