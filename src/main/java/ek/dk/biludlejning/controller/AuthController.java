@@ -74,9 +74,6 @@ public class AuthController {
 
         int rentedCarsCount = carService.getAllRentedCarsCount();
         model.addAttribute("rentedCarsCount", rentedCarsCount);
-
-
-
         return "dashboard";
     }
 
