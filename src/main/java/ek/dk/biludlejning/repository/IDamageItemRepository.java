@@ -17,5 +17,4 @@ public interface IDamageItemRepository {
 
     //delete car by ID in table
     int deleteById(int id);
-
 }
