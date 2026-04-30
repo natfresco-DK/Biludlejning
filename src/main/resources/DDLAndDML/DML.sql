@@ -19,9 +19,9 @@ VALUES ('Anders', 'Nielsen', 'anders@email.dk', '50112233', 'DK12345678', 'Nørr
 
 
 INSERT INTO cars (reg_nr, vin, brand, model, location, odometer, car_description, status, active)
-VALUES ('AB12345', 'VIN00000000000001', 'Toyota', 'Yaris', 'København', 45000, 'Compact city car', 'AVAILABLE', TRUE),
+VALUES ('AB12345', 'VIN00000000000001', 'Toyota', 'Yaris', 'København', 45000, 'Compact city car', 'RENTED', TRUE),
        ('CD67890', 'VIN00000000000002', 'Volkswagen', 'Golf', 'Aarhus', 72000, 'Popular family hatchback', 'RENTED', TRUE),
-       ('EF11223', 'VIN00000000000003', 'Tesla', 'Model 3', 'København', 28000, 'Electric sedan', 'AVAILABLE', TRUE),
+       ('EF11223', 'VIN00000000000003', 'Tesla', 'Model 3', 'København', 28000, 'Electric sedan', 'RENTED', TRUE),
        ('GH44556', 'VIN00000000000004', 'Ford', 'Focus', 'Odense', 91000, 'Reliable station car', 'MAINTENANCE', TRUE),
        ('IJ77889', 'VIN00000000000005', 'BMW', '320i', 'Aalborg', 65000, 'Luxury sedan', 'AVAILABLE', TRUE);
 
