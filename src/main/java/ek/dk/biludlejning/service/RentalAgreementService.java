@@ -96,13 +96,13 @@ public class RentalAgreementService {
     }
 
     public boolean isLeaseCompleted(int carId) {
-        List<RentalAgreement> activeLeases = findByCarId(carId);
         List<RentalAgreement> rentalAgreements = findByCarId(carId);
         if (rentalAgreements.isEmpty()) {
             return true;
         }
         LocalDate today = LocalDate.now();
-        for (RentalAgreement lease : rentalAgreements) {e().isAfter(today)) {
+        for (RentalAgreement lease : rentalAgreements) {
+            if (lease.getActive() && lease.getEndDate().isAfter(today)) {
                 return false;
             }
         }
