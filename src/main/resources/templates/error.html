@@ -1,24 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Skaderapporter</title>
+    <title>Adgang nægtet</title>
     <link rel="stylesheet" th:href="@{/style.css}">
-
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
-<section class ="layout">
+<section class="layout">
     <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
     <main class="content">
-        <h1>Velkommen til damage reports</h1>
+        <h1>Adgang nægtet</h1>
 
+        <div>
+            <p th:text="${errorMessage}"></p>
+        </div>
+
+        <a th:href="@{/dashboard}" class="btn-primary">
+            Tilbage til dashboard
+        </a>
     </main>
 </section>
-
 
 </body>
 </html>

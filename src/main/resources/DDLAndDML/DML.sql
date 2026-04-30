@@ -1,14 +1,15 @@
 USE biludlejning;
 
 INSERT INTO users (first_name, last_name, username, password, email, phone, role, active)
-VALUES ('Simon', 'Admin', 'sadmin', '$2y$10$hash1', 'admin@biludlejning.dk', '40112233', 'ADMIN', TRUE),
-       ('Maria', 'Jensen', 'mjensen', '$2y$10$hash2', 'maria@biludlejning.dk', '22113344', 'DATAREGISTRERING', TRUE),
-       ('Thomas', 'Hansen', 'thansen', '$2y$10$hash3', 'thomas@biludlejning.dk', '33114455', 'SKADE/UDBEDRING', TRUE),
-       ('Simon', 'Fresco', 'sfresco', '$2y$10$hash3', 'simon@biludlejning.dk', '66666666', 'FORETNINGSUDVIKLING', TRUE),
-        ('test', 'test', 'test', 'QoJ+o69Avow5/WwH8Hz1UIjRb8DfiwdVK10MHKT0v78=', 'test@test.dk', '12345678', 'DATAREGISTRERING', TRUE);
+VALUES ('Simon', 'Admin', 'sadmin', 'QoJ+o69Avow5/WwH8Hz1UIjRb8DfiwdVK10MHKT0v78=', 'admin@biludlejning.dk', '40112233', 'ADMIN', TRUE),
+       ('Maria', 'Jensen', 'mjensen', 'QoJ+o69Avow5/WwH8Hz1UIjRb8DfiwdVK10MHKT0v78=', 'maria@biludlejning.dk', '22113344', 'DATAREGISTRERING', TRUE),
+       ('Thomas', 'Hansen', 'thansen', 'QoJ+o69Avow5/WwH8Hz1UIjRb8DfiwdVK10MHKT0v78=', 'thomas@biludlejning.dk', '33114455', 'SKADE/UDBEDRING', TRUE),
+       ('Simon', 'Fresco', 'sfresco', 'QoJ+o69Avow5/WwH8Hz1UIjRb8DfiwdVK10MHKT0v78=', 'simon@biludlejning.dk', '66666666', 'FORETNINGSUDVIKLING', TRUE),
+       ('test', 'test', 'test', 'QoJ+o69Avow5/WwH8Hz1UIjRb8DfiwdVK10MHKT0v78=', 'test@test.dk', '12345678', 'DATAREGISTRERING', TRUE);
 /*
- test bruger password: password_placeholder
- */
+ all passwords: password_placeholder
+ */;
+
 
 INSERT INTO customers (first_name, last_name, email, phone, licence_no, street_address, zip_code, city)
 VALUES ('Anders', 'Nielsen', 'anders@email.dk', '50112233', 'DK12345678', 'Nørrebrogade 10', 2200, 'København'),

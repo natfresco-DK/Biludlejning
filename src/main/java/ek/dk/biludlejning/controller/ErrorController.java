@@ -7,14 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Controller
-public class CarController {
-
-    @GetMapping("/cars")
-    public  String damageReports(Model model,
-                                 @SessionAttribute(name = "currentUser", required = false) User currentUser) {
+public class ErrorController {
+    @GetMapping("/access-denied")
+    public String accessDenied(Model model,
+                               @SessionAttribute(name = "currentUser", required = false) User currentUser) {
         model.addAttribute("currentUser", currentUser);
-        model.addAttribute("activePage", "cars");
-        return "cars";
+        model.addAttribute("errorMessage", "Du har ikke tilladelse til at få adgang til denne side.");
+        return "error";
     }
-
 }
