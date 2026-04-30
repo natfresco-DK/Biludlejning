@@ -1,6 +1,8 @@
 package ek.dk.biludlejning.service;
 
+import ek.dk.biludlejning.model.RentalAgreement;
 import ek.dk.biludlejning.model.User;
+import ek.dk.biludlejning.repository.IRentalAgreementRepository;
 import ek.dk.biludlejning.repository.IUserRepository;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,11 @@ public class UserService {
 
     public UserService(IUserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+
+    public List<User> getAllUsers(){
+        return userRepository.getAllUsers();
     }
 
     public void createUser(User user) {
