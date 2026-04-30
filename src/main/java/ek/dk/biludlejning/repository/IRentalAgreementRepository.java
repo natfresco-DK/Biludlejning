@@ -22,4 +22,8 @@ public interface IRentalAgreementRepository {
 
     double getTotalActiveRevenue();
 
+    List<RentalAgreement> getReturnedRentalAgreements();
+
+
+
 }

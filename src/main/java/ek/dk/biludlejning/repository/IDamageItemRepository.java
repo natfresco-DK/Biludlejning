@@ -3,6 +3,7 @@ package ek.dk.biludlejning.repository;
 
 
 import ek.dk.biludlejning.model.DamageItem;
+import ek.dk.biludlejning.model.DamageReport;
 
 import java.util.Optional;
 public interface IDamageItemRepository {
@@ -17,5 +18,4 @@ public interface IDamageItemRepository {
 
     //delete car by ID in table
     int deleteById(int id);
-
 }

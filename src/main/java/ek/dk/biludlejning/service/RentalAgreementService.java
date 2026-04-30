@@ -65,5 +65,9 @@ public class RentalAgreementService {
         return rentalAgreementRepository.getTotalActiveRevenue();
     }
 
+    public List<RentalAgreement> getReturnedRentalAgreements() {
+        return rentalAgreementRepository.getReturnedRentalAgreements();
+    }
+
 
 }

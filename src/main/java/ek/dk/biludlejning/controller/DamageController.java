@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -52,19 +53,9 @@ public class DamageController {
             model.addAttribute("damageReport", new DamageReport());
         }
 
-        List<Car> returnedCars = carService.getReturnedCars();
-
-        List<Integer> returnedCarIds = returnedCars.stream()
-                .map(Car::getCarId)
-                .collect(Collectors.toList());
-
-        List<RentalAgreement> rentalAgreementsWithReturnedCars =
-                rentalAgreementService.getAllRentalAgreements().stream()
-                        .filter(ra -> returnedCarIds.contains(ra.getCar()))
-                        .collect(Collectors.toList());
-
         model.addAttribute("activePage", "damage-reports");
-        model.addAttribute("rentalAgreements", rentalAgreementsWithReturnedCars);
+        model.addAttribute("rentalAgreements",
+                rentalAgreementService.getReturnedRentalAgreements());
         return "damage_create";
     }
 
@@ -76,26 +67,21 @@ public class DamageController {
         if (accessCheck != null) {
             return accessCheck;
         }
-        damageService.createDamageReport(damageReport, currentUser.getId());
 
-        RentalAgreement rentalAgreement =
-                rentalAgreementService.getAllRentalAgreements().stream()
-                        .filter(ra -> ra.getAgreementId() == damageReport.getRentalAgreementId())
-                        .findFirst()
-                        .orElse(null);
+        Optional<String> error = damageService.createDamageReport(damageReport, currentUser.getId());
 
-        if (rentalAgreement == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Lejeaftalen blev ikke fundet.");
+        if (error.isPresent()) {
+            redirectAttributes.addFlashAttribute("errorMessage", error.get());
+            redirectAttributes.addFlashAttribute("damageReport", damageReport);
             return "redirect:/damage-report-create";
         }
 
-        int carId = rentalAgreement.getCar();
-        carService.updateCarStatus(carId, "MAINTENANCE");
         redirectAttributes.addFlashAttribute("successMessage",
                 "Skaderapporten blev oprettet, og bilen er sat til MAINTENANCE.");
 
         return "redirect:/damage-report-create";
     }
+
 
     private String checkAccess(User currentUser) {
         if (currentUser == null) {

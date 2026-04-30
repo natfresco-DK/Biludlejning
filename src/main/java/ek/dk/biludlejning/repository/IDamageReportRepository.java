@@ -18,5 +18,8 @@ public interface IDamageReportRepository {
     // delete damage report by id
     int deleteById(int id);
 
+    void setCarToMaintenance(DamageReport report);
+
+
 }
 

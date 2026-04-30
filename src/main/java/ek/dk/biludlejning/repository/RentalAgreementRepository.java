@@ -114,6 +114,10 @@ public class RentalAgreementRepository implements IRentalAgreementRepository{
         return jdbcTemplate.queryForObject(sql, Double.class);
     }
 
-
+    @Override
+    public List<RentalAgreement> getReturnedRentalAgreements() {
+        String sql = "SELECT ra.* FROM rental_agreements ra JOIN cars c ON ra.car_id = c.car_id WHERE c.status = 'RETURNED'";
+        return jdbcTemplate.query(sql, this::mapRentalAgreement);
+    }
 
 }

@@ -39,6 +39,7 @@ public class DamageService {
         damageReport.setReportDate(LocalDate.now());
 
         damageReportRepository.createDamageReport(damageReport);
+        damageReportRepository.setCarToMaintenance(damageReport);
 
         return Optional.empty();
     }
@@ -75,6 +76,10 @@ public class DamageService {
             return Optional.of("Der opstod en fejl: " + e.getMessage());
         }
     }
+
+
+
+
 
 }
 
