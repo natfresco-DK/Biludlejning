@@ -1,15 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Opret skade</title>
+    <title>Opret skaderapport</title>
     <link rel="stylesheet" th:href="@{/style.css}">
-
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
 </head>
 <body>
+
+<section class="layout">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="content">
+        <h1>Opret skaderapport</h1>
+
+        <p th:if="${successMessage}" th:text="${successMessage}" class="success-message"></p>
+        <p th:if="${errorMessage}" th:text="${errorMessage}" class="error-message"></p>
+
+        <form th:action="@{/damage-report-create}" th:object="${damageReport}" method="post">
+
+            <div th:if="${#lists.isEmpty(rentalAgreements)}" class="error-message">
+                Der findes ingen lejeaftaler med en bil i status RETURNED.
+            </div>
+
+            <div>
+                <h2>Skadeoplysninger</h2>
+
+                <label for="rentalAgreement">Lejeaftale / returneret bil:</label>
+                <select id="rentalAgreement" th:field="*{rentalAgreementId}" required>
+                    <option value="0" disabled selected>-- Vælg returneret bil --</option>
+
+                    <option th:each="agreement : ${rentalAgreements}"
+                            th:value="${agreement.agreementId}"
+                            th:text="${'Aftale ' + agreement.agreementId + ' - Bil ID: ' + agreement.car}">
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label for="returnDate">Returneringsdato:</label>
+                <input type="date" id="returnDate" th:field="*{returnDate}" required>
+            </div>
+
+            <div>
+                <label for="odometer">Kilometertæller:</label>
+                <input type="number" id="odometer" th:field="*{odometer}" min="0" step="1" required>
+            </div>
+
+            <div>
+                <label for="cost">Samlet skadepris:</label>
+                <input type="number" id="cost" th:field="*{cost}" min="0" step="0.01" required>
+            </div>
+
+            <button type="submit">Opret skaderapport</button>
+        </form>
+    </main>
+</section>
 
 </body>
 </html>

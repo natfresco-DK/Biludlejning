@@ -92,6 +92,12 @@ public class DamageReportRepository implements IDamageReportRepository {
         String sql = "DELETE FROM damage_reports WHERE damage_report_id = ?";
         return jdbcTemplate.update(sql, id);
     }
+
+    public void setCarToMaintenance(DamageReport report) {
+        String sql = "UPDATE cars c JOIN rental_agreements ra ON c.car_id = ra.car_id SET c.status = 'MAINTENANCE' WHERE ra.agreement_id = ?";
+        jdbcTemplate.update(sql, report.getRentalAgreementId());
+    }
+
 }
 
 

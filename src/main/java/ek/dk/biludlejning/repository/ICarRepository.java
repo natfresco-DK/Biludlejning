@@ -17,9 +17,12 @@ public interface ICarRepository {
 
     List<Car> findAvailableCars();
 
+    List<Car> findReturnedCars();
+
     int findAllRentedCars();
 
     //delete car by ID in table
     int deleteById(int id);
 
+    void updateCarStatus(int carId, String status);
 }
