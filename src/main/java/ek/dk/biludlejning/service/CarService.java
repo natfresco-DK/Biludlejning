@@ -38,5 +38,10 @@ public class CarService {
         return carRepository.findReturnedCars();
     }
 
+    public void updateCarStatus(int carId, String status) {
+        carRepository.updateCarStatus(carId, status);
+    }
+
+
 
 }

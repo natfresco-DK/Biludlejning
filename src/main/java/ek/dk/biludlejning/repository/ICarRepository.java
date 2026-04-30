@@ -24,4 +24,5 @@ public interface ICarRepository {
     //delete car by ID in table
     int deleteById(int id);
 
+    void updateCarStatus(int carId, String status);
 }
