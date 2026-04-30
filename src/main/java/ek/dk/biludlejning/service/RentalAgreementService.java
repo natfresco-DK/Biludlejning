@@ -2,10 +2,8 @@ package ek.dk.biludlejning.service;
 
 import ek.dk.biludlejning.model.Car;
 import ek.dk.biludlejning.model.RentalAgreement;
-import ek.dk.biludlejning.repository.CarRepository;
 import ek.dk.biludlejning.repository.ICarRepository;
 import ek.dk.biludlejning.repository.IRentalAgreementRepository;
-import ek.dk.biludlejning.repository.RentalAgreementRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,8 +40,7 @@ public class RentalAgreementService {
     }
 
     public List<RentalAgreement> getAllRentalAgreements(){
-        List<RentalAgreement> rentalAgreementList = rentalAgreementRepository.getAllRentalAgreements();
-        return rentalAgreementList;
+        return rentalAgreementRepository.getAllRentalAgreements();
     }
 
     private Optional<String> validateRentalAgreement(RentalAgreement rentalAgreement) {
@@ -100,12 +97,12 @@ public class RentalAgreementService {
 
     public boolean isLeaseCompleted(int carId) {
         List<RentalAgreement> activeLeases = findByCarId(carId);
-        if (activeLeases.isEmpty()) {
+        List<RentalAgreement> rentalAgreements = findByCarId(carId);
+        if (rentalAgreements.isEmpty()) {
             return true;
         }
         LocalDate today = LocalDate.now();
-        for (RentalAgreement lease : activeLeases) {
-            if (lease.getActive() && lease.getEndDate().isAfter(today)) {
+        for (RentalAgreement lease : rentalAgreements) {e().isAfter(today)) {
                 return false;
             }
         }
