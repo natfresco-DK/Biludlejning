@@ -109,4 +109,11 @@ public class RentalAgreementRepository implements IRentalAgreementRepository{
         return jdbcTemplate.update("DELETE FROM rental_agreements WHERE agreement_id = ?", id);
     }
 
+    public double getTotalActiveRevenue() {
+        String sql = "SELECT COALESCE(SUM(downpayment + (monthly_payment * TIMESTAMPDIFF(MONTH, start_date, end_date))),0) FROM rental_agreements WHERE active = TRUE";
+        return jdbcTemplate.queryForObject(sql, Double.class);
+    }
+
+
+
 }

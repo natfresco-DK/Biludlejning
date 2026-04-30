@@ -85,3 +85,54 @@ body {
 .table th {
     background: #f4f4f4;
 }
+.cards {
+    display: flex;
+    justify-content: space-around;
+    margin: 50px;
+}
+
+.card {
+    width: 270px;
+    height: 120px;
+    background-color: #1f6feb;
+    border: 2px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 15px;
+    box-sizing: border-box;
+
+}
+
+.card-icon {
+    font-size: 36px;
+    margin-right: 15px;
+}
+
+.card-content {
+    text-align: center;
+}
+.card-content h2 {
+    margin: 0 0 8px 0;
+    font-size: 22px;
+}
+
+.card-content p {
+    display: flex;
+    margin: 0;
+    font-size: 24px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.card-content span {
+    display: block;
+    margin-top: 5px;
+    font-size: 18px;
+    font-style: italic;
+    align-items: center;
+
+}
+
