@@ -108,6 +108,12 @@ public class CarRepository implements ICarRepository {
     }
 
     @Override
+    public List<Car> findReturnedCars(){
+        String sql = "SELECT * FROM cars WHERE active = true AND status = ?";
+        return jdbcTemplate.query(sql, carRowMapper, "RETURNED");
+    }
+
+    @Override
     public int findAllRentedCars() {
         String sql = "SELECT COUNT(*) FROM cars WHERE status = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, "RENTED");
