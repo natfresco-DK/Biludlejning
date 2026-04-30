@@ -77,6 +77,11 @@ public class RentalAgreementRepository implements IRentalAgreementRepository{
         return jdbcTemplate.query(sql, this::mapRentalAgreement);
     }
 
+    public List<RentalAgreement> findByCarId(int carId) {
+        String sql = "SELECT * FROM rental_agreements WHERE car_id = ?";
+        return jdbcTemplate.query(sql, this::mapRentalAgreement, carId);
+    }
+
     //updater
     public void updateRentalAgreement(RentalAgreement rentalAgreement) {
         jdbcTemplate.update(

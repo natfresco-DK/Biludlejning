@@ -12,11 +12,60 @@
 <body>
 
 
-<section class ="layout">
+<section class="layout">
     <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
     <main class="content">
         <h1>Velkommen til cars</h1>
+        <div>
+            <a th:href="@{/car-create}" class="btn-primary">
+                + Opret ny bil
+            </a>
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Car ID</th>
+                <th>Reg nr</th>
+                <th>VIN</th>
+                <th>Mærke</th>
+                <th>Model</th>
+                <th>Lokation</th>
+                <th>Odometer</th>
+                <th>Beskrivelse</th>
+                <th>Status</th>
+                <th>Aktiv</th>
+                <th>Handling</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(cars)}">
+                <td colspan="10">Ingen biler fundet</td>
+            </tr>
+            <tr th:each="car : ${cars}">
+                <td th:text="${car.carId}"></td>
+                <td th:text="${car.regNr}"></td>
+                <td th:text="${car.vin}"></td>
+                <td th:text="${car.brand}"></td>
+                <td th:text="${car.model}"></td>
+                <td th:text="${car.location}"></td>
+                <td th:text="${car.odometer}"></td>
+                <td th:text="${car.carDescription}"></td>
+                <td th:text="${car.status}"></td>
+                <td th:text="${car.active}"></td>
+                <td>
+                    <form th:action="@{/car-return/{carId}(carId=${car.carId})}" method="post" style="display: inline;">
+                        <button type="submit"
+                                th:disabled="${!#strings.equalsIgnoreCase(car.status, 'RENTED') || !leaseCompletedMap.get(car.carId)}"
+                                class="btn-return"
+                                title="Bilen skal være udlejet og leaset skal være afsluttet">
+                            Returner
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
     </main>
 </section>

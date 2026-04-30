@@ -1,11 +1,13 @@
 package ek.dk.biludlejning.service;
 
+import ek.dk.biludlejning.model.Car;
 import ek.dk.biludlejning.model.RentalAgreement;
+import ek.dk.biludlejning.repository.ICarRepository;
 import ek.dk.biludlejning.repository.IRentalAgreementRepository;
-import ek.dk.biludlejning.repository.RentalAgreementRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,12 +15,12 @@ import java.util.Optional;
 public class RentalAgreementService {
 
     private final IRentalAgreementRepository rentalAgreementRepository;
-    private final CarService carService;
+    private final ICarRepository carRepository;
 
 
-    public RentalAgreementService(IRentalAgreementRepository rentalAgreementRepository, CarService carService) {
+    public RentalAgreementService(IRentalAgreementRepository rentalAgreementRepository, ICarRepository carRepository) {
         this.rentalAgreementRepository = rentalAgreementRepository;
-        this.carService = carService;
+        this.carRepository = carRepository;
     }
 
     @Transactional
@@ -31,15 +33,14 @@ public class RentalAgreementService {
         rentalAgreement.setActive(true);
         rentalAgreement.setCreatedBy(createdBy);
 
-        carService.setCarAsRented(rentalAgreement.getCar());
+        setCarAsRented(rentalAgreement.getCar());
         rentalAgreementRepository.createRentalAgreement(rentalAgreement);
 
         return Optional.empty();
     }
 
     public List<RentalAgreement> getAllRentalAgreements(){
-        List<RentalAgreement> rentalAgreementList = rentalAgreementRepository.getAllRentalAgreements();
-        return rentalAgreementList;
+        return rentalAgreementRepository.getAllRentalAgreements();
     }
 
     private Optional<String> validateRentalAgreement(RentalAgreement rentalAgreement) {
@@ -69,5 +70,47 @@ public class RentalAgreementService {
         return rentalAgreementRepository.getReturnedRentalAgreements();
     }
 
+    public List<RentalAgreement> findByCarId(int carId){
+        return rentalAgreementRepository.findByCarId(carId);
+    }
+
+    public void setCarAsRented(int carId) {
+        Car car = carRepository.findByXY("car_id", carId)
+                .orElseThrow(() -> new IllegalArgumentException("Bilen blev ikke fundet"));
+
+        if (!"AVAILABLE".equalsIgnoreCase(car.getStatus())) {
+            throw new IllegalArgumentException("Bilen er ikke tilgængelig");
+        }
+
+        car.setStatus("RENTED");
+        carRepository.update(car);
+    }
+
+    public void setCarAsReturned(int carId) {
+        Car car = carRepository.findByXY("car_id", carId)
+                .orElseThrow(() -> new IllegalArgumentException("Bilen blev ikke fundet"));
+        if (!"RENTED".equalsIgnoreCase(car.getStatus())) {
+            throw new IllegalArgumentException("Bilen er ikke udlejet");
+        }
+        if (!isLeaseCompleted(carId)) {
+            throw new IllegalArgumentException("Leaset er ikke afsluttet endnu");
+        }
+        car.setStatus("AVAILABLE");
+        carRepository.update(car);
+    }
+
+    public boolean isLeaseCompleted(int carId) {
+        List<RentalAgreement> rentalAgreements = findByCarId(carId);
+        if (rentalAgreements.isEmpty()) {
+            return true;
+        }
+        LocalDate today = LocalDate.now();
+        for (RentalAgreement lease : rentalAgreements) {
+            if (lease.getActive() && lease.getEndDate().isAfter(today)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

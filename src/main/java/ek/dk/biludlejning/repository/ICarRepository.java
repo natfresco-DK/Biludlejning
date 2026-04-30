@@ -17,6 +17,8 @@ public interface ICarRepository {
 
     List<Car> findAvailableCars();
 
+    List<Car> getAllCars();
+
     List<Car> findReturnedCars();
 
     int findAllRentedCars();
