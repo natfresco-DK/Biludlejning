@@ -33,10 +33,6 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        env:
-          DB_URL: ${{secrets.PROD_DATABASE_URL}}
-          DB_USER: ${{secrets.PROD_DATABASE_USERNAME}}
-          DB_PASSWORD: ${{secrets.PROD_DATABASE_PASSWORD}}
         run: mvn clean install
 
       - name: Upload Maven artifacts
