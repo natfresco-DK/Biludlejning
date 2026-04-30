@@ -3,7 +3,6 @@ package ek.dk.biludlejning.repository;
 
 
 import ek.dk.biludlejning.model.DamageItem;
-import ek.dk.biludlejning.model.DamageReport;
 
 import java.util.Optional;
 public interface IDamageItemRepository {

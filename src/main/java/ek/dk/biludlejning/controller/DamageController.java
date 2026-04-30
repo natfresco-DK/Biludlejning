@@ -1,9 +1,7 @@
 package ek.dk.biludlejning.controller;
 
 
-import ek.dk.biludlejning.model.Car;
 import ek.dk.biludlejning.model.DamageReport;
-import ek.dk.biludlejning.model.RentalAgreement;
 import ek.dk.biludlejning.model.User;
 import ek.dk.biludlejning.service.DamageService;
 import ek.dk.biludlejning.service.CarService;
@@ -15,9 +13,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 public class DamageController {
