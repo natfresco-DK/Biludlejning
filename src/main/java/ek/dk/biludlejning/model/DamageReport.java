@@ -14,6 +14,7 @@ public class DamageReport {
     protected int registeredBy;
     protected List<DamageItem> damages;
 
+
     public DamageReport() {}
 
     public DamageReport(LocalDate reportDate, LocalDate returnDate, double cost, int odometer, int rentalAgreementId, int registeredBy, List<DamageItem> damages) {
