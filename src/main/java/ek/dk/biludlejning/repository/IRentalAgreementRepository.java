@@ -20,6 +20,8 @@ public interface IRentalAgreementRepository {
 
     int deleteRentalAgreementById(int id);
 
+    List<RentalAgreement> findByCarId(int carId);
+
     double getTotalActiveRevenue();
 
 }

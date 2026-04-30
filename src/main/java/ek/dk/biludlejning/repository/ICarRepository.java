@@ -17,6 +17,8 @@ public interface ICarRepository {
 
     List<Car> findAvailableCars();
 
+    List<Car> getAllCars();
+
     int findAllRentedCars();
 
     //delete car by ID in table
