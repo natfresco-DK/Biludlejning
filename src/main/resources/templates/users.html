@@ -16,43 +16,47 @@
     <main class="content">
         <h1>Velkommen til brugere</h1>
 
-        <form th:action="@{/opret-bruger}" th:object="${user}" method="post">
-            <p th:if="${successMessage}" th:text="${successMessage}" class="success-message"></p>
-            <p th:if="${errorMessage}" th:text="${errorMessage}" class="error-message"></p>
+        <div>
+            <a th:href="@{/users-create}" class="btn-primary">
+                + Opret bruger
+            </a>
+        </div>
 
-            <label for="firstname">Fornavn: </label>
-            <input type="text" id="firstname" th:field="*{firstname}" required>
-            <br>
 
-            <label for="lastname">Efternavn: </label>
-            <input type="text" id="lastname" th:field="*{lastname}" required>
-            <br>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Bruger ID</th>
+                <th>Brugernavn</th>
+                <th>Role</th>
+                <th>Fornavn</th>
+                <th>Efternavn</th>
+                <th>Telefon</th>
+                <th>Email</th>
+                <th>Aktiveret</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(usersList)}">
+                <td colspan="10">Ingen brugere fundet</td>
+            </tr>
+            <tr th:each="brugere : ${usersList}">
+                <td th:text="${brugere.getId}"></td>
+                <td th:text="${brugere.getUsername}"></td>
+                <td th:text="${brugere.getRole}"></td>
+                <td th:text="${brugere.getFirstname}"></td>
+                <td th:text="${brugere.getLastname}"></td>
+                <td th:text="${brugere.getPhone}"></td>
+                <td th:text="${brugere.getEmail}"></td>
+                <td th:text="${brugere.isActive}"></td>
+            </tr>
+            </tbody>
+        </table>
 
-            <label for="email">E-mail: </label>
-            <input type="email" id="email" th:field="*{email}" required>
-            <br>
 
-            <label for="username">Brugernavn: </label>
-            <input type="text" id="username" th:field="*{username}" required>
-            <br>
 
-            <label for="password">Adgangskode: </label>
-            <input type="password" id="password" th:field="*{password}" required>
-            <br>
 
-            <label for="phone">Telefon: </label>
-            <input type="tel" id="phone" th:field="*{phone}" required>
-            <br>
-            <select th:field="*{role}">
-                <option value="">Vælg rolle</option>
-                <option th:each="role : ${roles}"
-                        th:value="${role}"
-                        th:text="${role}">
-                </option>
-            </select>
 
-            <button type="submit">Opret bruger</button>
-        </form>
     </main>
 </section>
 
