@@ -1,10 +1,10 @@
 package ek.dk.biludlejning.controller;
 
 
+import ek.dk.biludlejning.model.DamageItem;
 import ek.dk.biludlejning.model.DamageReport;
 import ek.dk.biludlejning.model.User;
 import ek.dk.biludlejning.service.DamageService;
-import ek.dk.biludlejning.service.CarService;
 import ek.dk.biludlejning.service.RentalAgreementService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,12 +18,10 @@ import java.util.Optional;
 @Controller
 public class DamageController {
     private final DamageService damageService;
-    private final CarService carService;
     private final RentalAgreementService rentalAgreementService;
 
-    public DamageController(DamageService damageService, CarService carService, RentalAgreementService rentalAgreementService) {
+    public DamageController(DamageService damageService, RentalAgreementService rentalAgreementService) {
         this.damageService = damageService;
-        this.carService = carService;
         this.rentalAgreementService = rentalAgreementService;
     }
 
@@ -31,7 +29,12 @@ public class DamageController {
     public  String damageReports(Model model,
                                  @SessionAttribute(name = "currentUser", required = false) User currentUser) {
         model.addAttribute("currentUser", currentUser);
+        String accessCheck = checkAccess(currentUser);
+        if (accessCheck != null) {
+            return accessCheck;
+        }
         model.addAttribute("activePage", "damage-reports");
+        model.addAttribute("damageReportList", damageService.getAllDamageReports());
         return "damage_reports";
     }
 
@@ -44,7 +47,6 @@ public class DamageController {
         if (accessCheck != null) {
             return accessCheck;
         }
-
         if (!model.containsAttribute("damageReport")) {
             model.addAttribute("damageReport", new DamageReport());
         }
@@ -76,6 +78,17 @@ public class DamageController {
                 "Skaderapporten blev oprettet, og bilen er sat til MAINTENANCE.");
 
         return "redirect:/damage-report-create";
+    }
+
+    @GetMapping("/add-damage-item")
+    public String addDamageItem(@ModelAttribute DamageItem damageItem,
+                                RedirectAttributes redirectAttributes,
+                                @SessionAttribute(name = "currentUser", required = false)User currentUser){
+        String accessCheck = checkAccess(currentUser);
+        if (accessCheck != null) {
+            return accessCheck;
+        }
+        return "redirect:/damage_create";
     }
 
 

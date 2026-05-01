@@ -2,6 +2,7 @@ package ek.dk.biludlejning.repository;
 
 import ek.dk.biludlejning.model.DamageReport;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IDamageReportRepository {
@@ -11,6 +12,8 @@ public interface IDamageReportRepository {
 
     // find damage report by attribute
     Optional<DamageReport> findByXY(String attribute, Object data);
+
+    List<DamageReport> getAllDamageReports();
 
     // update existing damage report
     void update(DamageReport report);
