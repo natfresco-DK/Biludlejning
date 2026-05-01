@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -44,6 +45,10 @@ public class DamageService {
         return Optional.empty();
     }
 
+    public List<DamageReport> getAllDamageReports(){
+        return damageReportRepository.getAllDamageReports();
+    }
+
     private Optional<String> validateDamageReport(DamageReport damageReport) {
         try {
             if (damageReport.getRentalAgreementId() == 0) {
@@ -76,11 +81,6 @@ public class DamageService {
             return Optional.of("Der opstod en fejl: " + e.getMessage());
         }
     }
-
-
-
-
-
 }
 
 
