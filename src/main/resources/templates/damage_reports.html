@@ -31,7 +31,7 @@
                 <th>odometer</th>
                 <th>lejeaftale ID</th>
                 <th>registreret af</th>
-                <th>              </th>
+                <th>Handling</th>
             </tr>
             </thead>
             <tbody>
@@ -46,11 +46,13 @@
                 <td th:text="${report.odometer}"></td>
                 <td th:text="${report.rentalAgreementId}"></td>
                 <td th:text="${report.registeredBy}"></td>
+                <td>
                 <form th:action="@{/add-damage-item}" method="post" style="display: inline;">
                     <button type="submit" >
-                        Returner
+                        add damage item
                     </button>
                 </form>
+                </td>
             </tr>
             </tbody>
         </table>
