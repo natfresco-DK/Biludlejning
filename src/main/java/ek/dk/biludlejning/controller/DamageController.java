@@ -61,8 +61,11 @@ public class DamageController {
 
     @PostMapping("/damage-report-create")
     public String createDamageReport(@ModelAttribute DamageReport damageReport,
+                                     Model model,
                                      RedirectAttributes redirectAttributes,
                                      @SessionAttribute(name = "currentUser", required = false) User currentUser) {
+        model.addAttribute("currentUser", currentUser);
+
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
             return accessCheck;
@@ -84,11 +87,15 @@ public class DamageController {
 
     @PostMapping("/add-damage-item")
     public String addDamageItem(
+            Model model,
             @RequestParam int reportId,
             @RequestParam String description,
             @RequestParam double price,
             RedirectAttributes redirectAttributes,
             @SessionAttribute(name = "currentUser", required = false) User currentUser) {
+
+        model.addAttribute("currentUser", currentUser);
+
 
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
@@ -116,6 +123,8 @@ public class DamageController {
             @PathVariable int reportId,
             Model model,
             @SessionAttribute(name = "currentUser", required = false) User currentUser) {
+        model.addAttribute("currentUser", currentUser);
+
 
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
