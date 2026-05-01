@@ -14,13 +14,46 @@
     <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
     <main class="content">
-        <h1>Velkommen til damage reports</h1>
+        <h1>Velkommen til skaderapporter</h1>
 
         <div>
             <a th:href="@{/damage-report-create}" class="btn-primary">
                 + Opret skaderapport
             </a>
         </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Skade raport ID</th>
+                <th>Afleverings Dato</th>
+                <th>Raport Dato</th>
+                <th>pris</th>
+                <th>odometer</th>
+                <th>lejeaftale ID</th>
+                <th>registreret af</th>
+                <th>              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(damageReportList)}">
+                <td colspan="10">Ingen skaderapporter fundet</td>
+            </tr>
+            <tr th:each="report : ${damageReportList}">
+                <td th:text="${report.damgeReportId}"></td>
+                <td th:text="${report.returnDate}"></td>
+                <td th:text="${report.reportDate}"></td>
+                <td th:text="${report.cost}"></td>
+                <td th:text="${report.odometer}"></td>
+                <td th:text="${report.rentalAgreementId}"></td>
+                <td th:text="${report.registeredBy}"></td>
+                <form th:action="@{/add-damage-item}" method="post" style="display: inline;">
+                    <button type="submit" >
+                        Returner
+                    </button>
+                </form>
+            </tr>
+            </tbody>
+        </table>
 
     </main>
 </section>
