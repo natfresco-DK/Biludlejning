@@ -23,6 +23,7 @@ public interface IDamageReportRepository {
 
     void setCarToMaintenance(DamageReport report);
 
+    DamageReport getDamageReportById(int reportId);
 
 }
 

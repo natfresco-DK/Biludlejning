@@ -9,9 +9,11 @@ import ek.dk.biludlejning.service.RentalAgreementService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.Optional;
 
@@ -80,17 +82,70 @@ public class DamageController {
         return "redirect:/damage-report-create";
     }
 
-    @GetMapping("/add-damage-item")
-    public String addDamageItem(@ModelAttribute DamageItem damageItem,
-                                RedirectAttributes redirectAttributes,
-                                @SessionAttribute(name = "currentUser", required = false)User currentUser){
+    @PostMapping("/add-damage-item")
+    public String addDamageItem(
+            @RequestParam int reportId,
+            @RequestParam String description,
+            @RequestParam double price,
+            RedirectAttributes redirectAttributes,
+            @SessionAttribute(name = "currentUser", required = false) User currentUser) {
+
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
             return accessCheck;
         }
-        return "redirect:/damage_create";
+
+        DamageItem damageItem = new DamageItem();
+        damageItem.setReportId(reportId);
+        damageItem.setDescription(description);
+        damageItem.setPrice(price);
+
+        Optional<String> error = damageService.createDamageItem(damageItem);
+
+        if (error.isPresent()) {
+            redirectAttributes.addFlashAttribute("errorMessage", error.get());
+            return "redirect:/add-damage-item/" + reportId;
+        }
+
+        redirectAttributes.addFlashAttribute("successMessage", "Skaden blev tilføjet.");
+        return "redirect:/damage-reports";
     }
 
+    @GetMapping("/add-damage-item/{reportId}")
+    public String showAddDamageItemPage(
+            @PathVariable int reportId,
+            Model model,
+            @SessionAttribute(name = "currentUser", required = false) User currentUser) {
+
+        String accessCheck = checkAccess(currentUser);
+        if (accessCheck != null) {
+            return accessCheck;
+        }
+
+        model.addAttribute("reportId", reportId);
+        model.addAttribute("damageItem", new DamageItem());
+
+        return "damage_add_item";
+    }
+
+
+    @GetMapping("/damage-report/{reportId}")
+    public String viewDamageReport(
+            @PathVariable int reportId,
+            Model model,
+            @SessionAttribute(name = "currentUser", required = false) User currentUser) {
+
+        String accessCheck = checkAccess(currentUser);
+        if (accessCheck != null) {
+            return accessCheck;
+        }
+
+        model.addAttribute("damageReport", damageService.getDamageReportById(reportId));
+        model.addAttribute("damageItems", damageService.getDamageItemsByReportId(reportId));
+        model.addAttribute("activePage", "damage-reports");
+
+        return "damage_view";
+    }
 
     private String checkAccess(User currentUser) {
         if (currentUser == null) {

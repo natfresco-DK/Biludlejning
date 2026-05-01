@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -28,7 +29,8 @@ public class DamageItemRepository implements IDamageItemRepository{
         public DamageItem mapRow(ResultSet rs, int rowNum) throws SQLException {
             DamageItem damageItem = new DamageItem();
             damageItem.setDamageId(rs.getInt("damage_id"));
-            damageItem.setDamageId(rs.getInt("damage_report_id"));
+           // damageItem.setDamageId(rs.getInt("damage_report_id"));
+            damageItem.setReportId(rs.getInt("damage_report_id"));
             damageItem.setDescription(rs.getString("description"));
             damageItem.setPrice(rs.getDouble("price"));
             return damageItem;
@@ -36,9 +38,9 @@ public class DamageItemRepository implements IDamageItemRepository{
     };
 
     @Override
-    public void createCar(DamageItem damageItem) {
-        String sql = "INSERT INTO damage_items (damage_id, damage_report_id, description, price) " +
-                "VALUES (?,?,?,?)";
+    public void createDamageItem(DamageItem damageItem) {
+        String sql = "INSERT INTO damage_items (damage_report_id, description, price) " + //damage_id
+                "VALUES (?,?,?)";
         jdbcTemplate.update(sql,
                 damageItem.getReportId(),
                 damageItem.getDescription(),
@@ -82,5 +84,12 @@ public class DamageItemRepository implements IDamageItemRepository{
     public int deleteById(int id) {
         String sql = "DELETE FROM damage_items WHERE damage_id = ?";
         return jdbcTemplate.update(sql, id);
+    }
+
+    @Override
+    public List<DamageItem> getDamageItemsByReportId(int reportId) {
+        String sql = "SELECT * FROM damage_items WHERE damage_report_id = ?";
+
+        return jdbcTemplate.query(sql, damageItemRowMapper, reportId);
     }
 }

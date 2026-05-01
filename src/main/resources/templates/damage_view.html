@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Skaderapport</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+<body>
+
+<section class="layout">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="content">
+        <h1>Skaderapport</h1>
+
+        <p><strong>Rapport ID:</strong> <span th:text="${damageReport.damgeReportId}"></span></p>
+        <p><strong>Rapport dato:</strong> <span th:text="${damageReport.reportDate}"></span></p>
+        <p><strong>Returneringsdato:</strong> <span th:text="${damageReport.returnDate}"></span></p>
+        <p><strong>Odometer:</strong> <span th:text="${damageReport.odometer}"></span></p>
+        <p><strong>Lejeaftale ID:</strong> <span th:text="${damageReport.rentalAgreementId}"></span></p>
+        <p><strong>Registreret af:</strong> <span th:text="${damageReport.registeredBy}"></span></p>
+
+        <h2>Skader</h2>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Skade ID</th>
+                <th>Beskrivelse</th>
+                <th>Pris</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:if="${#lists.isEmpty(damageItems)}">
+                <td colspan="3">Ingen skader tilføjet til denne rapport</td>
+            </tr>
+
+            <tr th:each="item : ${damageItems}">
+                <td th:text="${item.damageId}"></td>
+                <td th:text="${item.description}"></td>
+                <td th:text="${item.price}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <br>
+
+        <a th:href="@{/damage-reports}" class="btn-primary">Tilbage</a>
+    </main>
+</section>
+
+</body>
+</html>

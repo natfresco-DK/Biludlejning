@@ -25,7 +25,9 @@ public class DamageItem {
     public int getDamageId() {
         return damageId;
     }
-    public void setDamageId(int damageId) {}
+    public void setDamageId(int damageId) {
+        this.damageId = damageId;
+    }
 
     public int getReportId() {
         return reportId;
