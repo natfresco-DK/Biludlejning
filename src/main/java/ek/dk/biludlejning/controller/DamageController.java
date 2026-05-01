@@ -135,6 +135,8 @@ public class DamageController {
             Model model,
             @SessionAttribute(name = "currentUser", required = false) User currentUser) {
 
+        model.addAttribute("currentUser", currentUser);
+
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
             return accessCheck;
