@@ -1,11 +1,13 @@
 package ek.dk.biludlejning.repository;
 
+import ek.dk.biludlejning.model.RentalAgreement;
 import ek.dk.biludlejning.model.User;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -17,6 +19,15 @@ public class UserRepository implements IUserRepository {
     public UserRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
+    public List<User> getAllUsers(){
+        String sql = "SELECT * FROM users";
+        return jdbcTemplate.query(sql, this::mapUser);
+    }
+
+
+
+
 
     public User mapUser(ResultSet rs, int rowNum) throws SQLException {
         User user = new User();

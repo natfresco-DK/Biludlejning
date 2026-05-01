@@ -41,7 +41,28 @@ public class UserController {
             model.addAttribute("user", new User());
         }
         model.addAttribute("roles", ALLOWED_ROLES);
+
+        model.addAttribute("usersList", userService.getAllUsers());
+
+
         return "users";
+    }
+
+    @GetMapping("/users-create")
+    public String createUserForm(Model model,
+                                 @SessionAttribute(name = "currentUser", required = false) User currentUser) {
+        model.addAttribute("currentUser", currentUser);
+        String accessCheck = checkAccess(currentUser);
+        if (accessCheck != null) {
+            return accessCheck;
+        }
+
+        model.addAttribute("activePage", "users");
+        if (!model.containsAttribute("user")) {
+            model.addAttribute("user", new User());
+        }
+        model.addAttribute("roles", ALLOWED_ROLES);
+        return "users_create";
     }
 
     @PostMapping("/opret-bruger")
@@ -66,6 +87,9 @@ public class UserController {
         redirectAttributes.addFlashAttribute("successMessage", "Brugeren blev oprettet");
         return "redirect:/users";
     }
+
+
+
 
     private String checkAccess(User currentUser) {
         if (currentUser == null) {
