@@ -14,12 +14,13 @@
 
   <input type="hidden" name="reportId" th:value="${reportId}" />
 
-  <label>Beskrivelse:</label>
-  <input type="text" name="description" required>
+  <label>Beskrivelse:
+    <input type="text" name="description" required>
+  </label>
 
-  <label>Pris:</label>
-  <input type="number" step="1" min="0" name="price" required>
-
+  <label>Pris:
+    <input type="number" step="1" min="0" name="price" required>
+  </label>
   <button type="submit">Gem skade</button>
 </form>
 
