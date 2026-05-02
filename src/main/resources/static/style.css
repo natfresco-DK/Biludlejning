@@ -24,7 +24,7 @@ body {
     width: 60px;
 }
 
-.nav-item {
+.sidebar-item {
     display: flex;
     align-items: center;
     gap: 22px;
@@ -34,14 +34,14 @@ body {
     font-size: 16px;
 }
 
-.nav-item i {
+.sidebar-item i {
     width: 22px;
     font-size: 20px;
     color: #666;
 }
 
-.nav-item:hover,
-.nav-item.active {
+.sidebar-item:hover,
+.sidebar-item.active {
     background-color: #eeeeee;
 }
 
