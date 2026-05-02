@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Tilføj skade til skaderapport</title>
+  <link rel="stylesheet" th:href="@{/style.css}">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<h2>Tilføj en skade</h2>
+
+<form th:action="@{/add-damage-item}" method="post">
+
+  <input type="hidden" name="reportId" th:value="${reportId}" />
+
+  <label>Beskrivelse:
+    <input type="text" name="description" required>
+  </label>
+
+  <label>Pris:
+    <input type="number" step="1" min="0" name="price" required>
+  </label>
+  <button type="submit">Gem skade</button>
+</form>
+
+</body>
+</html>

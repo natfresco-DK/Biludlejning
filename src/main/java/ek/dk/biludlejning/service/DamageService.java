@@ -1,8 +1,10 @@
 package ek.dk.biludlejning.service;
 
 import ek.dk.biludlejning.model.Car;
+import ek.dk.biludlejning.model.DamageItem;
 import ek.dk.biludlejning.model.DamageReport;
 import ek.dk.biludlejning.model.RentalAgreement;
+import ek.dk.biludlejning.repository.IDamageItemRepository;
 import ek.dk.biludlejning.repository.IDamageReportRepository;
 import ek.dk.biludlejning.repository.ICarRepository;
 import ek.dk.biludlejning.repository.IRentalAgreementRepository;
@@ -19,13 +21,15 @@ public class DamageService {
     private final IDamageReportRepository damageReportRepository;
     private final ICarRepository carRepository;
     private final IRentalAgreementRepository rentalAgreementRepository;
+    private final IDamageItemRepository damageItemRepository;
 
     public DamageService(IDamageReportRepository damageReportRepository,
                          ICarRepository carRepository,
-                         IRentalAgreementRepository rentalAgreementRepository) {
+                         IRentalAgreementRepository rentalAgreementRepository, IDamageItemRepository damageItemRepository) {
         this.damageReportRepository = damageReportRepository;
         this.carRepository = carRepository;
         this.rentalAgreementRepository = rentalAgreementRepository;
+        this.damageItemRepository = damageItemRepository;
     }
 
     @Transactional
@@ -80,6 +84,31 @@ public class DamageService {
         } catch (Exception e) {
             return Optional.of("Der opstod en fejl: " + e.getMessage());
         }
+    }
+
+    public Optional<String> createDamageItem(DamageItem damageItem) {
+        if (damageItem.getReportId() == 0) {
+            return Optional.of("Skaderapport skal vælges");
+        }
+
+        if (damageItem.getDescription() == null || damageItem.getDescription().isBlank()) {
+            return Optional.of("Beskrivelse skal udfyldes");
+        }
+
+        if (damageItem.getPrice() < 0) {
+            return Optional.of("Pris må ikke være negativ");
+        }
+
+        damageItemRepository.createDamageItem(damageItem);
+        return Optional.empty();
+    }
+
+    public DamageReport getDamageReportById(int reportId) {
+        return damageReportRepository.getDamageReportById(reportId);
+    }
+
+    public List<DamageItem> getDamageItemsByReportId(int reportId) {
+        return damageItemRepository.getDamageItemsByReportId(reportId);
     }
 }
 

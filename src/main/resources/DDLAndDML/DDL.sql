@@ -1,3 +1,5 @@
+DROP DATABASE IF EXISTS biludlejning;
+
 CREATE DATABASE IF NOT EXISTS biludlejning;
 
 USE biludlejning;

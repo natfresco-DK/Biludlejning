@@ -105,6 +105,13 @@ public class DamageReportRepository implements IDamageReportRepository {
         jdbcTemplate.update(sql, report.getRentalAgreementId());
     }
 
+    @Override
+    public DamageReport getDamageReportById(int reportId) {
+        String sql = "SELECT * FROM damage_reports WHERE damage_report_id = ?";
+
+        return jdbcTemplate.queryForObject(sql, damageReportRowMapper, reportId);
+    }
+
 }
 
 

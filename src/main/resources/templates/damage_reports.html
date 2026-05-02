@@ -47,11 +47,19 @@
                 <td th:text="${report.rentalAgreementId}"></td>
                 <td th:text="${report.registeredBy}"></td>
                 <td>
-                <form th:action="@{/add-damage-item}" method="post" style="display: inline;">
-                    <button type="submit" >
-                        add damage item
+
+                <form th:action="@{/add-damage-item/{id}(id=${report.damgeReportId})}" method="get" style="display: inline;">
+                    <button type="submit">
+                        Tilføj skade
                     </button>
                 </form>
+
+                <form th:action="@{/damage-report/{id}(id=${report.damgeReportId})}" method="get" style="display: inline;">
+                    <button type="submit">
+                        Vis
+                    </button>
+                </form>
+
                 </td>
             </tr>
             </tbody>
