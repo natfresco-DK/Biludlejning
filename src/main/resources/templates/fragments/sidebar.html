@@ -47,10 +47,33 @@
     <i class="fa-solid fa-users"></i>
         Brugere
     </a>
-    <div th:if="${currentUser != null}">
-        Bruger: <span th:text="${currentUser.firstname}">User Name</span>
+    <div th:if="${currentUser != null}" class="sidebar-user">
+        <div class="user-info">
+            <i class="fa-solid fa-user"></i>
+            <div>
+                <span class="user-label">Bruger:
+                    <strong>
+                        <text th:text="${currentUser.firstname}">Fornavn</text>
+                        <text th:text="${currentUser.lastname}">Efternavn</text>
+                    </strong>
+                </span>
+
+                <span class="user-label">Rolle:
+                    <strong>
+                        <text th:text="${currentUser.role}">Rolle</text>
+                    </strong>
+
+                </span>
+
+            </div>
+        </div>
     </div>
-    <form th:action="@{/logout}" method="post"><button type="submit">Log ud</button></form>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="logout-btn">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Log ud
+            </button>
+        </form>
 </nav>
 
 </body>
