@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 @Controller
 public class AuthController {
     private final AuthService authService;
     private final CarService carService;
     private final RentalAgreementService rentalAgreementService;
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     public AuthController(AuthService authService, CarService carService, RentalAgreementService rentalAgreementService) {
         this.authService = authService;
@@ -56,11 +59,14 @@ public class AuthController {
             HttpSession session = request.getSession(true);
             session.setAttribute("currentUser", user);
             System.out.println("AuthController: Created session for User id=" + user.getId());
+            logger.info("Created session for User id={}", user.getId());
             return "redirect:/dashboard";
         } catch (AuthenticationException e) {
             System.out.println("AuthController: Authentication failed: " + e.getMessage());
+            logger.warn("Authentication failed for email={}: {}", email, e.getMessage());
             if (e.getCause() != null) {
-                System.out.println("AuthController: Cause: " + e.getCause().getMessage());
+                System.out.println("AuthController: Cause: " +  e.getCause().getMessage());
+                logger.warn("Cause: {}", e.getCause().getMessage());
             }
             attrs.addAttribute("error", "true");
             return "redirect:/login";
