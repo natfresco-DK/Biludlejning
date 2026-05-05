@@ -1,7 +1,6 @@
 package ek.dk.biludlejning.controller;
 
 import ek.dk.biludlejning.model.Car;
-import ek.dk.biludlejning.model.RentalAgreement;
 import ek.dk.biludlejning.model.User;
 import ek.dk.biludlejning.service.CarService;
 import ek.dk.biludlejning.service.RentalAgreementService;
