@@ -125,7 +125,7 @@ public class RentalAgreementRepository implements IRentalAgreementRepository{
 
     public double getTotalActiveRevenue() {
         String sql = "SELECT COALESCE(SUM(downpayment + (monthly_payment * TIMESTAMPDIFF(MONTH, start_date, end_date))),0) FROM rental_agreements WHERE active = TRUE";
-        logger.info("Successfully fetched total active revenue: {}", sql);
+        logger.info("Successfully fetched total active revenue: Total={}", jdbcTemplate.queryForObject(sql, Double.class));
         return jdbcTemplate.queryForObject(sql, Double.class);
     }
 

@@ -135,7 +135,7 @@ public class CarRepository implements ICarRepository {
     @Override
     public int findAllRentedCars() {
         String sql = "SELECT COUNT(*) FROM cars WHERE UPPER(status) = ?";
-        logger.info("Successfully fetched all rented cars. Total count: {}", jdbcTemplate.query(sql, carRowMapper).size());
+        logger.info("Successfully fetched all rented cars. Total={}", jdbcTemplate.queryForObject(sql, Integer.class, "RENTED"));
         return jdbcTemplate.queryForObject(sql, Integer.class, "RENTED");
     }
 
