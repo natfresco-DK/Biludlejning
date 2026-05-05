@@ -1,9 +1,8 @@
 package ek.dk.biludlejning.repository;
 
-import ek.dk.biludlejning.model.Car;
-import ek.dk.biludlejning.model.Customer;
 import ek.dk.biludlejning.model.RentalAgreement;
-import ek.dk.biludlejning.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -19,6 +18,8 @@ public class RentalAgreementRepository implements IRentalAgreementRepository{
 
 
     private final JdbcTemplate jdbcTemplate;
+
+    private static final Logger logger = LoggerFactory.getLogger(RentalAgreementRepository.class);
 
     public RentalAgreementRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -52,33 +53,39 @@ public class RentalAgreementRepository implements IRentalAgreementRepository{
                 rentalAgreement.getCustomer(),
                     rentalAgreement.getActive()
         );
+        logger.info("Successfully created RentalAgreement");
     }
 
     //finders
     public Optional<RentalAgreement> findByXY(String attribute, Object data){
         Set<String> allowedAttributes = Set.of("agreement_id", "start_date", "end_date", "downpayment", "monthly_payment", "max_km", "created_by", "car_id", "customer_id","active");
         if (!allowedAttributes.contains(attribute)) {
+            logger.error("Attribute not allowed: {}", attribute);
             throw new IllegalArgumentException("Invalid attribute: " + attribute);
         }
         String sql = "SELECT * FROM rental_agreements WHERE " + attribute + " = ?";
         try {
+            logger.info("Successfully found RentalAgreement with attribute={} and data={}", attribute,  data);
             return Optional.of(jdbcTemplate.queryForObject(
                     sql,
                     this::mapRentalAgreement,
                     data
             ));
         } catch (EmptyResultDataAccessException e) {
+            logger.error("EmptyResultDataAccessException: No RentalAgreement found with attribute={} and data={}", attribute,  data);
             return Optional.empty();
         }
     }
 
     public List<RentalAgreement> getAllRentalAgreements(){
         String sql = "SELECT * FROM rental_agreements";
+        logger.info("Successfully fetched all RentalAgreements. Total count: {}", jdbcTemplate.query(sql, this::mapRentalAgreement).size());
         return jdbcTemplate.query(sql, this::mapRentalAgreement);
     }
 
     public List<RentalAgreement> findByCarId(int carId) {
         String sql = "SELECT * FROM rental_agreements WHERE car_id = ?";
+        logger.info("Successfully fetched car from carId={}", carId);
         return jdbcTemplate.query(sql, this::mapRentalAgreement, carId);
     }
 
@@ -107,22 +114,25 @@ public class RentalAgreementRepository implements IRentalAgreementRepository{
                 rentalAgreement.getActive(),
                 rentalAgreement.getAgreementId()
         );
+        logger.info("Successfully updated RentalAgreement");
     }
 
     //deleter
     public int deleteRentalAgreementById(int id) {
+        logger.info("Successfully deleted RentalAgreement with id={}", id);
         return jdbcTemplate.update("DELETE FROM rental_agreements WHERE agreement_id = ?", id);
     }
 
     public double getTotalActiveRevenue() {
         String sql = "SELECT COALESCE(SUM(downpayment + (monthly_payment * TIMESTAMPDIFF(MONTH, start_date, end_date))),0) FROM rental_agreements WHERE active = TRUE";
+        logger.info("Successfully fetched total active revenue: {}", sql);
         return jdbcTemplate.queryForObject(sql, Double.class);
     }
 
     @Override
     public List<RentalAgreement> getReturnedRentalAgreements() {
         String sql = "SELECT ra.* FROM rental_agreements ra JOIN cars c ON ra.car_id = c.car_id WHERE c.status = 'RETURNED'";
+        logger.info("Sucessfully fetched all returned RentalAgreements. Total count: {}", jdbcTemplate.query(sql, this::mapRentalAgreement).size());
         return jdbcTemplate.query(sql, this::mapRentalAgreement);
     }
-
 }
