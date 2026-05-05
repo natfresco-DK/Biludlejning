@@ -1,6 +1,7 @@
 package ek.dk.biludlejning.service;
 
 import ek.dk.biludlejning.model.Car;
+import ek.dk.biludlejning.model.Customer;
 import ek.dk.biludlejning.model.RentalAgreement;
 import ek.dk.biludlejning.repository.ICarRepository;
 import ek.dk.biludlejning.repository.IRentalAgreementRepository;
@@ -16,21 +17,27 @@ public class RentalAgreementService {
 
     private final IRentalAgreementRepository rentalAgreementRepository;
     private final ICarRepository carRepository;
+    private final CustomerService customerService;
 
 
-    public RentalAgreementService(IRentalAgreementRepository rentalAgreementRepository, ICarRepository carRepository) {
+    public RentalAgreementService(IRentalAgreementRepository rentalAgreementRepository, ICarRepository carRepository, CustomerService customerService) {
         this.rentalAgreementRepository = rentalAgreementRepository;
         this.carRepository = carRepository;
+        this.customerService = customerService;
     }
 
     @Transactional
-    public Optional<String> createRentalAgreement(RentalAgreement rentalAgreement, int createdBy) {
+    public Optional<String> createRentalAgreement(RentalAgreement rentalAgreement, int createdBy, Customer newCustomer) {
+        if(newCustomer != null){
+            Customer createdCustomer = customerService.createCustomer(newCustomer);
+            rentalAgreement.setCustomer(createdCustomer.getCustomerId());
+        }
+
         Optional<String> validationError = validateRentalAgreement(rentalAgreement);
         if (validationError.isPresent()) {
             return validationError;
         }
 
-        rentalAgreement.setActive(true);
         rentalAgreement.setCreatedBy(createdBy);
 
         setCarAsRented(rentalAgreement.getCar());

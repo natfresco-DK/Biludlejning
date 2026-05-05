@@ -17,11 +17,11 @@ import java.util.Set;
 public class CustomerRepository implements ICustomerRepository {
 
 
-    private final JdbcTemplate jdbctemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public CustomerRepository(JdbcTemplate jdbctemplate) {
-        this.jdbctemplate = jdbctemplate;
+    public CustomerRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     private final RowMapper<Customer> customerRowMapper = new RowMapper<Customer>() {
@@ -43,10 +43,10 @@ public class CustomerRepository implements ICustomerRepository {
     };
 
     @Override
-    public void createCustomer(Customer customer) {
+    public Customer createCustomer(Customer customer) {
         String sql = "INSERT INTO customers (first_name, last_name, email, phone, licence_no, street_address, zip_code, city) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        jdbctemplate.update(sql,
+        jdbcTemplate.update(sql,
                 customer.getFirstName(),
                 customer.getLastName(),
                 customer.getEmail(),
@@ -56,6 +56,17 @@ public class CustomerRepository implements ICustomerRepository {
                 customer.getZipCode(),
                 customer.getCity()
         );
+
+        String querySql = "SELECT customer_id FROM customers WHERE first_name = ? AND last_name = ? ORDER BY customer_id DESC LIMIT 1";
+        Integer customerId = jdbcTemplate.queryForObject(querySql, Integer.class,
+                customer.getFirstName(),
+                customer.getLastName());
+
+
+        customer.setCustomerId(customerId);
+
+
+        return customer;
     }
 
     @Override
@@ -77,7 +88,7 @@ public class CustomerRepository implements ICustomerRepository {
         }
         String sql = "SELECT * FROM customers WHERE " + attribute + " = ?";
         try {
-            Customer customer = jdbctemplate.queryForObject(sql, customerRowMapper, data);
+            Customer customer = jdbcTemplate.queryForObject(sql, customerRowMapper, data);
             return Optional.ofNullable(customer);
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
@@ -97,7 +108,7 @@ public class CustomerRepository implements ICustomerRepository {
                 "city = ?, " +
                 "active = ? " +
                 "WHERE customer_id = ?";
-        jdbctemplate.update(sql,
+        jdbcTemplate.update(sql,
                 customer.getFirstName(),
                 customer.getLastName(),
                 customer.getEmail(),
@@ -114,12 +125,12 @@ public class CustomerRepository implements ICustomerRepository {
     @Override
     public List<Customer> findAllActive() {
         String sql = "SELECT * FROM customers WHERE active = true";
-        return jdbctemplate.query(sql, customerRowMapper);
+        return jdbcTemplate.query(sql, customerRowMapper);
     }
 
     @Override
     public int deleteById(int id) {
         String sql = "DELETE FROM customers WHERE customer_id = ?";
-        return jdbctemplate.update(sql, id);
+        return jdbcTemplate.update(sql, id);
     }
 }

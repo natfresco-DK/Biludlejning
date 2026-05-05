@@ -18,4 +18,8 @@ public class CustomerService {
     public List<Customer> getAllActiveCustomers() {
         return customerRepository.findAllActive();
     }
+
+    public Customer createCustomer(Customer customer){
+        return customerRepository.createCustomer(customer);
+    }
 }

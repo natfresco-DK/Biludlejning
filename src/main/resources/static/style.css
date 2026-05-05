@@ -94,6 +94,7 @@ body {
 .table th {
     background: #f4f4f4;
 }
+
 .cards {
     display: flex;
     justify-content: space-around;
@@ -122,6 +123,7 @@ body {
 .card-content {
     text-align: center;
 }
+
 .card-content h2 {
     margin: 0 0 8px 0;
     font-size: 22px;
@@ -177,4 +179,27 @@ body {
     background-color: #dc2626;
 }
 
+#newCustomerForm {
+    display: block;
+}
+
+.customer-toggle label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-section {
+    border: 1px solid #e0e0e0;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    background-color: #fafafa;
+}
+
+.form-section h3 {
+    margin-top: 0;
+    color: #333;
+}
 
