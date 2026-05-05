@@ -18,7 +18,7 @@ public class ErrorController {
                                @SessionAttribute(name = "currentUser", required = false) User currentUser) {
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("errorMessage", "Du har ikke tilladelse til at få adgang til denne side.");
-        logger.info("Access denied page accessed by User id={} and email={}", (currentUser != null ? currentUser.getId() : "null"), (currentUser != null ? currentUser.getEmail() : "null"));
+        logger.info("Access denied page accessed by User id={} with email={}", (currentUser != null ? currentUser.getId() : "null"), (currentUser != null ? currentUser.getEmail() : "null"));
         return "error";
     }
 }

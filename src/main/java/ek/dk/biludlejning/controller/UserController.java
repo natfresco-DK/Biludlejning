@@ -2,6 +2,8 @@ package ek.dk.biludlejning.controller;
 
 import ek.dk.biludlejning.model.User;
 import ek.dk.biludlejning.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +26,9 @@ public class UserController {
             "FORETNINGSUDVIKLING"
     );
 
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -34,6 +39,7 @@ public class UserController {
         model.addAttribute("currentUser", currentUser);
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
+            logger.warn("Access check has been denied for User id={} with email={} at @GET /users", currentUser.getId(), currentUser.getEmail());
             return accessCheck;
         }
         model.addAttribute("activePage", "users");
@@ -44,7 +50,7 @@ public class UserController {
 
         model.addAttribute("usersList", userService.getAllUsers());
 
-
+        logger.info("User with User id={} with email={} accessed @GET /users", currentUser.getId(), currentUser.getEmail());
         return "users";
     }
 
@@ -54,6 +60,7 @@ public class UserController {
         model.addAttribute("currentUser", currentUser);
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
+            logger.warn("Access check has been denied for User id={} with email={} at @GET /users-create", currentUser.getId(), currentUser.getEmail());
             return accessCheck;
         }
 
@@ -62,6 +69,7 @@ public class UserController {
             model.addAttribute("user", new User());
         }
         model.addAttribute("roles", ALLOWED_ROLES);
+        logger.info("User with User id={} with email={} accessed @GET /users-create", currentUser.getId(), currentUser.getEmail());
         return "users_create";
     }
 
@@ -73,6 +81,7 @@ public class UserController {
         model.addAttribute("currentUser", currentUser);
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
+            logger.warn("Access check has been denied for User id={} with email={} at @POST /opret-bruger", currentUser.getId(), currentUser.getEmail());
             return accessCheck;
         }
         Optional<String> validationError = userService.validateUser(user);
@@ -85,6 +94,7 @@ public class UserController {
         }
         userService.createUser(user);
         redirectAttributes.addFlashAttribute("successMessage", "Brugeren blev oprettet");
+        logger.info("User created successfully by User id={} with email={}", currentUser.getId(), currentUser.getEmail());
         return "redirect:/users";
     }
 

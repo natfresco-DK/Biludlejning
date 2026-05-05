@@ -39,12 +39,12 @@ public class LeaseController {
         model.addAttribute("currentUser", currentUser);
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
-            logger.warn("Access check has been denied for User id={} and email={} at @GET /lease-agreements", currentUser.getId(), currentUser.getEmail());
+            logger.warn("Access check has been denied for User id={} with email={} at @GET /lease-agreements", currentUser.getId(), currentUser.getEmail());
             return accessCheck;
         }
         model.addAttribute("activePage", "lease-agreements");
         model.addAttribute("rentalAgreementList", rentalAgreementService.getAllRentalAgreements());
-        logger.info("User with User id={} and email={} accessed @GET /lease_agreements", currentUser.getId(), currentUser.getEmail());
+        logger.info("User with User id={} with email={} accessed @GET /lease_agreements", currentUser.getId(), currentUser.getEmail());
         return "lease_agreements";
     }
 
@@ -54,7 +54,7 @@ public class LeaseController {
         model.addAttribute("currentUser", currentUser);
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
-            logger.warn("Access check has been denied for User id={} and email={} at @GET /reports", currentUser.getId(), currentUser.getEmail());
+            logger.warn("Access check has been denied for User id={} with email={} at @GET /reports", currentUser.getId(), currentUser.getEmail());
             return accessCheck;
         }
         model.addAttribute("activePage", "reports");
@@ -68,14 +68,14 @@ public class LeaseController {
         model.addAttribute("currentUser", currentUser);
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
-            logger.warn("Access check has been denied for User id={} and email={} at @GET /lease-create", currentUser.getId(), currentUser.getEmail());
+            logger.warn("Access check has been denied for User id={} with email={} at @GET /lease-create", currentUser.getId(), currentUser.getEmail());
             return accessCheck;
         }
         model.addAttribute("activePage", "lease-agreements");
 
         if (!model.containsAttribute("rentalAgreement")) {
             model.addAttribute("rentalAgreement", new RentalAgreement());
-            logger.info("No existing rentalAgreement found in model, adding new RentalAgreement for User id={} and email={}", currentUser.getId(), currentUser.getEmail());
+            logger.info("No existing rentalAgreement found in model, adding new RentalAgreement for User id={} with email={}", currentUser.getId(), currentUser.getEmail());
         }
 
         model.addAttribute("customers", customerService.getAllActiveCustomers());
@@ -93,7 +93,7 @@ public class LeaseController {
         model.addAttribute("currentUser", currentUser);
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
-            logger.warn("Access check has been denied for User id={} and email={} at @POST /lease-create", currentUser.getId(), currentUser.getEmail());
+            logger.warn("Access check has been denied for User id={} with email={} at @POST /lease-create", currentUser.getId(), currentUser.getEmail());
             return accessCheck;
         }
 

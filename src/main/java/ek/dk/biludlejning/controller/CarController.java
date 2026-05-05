@@ -43,7 +43,7 @@ public class CarController {
         }
         model.addAttribute("leaseCompletedMap",leaseCompletedMap);
         model.addAttribute("activePage", "cars");
-        logger.info("User with User id={} and email={} accessed /cars", (currentUser != null ? currentUser.getId() : "null"), (currentUser != null ? currentUser.getEmail() : "null"));
+        logger.info("User with User id={} with email={} accessed /cars", (currentUser != null ? currentUser.getId() : "null"), (currentUser != null ? currentUser.getEmail() : "null"));
         return "cars";
     }
 

@@ -34,7 +34,7 @@ public class AuthController {
 
     @GetMapping("/")
     public String index(@SessionAttribute(name = "currentUser", required = false)User currentUser){
-        logger.info("User with User id={} and email={} accessed root", (currentUser != null ? currentUser.getId() : "null"), (currentUser != null ? currentUser.getEmail() : "null"));
+        logger.info("User with User id={} with email={} accessed root", (currentUser != null ? currentUser.getId() : "null"), (currentUser != null ? currentUser.getEmail() : "null"));
         return (currentUser == null) ? "redirect:/login" : "redirect:/dashboard";
     }
 
