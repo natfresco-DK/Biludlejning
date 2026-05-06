@@ -1,7 +1,8 @@
 package ek.dk.biludlejning.repository;
 
-import ek.dk.biludlejning.model.Car;
 import ek.dk.biludlejning.model.DamageItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,6 +20,8 @@ public class DamageItemRepository implements IDamageItemRepository{
 
     private final JdbcTemplate jdbcTemplate;
 
+    private static final Logger logger = LoggerFactory.getLogger(DamageItemRepository.class);
+
     @Autowired
     public DamageItemRepository(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
@@ -29,7 +32,6 @@ public class DamageItemRepository implements IDamageItemRepository{
         public DamageItem mapRow(ResultSet rs, int rowNum) throws SQLException {
             DamageItem damageItem = new DamageItem();
             damageItem.setDamageId(rs.getInt("damage_id"));
-           // damageItem.setDamageId(rs.getInt("damage_report_id"));
             damageItem.setReportId(rs.getInt("damage_report_id"));
             damageItem.setDescription(rs.getString("description"));
             damageItem.setPrice(rs.getDouble("price"));
@@ -46,6 +48,7 @@ public class DamageItemRepository implements IDamageItemRepository{
                 damageItem.getDescription(),
                 damageItem.getPrice()
         );
+        logger.info("Successfully created DamageItem with reportId={}, description={}, price={}", damageItem.getReportId(), damageItem.getDescription(), damageItem.getPrice());
     }
 
     @Override
@@ -57,13 +60,16 @@ public class DamageItemRepository implements IDamageItemRepository{
                 "price"
         );
         if (!allowedAttributes.contains(attribute)) {
+            logger.error("Attribute not allowed: {}", attribute);
             throw new IllegalArgumentException("Invalid Attribute: " + attribute);
         }
         String sql = "SELECT * FROM damage_items WHERE " + attribute + " = ?";
         try {
             DamageItem damageItem = jdbcTemplate.queryForObject(sql, damageItemRowMapper, data);
+            logger.info("Successfully found DamageItem with attribute={} and data={}", attribute,  data);
             return Optional.ofNullable(damageItem);
         } catch (EmptyResultDataAccessException e) {
+            logger.error("EmptyResultDataAccessException: No DamageItem found with attribute={} and data={}", attribute,  data);
             return Optional.empty();
         }
     }
@@ -78,18 +84,20 @@ public class DamageItemRepository implements IDamageItemRepository{
                 damageItem.getDescription(),
                 damageItem.getDamageId()
         );
+        logger.info("Successfully updated DamageItem with id={}: ", damageItem.getDamageId());
     }
 
     @Override
     public int deleteById(int id) {
         String sql = "DELETE FROM damage_items WHERE damage_id = ?";
+        logger.info("Successfully deleted DamageItem with id={}", id);
         return jdbcTemplate.update(sql, id);
     }
 
     @Override
     public List<DamageItem> getDamageItemsByReportId(int reportId) {
         String sql = "SELECT * FROM damage_items WHERE damage_report_id = ?";
-
+        logger.info("Successfully fetched DamageItems with reportId={}. Total count: {}", reportId, jdbcTemplate.query(sql, damageItemRowMapper, reportId).size());
         return jdbcTemplate.query(sql, damageItemRowMapper, reportId);
     }
 }

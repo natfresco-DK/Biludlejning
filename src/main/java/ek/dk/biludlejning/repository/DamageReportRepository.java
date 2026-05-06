@@ -1,6 +1,8 @@
 package ek.dk.biludlejning.repository;
 
 import ek.dk.biludlejning.model.DamageReport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,6 +19,8 @@ import java.util.Set;
 public class DamageReportRepository implements IDamageReportRepository {
 
     private final JdbcTemplate jdbcTemplate;
+
+    private static final Logger logger = LoggerFactory.getLogger(DamageReportRepository.class);
 
     @Autowired
     public DamageReportRepository(JdbcTemplate jdbcTemplate) {
@@ -49,6 +53,7 @@ public class DamageReportRepository implements IDamageReportRepository {
                 report.getRentalAgreementId(),
                 report.getRegisteredBy()
         );
+        logger.info("Successfully created DamageReport");
     }
 
     @Override
@@ -63,13 +68,16 @@ public class DamageReportRepository implements IDamageReportRepository {
                 "registered_by"
         );
         if (!allowedAttributes.contains(attribute)) {
+            logger.error("Attribute not allowed: {}", attribute);
             throw new IllegalArgumentException("Invalid Attribute: " + attribute);
         }
         String sql = "SELECT * FROM damage_reports WHERE " + attribute + " = ?";
         try {
             DamageReport report = jdbcTemplate.queryForObject(sql, damageReportRowMapper, data);
+            logger.info("Successfully found DamageReport with attribute={} and data={}", attribute,  data);
             return Optional.ofNullable(report);
         } catch (EmptyResultDataAccessException e) {
+            logger.error("EmptyResultDataAccessException: No DamageReport found with attribute={} and data={}", attribute,  data);
             return Optional.empty();
         }
     }
@@ -77,6 +85,7 @@ public class DamageReportRepository implements IDamageReportRepository {
     @Override
     public List<DamageReport> getAllDamageReports() {
         String sql = "SELECT * FROM damage_reports";
+        logger.info("Successfully fetched all damage reports. Total count: {}", jdbcTemplate.query(sql, damageReportRowMapper).size());
         return jdbcTemplate.query(sql, damageReportRowMapper);
     }
 
@@ -92,23 +101,26 @@ public class DamageReportRepository implements IDamageReportRepository {
                 report.getRegisteredBy(),
                 report.getDamgeReportId()
         );
+        logger.info("Successfully updated DamageReport with DamageReportId={}", report.getDamgeReportId());
     }
 
     @Override
     public int deleteById(int id) {
         String sql = "DELETE FROM damage_reports WHERE damage_report_id = ?";
+        logger.info("Successfully deleted DamageReport with id={}", id);
         return jdbcTemplate.update(sql, id);
     }
 
     public void setCarToMaintenance(DamageReport report) {
         String sql = "UPDATE cars c JOIN rental_agreements ra ON c.car_id = ra.car_id SET c.status = 'MAINTENANCE' WHERE ra.agreement_id = ?";
+        logger.info("Successfully set car to MAINTENANCE for DamageReport with RentalAgreementId={}", report.getRentalAgreementId());
         jdbcTemplate.update(sql, report.getRentalAgreementId());
     }
 
     @Override
     public DamageReport getDamageReportById(int reportId) {
         String sql = "SELECT * FROM damage_reports WHERE damage_report_id = ?";
-
+        logger.info("Successfully fetched DamageReport with id={}. Total count: {}", reportId, jdbcTemplate.query(sql, damageReportRowMapper, reportId).size());
         return jdbcTemplate.queryForObject(sql, damageReportRowMapper, reportId);
     }
 

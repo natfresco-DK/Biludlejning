@@ -1,7 +1,8 @@
 package ek.dk.biludlejning.repository;
 
-import ek.dk.biludlejning.model.RentalAgreement;
 import ek.dk.biludlejning.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,18 +17,11 @@ public class UserRepository implements IUserRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
+    private static final Logger logger = LoggerFactory.getLogger(UserRepository.class);
+
     public UserRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-
-    public List<User> getAllUsers(){
-        String sql = "SELECT * FROM users";
-        return jdbcTemplate.query(sql, this::mapUser);
-    }
-
-
-
-
 
     public User mapUser(ResultSet rs, int rowNum) throws SQLException {
         User user = new User();
@@ -43,6 +37,12 @@ public class UserRepository implements IUserRepository {
         return user;
     }
 
+    public List<User> getAllUsers(){
+        String sql = "SELECT * FROM users";
+        logger.info("Successfully fetched all users. Total count: {}", jdbcTemplate.query(sql, this::mapUser).size());
+        return jdbcTemplate.query(sql, this::mapUser);
+    }
+
     @Override
     public void createUser(User user) {
         jdbcTemplate.update(
@@ -56,22 +56,26 @@ public class UserRepository implements IUserRepository {
                 user.getRole(),
                 user.isActive()
         );
+        logger.info("Successfully created user with id={}", user.getId());
     }
 
     @Override
     public Optional<User> findByXY(String attribute, Object data){
         Set<String> allowedAttributes = Set.of("first_name", "last_name", "username", "email", "phone", "role", "active", "user_id");
         if (!allowedAttributes.contains(attribute)) {
+            logger.error("Attribute not allowed: {}", attribute);
             throw new IllegalArgumentException("Invalid attribute: " + attribute);
         }
         String sql = "SELECT * FROM users WHERE " + attribute + " = ?";
         try {
+            logger.info("Successfully found User with attribute={} and data={}", attribute,  data);
             return Optional.of(jdbcTemplate.queryForObject(
                     sql,
                     this::mapUser,
                     data
             ));
         } catch (EmptyResultDataAccessException e) {
+            logger.error("EmptyResultDataAccessException: No User found with attribute={} and data={}", attribute,  data);
             return Optional.empty();
         }
     }
@@ -90,10 +94,12 @@ public class UserRepository implements IUserRepository {
                 user.isActive(),
                 user.getId()
         );
+        logger.info("Succesfully updated user");
     }
 
     @Override
     public int deleteUser(int id) {
+        logger.info("Successfully deleted User with id={}", id);
         return jdbcTemplate.update("DELETE FROM users WHERE user_id = ?", id);
     }
 }

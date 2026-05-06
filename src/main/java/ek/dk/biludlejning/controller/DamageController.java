@@ -6,6 +6,8 @@ import ek.dk.biludlejning.model.DamageReport;
 import ek.dk.biludlejning.model.User;
 import ek.dk.biludlejning.service.DamageService;
 import ek.dk.biludlejning.service.RentalAgreementService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
@@ -22,6 +24,9 @@ public class DamageController {
     private final DamageService damageService;
     private final RentalAgreementService rentalAgreementService;
 
+    private static final Logger logger = LoggerFactory.getLogger(DamageController.class);
+
+
     public DamageController(DamageService damageService, RentalAgreementService rentalAgreementService) {
         this.damageService = damageService;
         this.rentalAgreementService = rentalAgreementService;
@@ -33,10 +38,12 @@ public class DamageController {
         model.addAttribute("currentUser", currentUser);
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
+            logger.warn("Access check has been denied for User id={} with email={} at @GET /damage-reports", currentUser.getId(), currentUser.getEmail());
             return accessCheck;
         }
         model.addAttribute("activePage", "damage-reports");
         model.addAttribute("damageReportList", damageService.getAllDamageReports());
+        logger.info("User with User id={} with email={} accessed /damage_reports", currentUser.getId(), currentUser.getEmail());
         return "damage_reports";
     }
 
@@ -47,16 +54,19 @@ public class DamageController {
 
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
+            logger.warn("Access check has been denied for User id={} with email={} at @GET /damage-report-create", currentUser.getId(), currentUser.getEmail());
             return accessCheck;
         }
         if (!model.containsAttribute("damageReport")) {
+            logger.info("No existing damageReport found in model, adding new DamageReport for User id={} with email={}", currentUser.getId(), currentUser.getEmail());
             model.addAttribute("damageReport", new DamageReport());
         }
 
         model.addAttribute("activePage", "damage-reports");
         model.addAttribute("rentalAgreements",
                 rentalAgreementService.getReturnedRentalAgreements());
-        return "damage_create";
+        logger.info("User with User id={} with email={} accessed @GET /damage_report_create", currentUser.getId(), currentUser.getEmail());
+        return "damage_report_create";
     }
 
     @PostMapping("/damage-report-create")
@@ -68,6 +78,7 @@ public class DamageController {
 
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
+            logger.warn("Access check has been denied for User id={} with email={} at @POST /damage-report-create", currentUser.getId(), currentUser.getEmail());
             return accessCheck;
         }
 
@@ -82,6 +93,8 @@ public class DamageController {
         redirectAttributes.addFlashAttribute("successMessage",
                 "Skaderapporten blev oprettet, og bilen er sat til MAINTENANCE.");
 
+        logger.info("User with User id={} with email={} accessed @POST /damage_report_create", currentUser.getId(), currentUser.getEmail());
+        logger.info("Damage report was created, car set to MAINTENANCE");
         return "redirect:/damage-report-create";
     }
 
@@ -96,9 +109,9 @@ public class DamageController {
 
         model.addAttribute("currentUser", currentUser);
 
-
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
+            logger.warn("Access check has been denied for User id={} with email={} at @POST /add-damage-item", currentUser.getId(), currentUser.getEmail());
             return accessCheck;
         }
 
@@ -115,6 +128,8 @@ public class DamageController {
         }
 
         redirectAttributes.addFlashAttribute("successMessage", "Skaden blev tilføjet.");
+        logger.info("User with User id={} with email={} accessed @POST /damage_report_create", currentUser.getId(), currentUser.getEmail());
+        logger.info("Damage item added to report id={}", reportId);
         return "redirect:/damage-reports";
     }
 
@@ -128,12 +143,15 @@ public class DamageController {
 
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
+            logger.warn("Access check has been denied for User id={} with email={} at @GET /add-damge-item/{reportId}", currentUser.getId(), currentUser.getEmail());
             return accessCheck;
         }
 
         model.addAttribute("reportId", reportId);
         model.addAttribute("damageItem", new DamageItem());
 
+        logger.info("User with User id={} with email={} accessed @GET /damage_add_item", currentUser.getId(), currentUser.getEmail());
+        logger.info("Showing add damage item page for report id={}", reportId);
         return "damage_add_item";
     }
 
@@ -148,6 +166,7 @@ public class DamageController {
 
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
+            logger.warn("Access check has been denied for User id={} with email={} at @GET /damage-report/{reportId}", currentUser.getId(), currentUser.getEmail());
             return accessCheck;
         }
 
@@ -155,6 +174,7 @@ public class DamageController {
         model.addAttribute("damageItems", damageService.getDamageItemsByReportId(reportId));
         model.addAttribute("activePage", "damage-reports");
 
+        logger.info("User with User id={} with email={} accessed @GET /damage_view", currentUser.getId(), currentUser.getEmail());
         return "damage_view";
     }
 
