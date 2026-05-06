@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 public interface ICustomerRepository {
     //create a car in the table
-    void createCustomer(Customer customer);
+    Customer createCustomer(Customer customer);
 
     //find customer by X(data) and y(attribute) in table
     Optional<Customer> findByXY(String attribute, Object data);

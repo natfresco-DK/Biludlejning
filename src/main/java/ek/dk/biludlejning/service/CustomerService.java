@@ -23,4 +23,8 @@ public class CustomerService {
         logger.info("Fetching all active customers. Total: {}", customerRepository.findAllActive().size());
         return customerRepository.findAllActive();
     }
+
+    public Customer createCustomer(Customer customer){
+        return customerRepository.createCustomer(customer);
+    }
 }

@@ -1,5 +1,6 @@
 package ek.dk.biludlejning.controller;
 
+import ek.dk.biludlejning.model.Customer;
 import ek.dk.biludlejning.model.RentalAgreement;
 import ek.dk.biludlejning.model.User;
 import ek.dk.biludlejning.service.CarService;
@@ -9,10 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -87,9 +85,19 @@ public class LeaseController {
 
     @PostMapping("/lease-create")
     public String createLease(@ModelAttribute RentalAgreement rentalAgreement,
+                              @RequestParam(required = false) String createNewCustomer,
+                              @RequestParam(required = false) String newCustomerFirstName,
+                              @RequestParam(required = false) String newCustomerLastName,
+                              @RequestParam(required = false) String newCustomerEmail,
+                              @RequestParam(required = false) String newCustomerPhone,
+                              @RequestParam(required = false) String newCustomerLicenceNo,
+                              @RequestParam(required = false) String newCustomerStreetAddress,
+                              @RequestParam(required = false) Integer newCustomerZipCode,
+                              @RequestParam(required = false) String newCustomerCity,
                               @SessionAttribute(name = "currentUser", required = false) User currentUser,
                               Model model,
                               RedirectAttributes redirectAttributes) {
+
         model.addAttribute("currentUser", currentUser);
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
@@ -97,7 +105,46 @@ public class LeaseController {
             return accessCheck;
         }
 
-        var validationError = rentalAgreementService.createRentalAgreement(rentalAgreement, currentUser.getId());
+        boolean shouldCreateCustomer = "true".equalsIgnoreCase(createNewCustomer)
+                || (newCustomerFirstName != null && !newCustomerFirstName.trim().isEmpty());
+
+
+        if (!shouldCreateCustomer) {
+            model.addAttribute("activePage", "lease-agreements");
+            model.addAttribute("errorMessage", "Vælg en eksisterende kunde eller markér 'Opret ny kunde' og udfyld navn");
+            model.addAttribute("rentalAgreement", rentalAgreement);
+            model.addAttribute("customers", customerService.getAllActiveCustomers());
+            model.addAttribute("cars", carService.getAvailableCars());
+            return "lease_create";
+        }
+
+        Customer newCustomer = null;
+        if (shouldCreateCustomer) {
+            // Require first and last name for new customer
+            if (newCustomerFirstName == null || newCustomerFirstName.trim().isEmpty()
+                    || newCustomerLastName == null || newCustomerLastName.trim().isEmpty()) {
+                model.addAttribute("activePage", "lease-agreements");
+                model.addAttribute("errorMessage", "Fornavn og efternavn skal udfyldes for ny kunde");
+                model.addAttribute("rentalAgreement", rentalAgreement);
+                model.addAttribute("customers", customerService.getAllActiveCustomers());
+                model.addAttribute("cars", carService.getAvailableCars());
+                return "lease_create";
+            }
+
+            newCustomer = new Customer();
+            newCustomer.setFirstName(newCustomerFirstName.trim());
+            newCustomer.setLastName(newCustomerLastName.trim());
+            newCustomer.setEmail((newCustomerEmail != null && !newCustomerEmail.trim().isEmpty()) ? newCustomerEmail.trim() : null);
+            newCustomer.setPhone((newCustomerPhone != null && !newCustomerPhone.trim().isEmpty()) ? newCustomerPhone.trim() : null);
+            newCustomer.setLicenceNo((newCustomerLicenceNo != null && !newCustomerLicenceNo.trim().isEmpty()) ? newCustomerLicenceNo.trim() : null);
+            newCustomer.setStreetAddress((newCustomerStreetAddress != null && !newCustomerStreetAddress.trim().isEmpty()) ? newCustomerStreetAddress.trim() : null);
+            newCustomer.setZipCode(newCustomerZipCode != null ? newCustomerZipCode : 0);
+            newCustomer.setCity((newCustomerCity != null && !newCustomerCity.trim().isEmpty()) ? newCustomerCity.trim() : null);
+        }
+
+        var validationError = rentalAgreementService.createRentalAgreement(
+                rentalAgreement, currentUser.getId(), newCustomer
+        );
 
         if (validationError.isPresent()) {
             model.addAttribute("activePage", "lease-agreements");

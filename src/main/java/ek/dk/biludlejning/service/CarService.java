@@ -5,6 +5,7 @@ import ek.dk.biludlejning.repository.ICarRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -14,7 +15,7 @@ public class CarService {
 
     private static final Logger logger = LoggerFactory.getLogger(CarService.class);
 
-    public CarService(ICarRepository carRepository, RentalAgreementService rentalAgreementService) {
+    public CarService(ICarRepository carRepository) {
         this.carRepository = carRepository;
     }
 

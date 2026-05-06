@@ -19,15 +19,72 @@
         <p th:if="${errorMessage}" th:text="${errorMessage}" class="error-message"></p>
 
         <form th:action="@{/lease-create}" th:object="${rentalAgreement}" method="post">
-            <div>
-                <label for="customer">Kunde:</label>
-                <select id="customer" th:field="*{customer}" required>
-                    <option value="0" disabled selected>-- Vælg kunde --</option>
-                    <option th:each="customer : ${customers}"
-                            th:value="${customer.customerId}"
-                            th:text="${customer.firstName + ' ' + customer.lastName}">
-                    </option>
-                </select>
+
+            <!-- checkbox to indicate creating a new customer -->
+            <div class="customer-toggle">
+                <label>
+                    <input type="checkbox" id="createNewCustomer" name="createNewCustomer" value="true">
+                    <span>Opret ny kunde i stedet for at vælge eksisterende</span>
+                </label>
+            </div>
+
+            <!-- existing customer select -->
+            <div class="form-section">
+                <h3>Vælg eksisterende kunde</h3>
+                <div>
+                    <label for="customer">Kunde:</label>
+                    <select id="customer" th:field="*{customer}">
+                        <option value="0" disabled selected>-- Vælg kunde --</option>
+                        <option th:each="customer : ${customers}"
+                                th:value="${customer.customerId}"
+                                th:text="${customer.firstName + ' ' + customer.lastName}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <!-- form creating a new customer -->
+            <div class="form-section">
+                <h3>Opret ny kunde</h3>
+                <div  >
+                    <div>
+                        <label for="firstName">Fornavn:</label>
+                        <input type="text" id="firstName" name="newCustomerFirstName" placeholder="Fornavn">
+                    </div>
+                    <div>
+                        <label for="lastName">Efternavn:</label>
+                        <input type="text" id="lastName" name="newCustomerLastName" placeholder="Efternavn">
+                    </div>
+                </div>
+                <div  >
+                    <div>
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="newCustomerEmail" placeholder="Email">
+                    </div>
+                    <div>
+                        <label for="phone">Telefon:</label>
+                        <input type="tel" id="phone" name="newCustomerPhone" placeholder="Telefon">
+                    </div>
+                </div>
+                <div  >
+                    <div>
+                        <label for="licenceNo">Kørekort nr.:</label>
+                        <input type="text" id="licenceNo" name="newCustomerLicenceNo" placeholder="Kørekort nr.">
+                    </div>
+                    <div>
+                        <label for="streetAddress">Adresse:</label>
+                        <input type="text" id="streetAddress" name="newCustomerStreetAddress" placeholder="Gade og nr.">
+                    </div>
+                </div>
+                <div  >
+                    <div>
+                        <label for="zipCode">Postnummer:</label>
+                        <input type="number" id="zipCode" name="newCustomerZipCode" placeholder="Postnummer">
+                    </div>
+                    <div>
+                        <label for="city">By:</label>
+                        <input type="text" id="city" name="newCustomerCity" placeholder="By">
+                    </div>
+                </div>
             </div>
 
             <div>

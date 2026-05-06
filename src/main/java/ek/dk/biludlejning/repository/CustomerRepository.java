@@ -47,7 +47,7 @@ public class CustomerRepository implements ICustomerRepository {
     };
 
     @Override
-    public void createCustomer(Customer customer) {
+    public Customer createCustomer(Customer customer) {
         String sql = "INSERT INTO customers (first_name, last_name, email, phone, licence_no, street_address, zip_code, city) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql,
@@ -60,7 +60,17 @@ public class CustomerRepository implements ICustomerRepository {
                 customer.getZipCode(),
                 customer.getCity()
         );
+
+        String querySql = "SELECT customer_id FROM customers WHERE first_name = ? AND last_name = ? ORDER BY customer_id DESC LIMIT 1";
+        Integer customerId = jdbcTemplate.queryForObject(querySql, Integer.class,
+                customer.getFirstName(),
+                customer.getLastName());
+
+
+        customer.setCustomerId(customerId);
+
         logger.info("Successfully created customer with id={}: ", customer.getCustomerId());
+        return customer;
     }
 
     @Override
