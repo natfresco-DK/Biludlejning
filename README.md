@@ -36,7 +36,7 @@
 > 3. Kørsel af applikationen
 
 ### Information
-- "<>" = Står for required og skal erstattes med de relevante oplysninger.
+- `<>` = Står for required og skal erstattes med de relevante oplysninger.
 - Eksempel: ```<username>``` skal erstattes med det ønskede brugernavn. f.eks. ```biludlejning_admin```.
 
 
