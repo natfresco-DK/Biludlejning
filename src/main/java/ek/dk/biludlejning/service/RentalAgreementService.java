@@ -32,14 +32,14 @@ public class RentalAgreementService {
 
     @Transactional
     public Optional<String> createRentalAgreement(RentalAgreement rentalAgreement, int createdBy, Customer newCustomer) {
-        if(newCustomer != null){
-            Customer createdCustomer = customerService.createCustomer(newCustomer);
-            rentalAgreement.setCustomer(createdCustomer.getCustomerId());
-        }
-
         Optional<String> validationError = validateRentalAgreement(rentalAgreement);
         if (validationError.isPresent()) {
             return validationError;
+        }
+
+        if(newCustomer != null){
+            Customer createdCustomer = customerService.createCustomer(newCustomer);
+            rentalAgreement.setCustomer(createdCustomer.getCustomerId());
         }
 
         rentalAgreement.setCreatedBy(createdBy);
@@ -90,8 +90,9 @@ public class RentalAgreementService {
     }
 
     public List<RentalAgreement> findByCarId(int carId){
-        logger.info("Successfully found car by id={}. Total Rental Agreements found: {}", carId, rentalAgreementRepository.findByCarId(carId).size());
-        return rentalAgreementRepository.findByCarId(carId);
+        List<RentalAgreement> rentalAgreements = rentalAgreementRepository.findByCarId(carId);
+        logger.info("Successfully found car by id={}. Total Rental Agreements found: {}", carId, rentalAgreements.size());
+        return rentalAgreements;
     }
 
     public void setCarAsRented(int carId) {
