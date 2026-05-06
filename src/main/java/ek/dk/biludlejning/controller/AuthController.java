@@ -95,11 +95,11 @@ public class AuthController {
     @PostMapping("/logout")
     public String logout(HttpServletRequest request, @SessionAttribute(name = "currentUser", required = false) User currentUser){
         HttpSession session = request.getSession(false);
+        logger.info("Invalidated session for User id={} with email={}", currentUser.getId(), currentUser.getEmail());
         if (session != null) {
             session.invalidate();
-            logger.info("Invalidated session for User id={} with email={}", currentUser.getId(), currentUser.getEmail());
         }
-        logger.info("Logged out with User id={} with email={}", currentUser.getId(), currentUser.getEmail());
+        logger.info("Logged out a User");
         return "redirect:/login";
     }
 
