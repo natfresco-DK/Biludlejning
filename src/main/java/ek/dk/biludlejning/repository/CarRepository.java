@@ -112,7 +112,7 @@ public class CarRepository implements ICarRepository {
     @Override
     public List<Car> findAvailableCars(){
         String sql = "SELECT * FROM cars WHERE active = true AND UPPER(status) = ?";
-        logger.info("Successfully fetched all available cars. Total count: {}", jdbcTemplate.query(sql, carRowMapper).size());
+        logger.info("Successfully fetched all available cars. Total count: {}", jdbcTemplate.query(sql, carRowMapper, "AVAILABLE").size());
         return jdbcTemplate.query(sql, carRowMapper,
                 "AVAILABLE");
 
