@@ -56,8 +56,8 @@ FLUSH PRIVILEGES;
 ```
 
 ### Opsætning af miljøvariabler
-**Opret environment variables med følgende:**
-```
+*Opret environment variables med følgende:*
+```env
 DB_URL=jdbc:mysql://localhost:3306/biludlejning
 DB_USER=<username>
 DB_PASSWORD=<password>
