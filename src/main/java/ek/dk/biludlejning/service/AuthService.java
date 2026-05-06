@@ -2,6 +2,8 @@ package ek.dk.biludlejning.service;
 
 import ek.dk.biludlejning.model.User;
 import ek.dk.biludlejning.repository.IUserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
@@ -13,41 +15,40 @@ public class AuthService {
 
     private final IUserRepository userRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
+
     public AuthService(IUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     public User authenticate(String email, String password) {
-        System.out.println("\n\n========start authentication==============\n\n");
         if (email == null || email.trim().isEmpty() || password == null || password.isEmpty()) {
-            System.out.println("AuthService: Missing email or password");
+            logger.error("Missing email or password during authentication attempt");
             throw new AuthenticationException("Email og password er påkrævet");
         }
         String trimmedEmail = email.trim();
-        System.out.println("AuthService: Authenticate called for email='" + trimmedEmail + "'");
         try {
             Optional<User> opt = userRepository.findByXY("email", trimmedEmail);
             if (opt.isEmpty()) {
-                System.out.println("AuthService: No user found with email='" + trimmedEmail + "'");
+                logger.error("Invalid email during authentication attempt: email='{}'", trimmedEmail);
                 throw new AuthenticationException("Ugyldig email");
             }
             User user = opt.get();
-            System.out.println("AuthService: Found user with id=" + user.getId() + ", comparing passwords");
+            logger.info("Successfully found user with id='{}', starts comparing passwords", user.getId());
             String hashedInput = hashPassword(password);
-            System.out.println("DEBUG: Stored hash = " + user.getPassword());
-            System.out.println("DEBUG: Plain password = " + password);
-            System.out.println("DEBUG: Match result = " + user.getPassword().equals(hashedInput));
+            logger.debug("Hashed password: '{}'", hashedInput);
+            logger.debug("Plain password: '{}'", password);
+            logger.debug("Matching results: stored='{}', input='{}'", user.getPassword(), hashedInput);
 
-            System.out.println("AuthService: Found user with id=" + user.getId() + ", comparing passwords");
             //checks if password and hashedpassword matches
             if (!user.getPassword().equals(hashedInput)) {
-                System.out.println("AuthService: Password mismatch for email='" + trimmedEmail + "'");
+                logger.error("Invalid password during authentication attempt: email='{}'", trimmedEmail);
                 throw new AuthenticationException("Ugyldig password");
             }
-            System.out.println("AuthService: Authentication successful for user id=" + user.getId());
+            logger.info("Successfully found User with user id='{}', authentication successful", user.getId());
             return user;
         } catch (Exception e) {
-            System.out.println("AuthService: Error while finding user: " + e.getMessage());
+            logger.error("Exception during authentication attempt for email='{}'. No user found: {}", trimmedEmail, e.getMessage());
             throw new AuthenticationException("Database fejl", e);
         }
     }

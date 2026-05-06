@@ -14,12 +14,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Controller
 public class AuthController {
     private final AuthService authService;
     private final CarService carService;
     private final RentalAgreementService rentalAgreementService;
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     public AuthController(AuthService authService, CarService carService, RentalAgreementService rentalAgreementService) {
         this.authService = authService;
@@ -30,6 +34,7 @@ public class AuthController {
 
     @GetMapping("/")
     public String index(@SessionAttribute(name = "currentUser", required = false)User currentUser){
+        logger.info("User with User id={} with email={} accessed root", (currentUser != null ? currentUser.getId() : "null"), (currentUser != null ? currentUser.getEmail() : "null"));
         return (currentUser == null) ? "redirect:/login" : "redirect:/dashboard";
     }
 
@@ -55,12 +60,12 @@ public class AuthController {
             User user = authService.authenticate(email, password);
             HttpSession session = request.getSession(true);
             session.setAttribute("currentUser", user);
-            System.out.println("AuthController: Created session for User id=" + user.getId());
+            logger.info("Created session for User id={} with email={}", user.getId(), user.getEmail());
             return "redirect:/dashboard";
         } catch (AuthenticationException e) {
-            System.out.println("AuthController: Authentication failed: " + e.getMessage());
+            logger.warn("Authentication failed for email={}: {}", email, e.getMessage());
             if (e.getCause() != null) {
-                System.out.println("AuthController: Cause: " + e.getCause().getMessage());
+                logger.warn("Cause: {}", e.getCause().getMessage());
             }
             attrs.addAttribute("error", "true");
             return "redirect:/login";
@@ -70,6 +75,7 @@ public class AuthController {
     @GetMapping("/dashboard")
     public String dashboard(@SessionAttribute(name = "currentUser", required = false) User currentUser, Model model){
         if(currentUser == null){
+            logger.error("Current User is null");
             return "redirect:/login";
         }
         model.addAttribute("currentUser",currentUser);
@@ -78,22 +84,22 @@ public class AuthController {
         int rentedCarsCount = carService.getAllRentedCarsCount();
         model.addAttribute("rentedCarsCount", rentedCarsCount);
 
-
         double totalActiveRevenue = rentalAgreementService.getTotalActiveRevenue();
         model.addAttribute("totalActiveRevenue", totalActiveRevenue);
 
 
-
-
+        logger.info("Dashboard login with User id={} with email={}", currentUser.getId(), currentUser.getEmail());
         return "dashboard";
     }
 
     @PostMapping("/logout")
-    public String logout(HttpServletRequest request){
+    public String logout(HttpServletRequest request, @SessionAttribute(name = "currentUser", required = false) User currentUser){
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
+            logger.info("Invalidated session for User id={} with email={}", currentUser.getId(), currentUser.getEmail());
         }
+        logger.info("Logged out with User id={} with email={}", currentUser.getId(), currentUser.getEmail());
         return "redirect:/login";
     }
 

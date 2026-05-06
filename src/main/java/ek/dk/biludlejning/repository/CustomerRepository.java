@@ -1,6 +1,8 @@
 package ek.dk.biludlejning.repository;
 
 import ek.dk.biludlejning.model.Customer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,6 +20,8 @@ public class CustomerRepository implements ICustomerRepository {
 
 
     private final JdbcTemplate jdbcTemplate;
+
+    private static final Logger logger = LoggerFactory.getLogger(CustomerRepository.class);
 
     @Autowired
     public CustomerRepository(JdbcTemplate jdbcTemplate) {
@@ -65,7 +69,7 @@ public class CustomerRepository implements ICustomerRepository {
 
         customer.setCustomerId(customerId);
 
-
+        logger.info("Successfully created customer with id={}: ", customer.getCustomerId());
         return customer;
     }
 
@@ -84,13 +88,16 @@ public class CustomerRepository implements ICustomerRepository {
                 "active"
         );
         if (!allowedAttributes.contains(attribute)) {
+            logger.error("Attribute not allowed: {}", attribute);
             throw new IllegalArgumentException("Invalid Attribute: " + attribute);
         }
         String sql = "SELECT * FROM customers WHERE " + attribute + " = ?";
         try {
             Customer customer = jdbcTemplate.queryForObject(sql, customerRowMapper, data);
+            logger.info("Successfully found customer with attribute={} and data={}", attribute,  data);
             return Optional.ofNullable(customer);
         } catch (EmptyResultDataAccessException e) {
+            logger.error("EmptyResultDataAccessException: No customer found with attribute={} and data={}", attribute,  data);
             return Optional.empty();
         }
     }
@@ -120,17 +127,20 @@ public class CustomerRepository implements ICustomerRepository {
                 customer.isActive(),
                 customer.getCustomerId()
         );
+        logger.info("Successfully updated customer with id={}: ", customer.getCustomerId());
     }
 
     @Override
     public List<Customer> findAllActive() {
         String sql = "SELECT * FROM customers WHERE active = true";
+        logger.info("Successfully fetched all active customers. Total count: {}", jdbcTemplate.query(sql, customerRowMapper).size());
         return jdbcTemplate.query(sql, customerRowMapper);
     }
 
     @Override
     public int deleteById(int id) {
         String sql = "DELETE FROM customers WHERE customer_id = ?";
+        logger.info("Successfully deleted customer with id={}", id);
         return jdbcTemplate.update(sql, id);
     }
 }

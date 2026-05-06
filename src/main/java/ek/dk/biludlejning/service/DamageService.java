@@ -8,6 +8,8 @@ import ek.dk.biludlejning.repository.IDamageItemRepository;
 import ek.dk.biludlejning.repository.IDamageReportRepository;
 import ek.dk.biludlejning.repository.ICarRepository;
 import ek.dk.biludlejning.repository.IRentalAgreementRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,8 @@ public class DamageService {
     private final ICarRepository carRepository;
     private final IRentalAgreementRepository rentalAgreementRepository;
     private final IDamageItemRepository damageItemRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(DamageService.class);
 
     public DamageService(IDamageReportRepository damageReportRepository,
                          ICarRepository carRepository,
@@ -46,16 +50,19 @@ public class DamageService {
         damageReportRepository.createDamageReport(damageReport);
         damageReportRepository.setCarToMaintenance(damageReport);
 
+        logger.info("Creating damage report for damage report: {}", damageReport);
         return Optional.empty();
     }
 
     public List<DamageReport> getAllDamageReports(){
+        logger.info("Fetching all damage reports. Total: {}", damageReportRepository.getAllDamageReports().size());
         return damageReportRepository.getAllDamageReports();
     }
 
     private Optional<String> validateDamageReport(DamageReport damageReport) {
         try {
             if (damageReport.getRentalAgreementId() == 0) {
+                logger.warn("Rental Agreement ID is missing for damage report: {}", damageReport);
                 return Optional.of("Lejeaftale skal vælges");
             }
 
@@ -63,6 +70,7 @@ public class DamageService {
                     rentalAgreementRepository.findByXY("agreement_id", damageReport.getRentalAgreementId());
 
             if (rentalAgreement.isEmpty()) {
+                logger.warn("Rental Agreement not found for damage report: {}", damageReport);
                 return Optional.of("Lejeaftalen blev ikke fundet");
             }
 
@@ -70,32 +78,39 @@ public class DamageService {
                     carRepository.findByXY("car_id", rentalAgreement.get().getCar());
 
             if (carOptional.isEmpty()) {
+                logger.warn("Car not found for damage report: {}", damageReport);
                 return Optional.of("Bilen blev ikke fundet");
             }
 
             Car car = carOptional.get();
 
             if (!"RETURNED".equalsIgnoreCase(car.getStatus())) {
+                logger.warn("Car status is not RETURNED for damage report: {}. Current status: {}", damageReport, car.getStatus());
                 return Optional.of("Bilen skal have status 'RETURNED'");
             }
 
             return Optional.empty();
 
         } catch (Exception e) {
+            logger.error("Exception occurred while fetching damage reports: {}", e.getMessage());
             return Optional.of("Der opstod en fejl: " + e.getMessage());
         }
     }
 
     public Optional<String> createDamageItem(DamageItem damageItem) {
         if (damageItem.getReportId() == 0) {
+            logger.warn("Damage item ID is missing for damage report: {}", damageItem);
             return Optional.of("Skaderapport skal vælges");
+
         }
 
         if (damageItem.getDescription() == null || damageItem.getDescription().isBlank()) {
+            logger.warn("Description is missing for damage report: {}", damageItem);
             return Optional.of("Beskrivelse skal udfyldes");
         }
 
         if (damageItem.getPrice() < 0) {
+            logger.warn("Price is missing or lower than 1 for damage report: {}", damageItem);
             return Optional.of("Pris må ikke være negativ");
         }
 
@@ -104,10 +119,12 @@ public class DamageService {
     }
 
     public DamageReport getDamageReportById(int reportId) {
+        logger.info("Fetching damage report by ID: {}", reportId);
         return damageReportRepository.getDamageReportById(reportId);
     }
 
     public List<DamageItem> getDamageItemsByReportId(int reportId) {
+        logger.info("Fetching damage items by ID: {}. Total: {}", reportId, damageItemRepository.getDamageItemsByReportId(reportId).size());
         return damageItemRepository.getDamageItemsByReportId(reportId);
     }
 }

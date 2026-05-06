@@ -6,6 +6,8 @@ import ek.dk.biludlejning.model.User;
 import ek.dk.biludlejning.service.CarService;
 import ek.dk.biludlejning.service.CustomerService;
 import ek.dk.biludlejning.service.RentalAgreementService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,9 @@ public class LeaseController {
     private final RentalAgreementService rentalAgreementService;
     private final CustomerService customerService;
     private final CarService carService;
+
+    private static final Logger logger = LoggerFactory.getLogger(LeaseController.class);
+
 
     public LeaseController(RentalAgreementService rentalAgreementService,
                            CustomerService customerService,
@@ -32,10 +37,12 @@ public class LeaseController {
         model.addAttribute("currentUser", currentUser);
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
+            logger.warn("Access check has been denied for User id={} with email={} at @GET /lease-agreements", currentUser.getId(), currentUser.getEmail());
             return accessCheck;
         }
         model.addAttribute("activePage", "lease-agreements");
         model.addAttribute("rentalAgreementList", rentalAgreementService.getAllRentalAgreements());
+        logger.info("User with User id={} with email={} accessed @GET /lease_agreements", currentUser.getId(), currentUser.getEmail());
         return "lease_agreements";
     }
 
@@ -45,9 +52,11 @@ public class LeaseController {
         model.addAttribute("currentUser", currentUser);
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
+            logger.warn("Access check has been denied for User id={} with email={} at @GET /reports", currentUser.getId(), currentUser.getEmail());
             return accessCheck;
         }
         model.addAttribute("activePage", "reports");
+        logger.info("User with User id={} accessed @GET /reports", currentUser.getId());
         return "reports";
     }
 
@@ -57,17 +66,20 @@ public class LeaseController {
         model.addAttribute("currentUser", currentUser);
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
+            logger.warn("Access check has been denied for User id={} with email={} at @GET /lease-create", currentUser.getId(), currentUser.getEmail());
             return accessCheck;
         }
         model.addAttribute("activePage", "lease-agreements");
 
         if (!model.containsAttribute("rentalAgreement")) {
             model.addAttribute("rentalAgreement", new RentalAgreement());
+            logger.info("No existing rentalAgreement found in model, adding new RentalAgreement for User id={} with email={}", currentUser.getId(), currentUser.getEmail());
         }
 
         model.addAttribute("customers", customerService.getAllActiveCustomers());
         model.addAttribute("cars", carService.getAvailableCars());
 
+        logger.info("User with User id={} accessed @GET /lease-create", currentUser.getId());
         return "lease_create";
     }
 
@@ -89,6 +101,7 @@ public class LeaseController {
         model.addAttribute("currentUser", currentUser);
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
+            logger.warn("Access check has been denied for User id={} with email={} at @POST /lease-create", currentUser.getId(), currentUser.getEmail());
             return accessCheck;
         }
 
@@ -143,6 +156,8 @@ public class LeaseController {
         }
 
         redirectAttributes.addFlashAttribute("successMessage", "Lejeaftalen blev oprettet");
+        logger.info("User with User id={} accessed @POST /lease-create", currentUser.getId());
+        logger.info("Lease agreement was created successfully");
         return "redirect:/lease-agreements";
     }
 

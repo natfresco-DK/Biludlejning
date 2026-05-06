@@ -1,6 +1,8 @@
 package ek.dk.biludlejning.repository;
 
 import ek.dk.biludlejning.model.Car;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,6 +19,8 @@ import java.util.Set;
 public class CarRepository implements ICarRepository {
 
     private final JdbcTemplate jdbcTemplate;
+
+    private static final Logger logger = LoggerFactory.getLogger(CarRepository.class);
 
     @Autowired
     public CarRepository(JdbcTemplate jdbcTemplate) {
@@ -55,6 +59,7 @@ public class CarRepository implements ICarRepository {
                 car.getCarDescription(),
                 car.getStatus()
         );
+        logger.info("Successfully created car with id={}: ", car.getCarId());
     }
 
     @Override
@@ -72,13 +77,16 @@ public class CarRepository implements ICarRepository {
                 "active"
         );
         if (!allowedAttributes.contains(attribute)) {
+            logger.error("Attribute not allowed: {}", attribute);
             throw new IllegalArgumentException("Invalid Attribute: " + attribute);
         }
         String sql = "SELECT * FROM cars WHERE " + attribute + " = ?";
         try {
             Car car = jdbcTemplate.queryForObject(sql, carRowMapper, data);
+            logger.info("Successfully found car with attribute={} and data={}", attribute,  data);
             return Optional.ofNullable(car);
         } catch (EmptyResultDataAccessException e) {
+            logger.error("EmptyResultDataAccessException: No car found with attribute={} and data={}", attribute,  data);
             return Optional.empty();
         }
     }
@@ -99,40 +107,48 @@ public class CarRepository implements ICarRepository {
                 car.isActive(),
                 car.getCarId()
         );
+        logger.info("Successfully updated car with id={}: ", car.getCarId());
     }
     @Override
     public List<Car> findAvailableCars(){
         String sql = "SELECT * FROM cars WHERE active = true AND UPPER(status) = ?";
+        logger.info("Successfully fetched all available cars. Total count: {}", jdbcTemplate.query(sql, carRowMapper).size());
         return jdbcTemplate.query(sql, carRowMapper,
                 "AVAILABLE");
+
     }
 
     @Override
     public List<Car> getAllCars(){
         String sql = "SELECT * FROM cars";
+        logger.info("Successfully fetched all cars. Total count: {}", jdbcTemplate.query(sql, carRowMapper).size());
         return jdbcTemplate.query(sql, carRowMapper);
     }
 
     @Override
     public List<Car> findReturnedCars(){
         String sql = "SELECT * FROM cars WHERE active = true AND UPPER(status) = ?";
+        logger.info("Successfully fetched all returned cars. Total count: {}", jdbcTemplate.query(sql, carRowMapper).size());
         return jdbcTemplate.query(sql, carRowMapper, "RETURNED");
     }
 
     @Override
     public int findAllRentedCars() {
         String sql = "SELECT COUNT(*) FROM cars WHERE UPPER(status) = ?";
+        logger.info("Successfully fetched all rented cars. Total={}", jdbcTemplate.queryForObject(sql, Integer.class, "RENTED"));
         return jdbcTemplate.queryForObject(sql, Integer.class, "RENTED");
     }
 
     public void updateCarStatus(int carId, String status) {
         String sql = "UPDATE cars SET status = ? WHERE car_id = ?";
+        logger.info("Successfully updated car with id={} with new status={}:", carId, status);
         jdbcTemplate.update(sql, status, carId);
     }
 
     @Override
     public int deleteById(int id) {
         String sql = "DELETE FROM cars WHERE car_id = ?";
+        logger.info("Successfully deleted car with id={}", id);
         return jdbcTemplate.update(sql, id);
     }
 }
