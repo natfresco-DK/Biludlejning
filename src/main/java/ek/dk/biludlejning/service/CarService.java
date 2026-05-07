@@ -24,20 +24,7 @@ public class CarService {
         return carRepository.findAvailableCars();
     }
 
-    public void setCarAsRented(int carId) {
-        Car car = carRepository.findByXY("car_id", carId)
-                .orElseThrow(() -> new IllegalArgumentException("Bilen blev ikke fundet"));
-        logger.info("Setting Car as Rented: {}", car);
-
-        if (!"AVAILABLE".equalsIgnoreCase(car.getStatus())) {
-            logger.error("Car with id={} is not available for rent. Current status: {}", carId, car.getStatus());
-            throw new IllegalArgumentException("Bilen er ikke tilgængelig");
-        }
-        car.setStatus("RENTED");
-        carRepository.update(car);
-        logger.info("Successfully set Car as Rented: {}", car);
-    }
-    public List<Car> getAllCars(){
+    public List<Car> getAllCars() {
         logger.info("Fetching all cars. Total: {}", carRepository.getAllCars().size());
         return carRepository.getAllCars();
     }
@@ -57,6 +44,10 @@ public class CarService {
         carRepository.updateCarStatus(carId, status);
     }
 
-
-
+    public void addCar(String vin, String regNr, String location, int odometer,
+                       String carDescription, String make, String carModel) {
+        Car car = new Car(regNr, vin, make, carModel, location, odometer, carDescription, "AVAILABLE");
+        carRepository.createCar(car);
+        logger.info("Car created successfully: vin={}, make={}, model={}, regNr={}", vin, make, carModel, regNr);
+    }
 }

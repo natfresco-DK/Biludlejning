@@ -14,6 +14,17 @@ public class Car {
 
     public Car(){}
 
+    public Car(String regNr, String vin, String brand, String model, String location, int odometer,String carDescription, String status) {
+        this.regNr = regNr;
+        this.vin = vin;
+        this.brand = brand;
+        this.model = model;
+        this.location = location;
+        this.odometer = odometer;
+        this.carDescription = carDescription;
+        this.status = status;
+    }
+
     public Car(int carId, String regNr, String vin, String brand, String model, String location, int odometer,String carDescription, String status) {
         this.carId = carId;
         this.regNr = regNr;
