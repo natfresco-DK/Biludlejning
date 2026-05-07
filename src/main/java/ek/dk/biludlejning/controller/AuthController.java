@@ -61,7 +61,7 @@ public class AuthController {
             User user = authService.authenticate(email, password);
             HttpSession session = request.getSession(true);
             session.setAttribute("currentUser", user);
-            logger.info("Created session for User id={} with email={}", user.getId(), user.getEmail(), user.getRole());
+            logger.info("Created session for User id={} with email={} and role={}", user.getId(), user.getEmail(), user.getRole());
             return "redirect:/dashboard";
         } catch (AuthenticationException e) {
             logger.warn("Authentication failed for email={}: {}", email, e.getMessage());
