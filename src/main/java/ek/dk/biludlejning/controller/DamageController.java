@@ -179,12 +179,23 @@ public class DamageController {
     }
 
     private String checkAccess(User currentUser) {
+        logger.info("Access check: currentUser={}, role={}",
+                currentUser != null ? currentUser.getEmail() : "null",
+                currentUser != null ? currentUser.getRole() : "null");
+
         if (currentUser == null) {
+            logger.warn("Access denied because currentUser is null");
             return "redirect:/login";
         }
-        if (!("SKADE/UDBEDRING".equals(currentUser.getRole()) || "ADMIN".equals(currentUser.getRole()))) {
+
+        String role = currentUser.getRole() != null ? currentUser.getRole().trim() : "";
+
+        if (!("DATAREGISTRERING".equals(role) || "ADMIN".equals(role))) {
+            logger.warn("Access denied for user='{}' with role='{}'", currentUser.getEmail(), role);
             return "redirect:/access-denied";
         }
+
+        logger.info("Access granted for user='{}' with role='{}'", currentUser.getEmail(), role);
         return null;
     }
 }

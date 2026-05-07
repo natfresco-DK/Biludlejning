@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS customers
 CREATE TABLE IF NOT EXISTS cars
 (
     car_id          INT AUTO_INCREMENT PRIMARY KEY,
-    reg_nr          VARCHAR(20) NOT NULL UNIQUE,
+    reg_nr          VARCHAR(20) UNIQUE,
     vin             VARCHAR(50) NOT NULL UNIQUE,
     brand           VARCHAR(50) NOT NULL,
     model           VARCHAR(50) NOT NULL,

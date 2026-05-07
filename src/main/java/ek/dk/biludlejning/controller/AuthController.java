@@ -56,11 +56,12 @@ public class AuthController {
                           @RequestParam String password,
                           HttpServletRequest request,
                           RedirectAttributes attrs) {
+        logger.info("Login attempt for email='{}'", email);
         try {
             User user = authService.authenticate(email, password);
             HttpSession session = request.getSession(true);
             session.setAttribute("currentUser", user);
-            logger.info("Created session for User id={} with email={}", user.getId(), user.getEmail());
+            logger.info("Created session for User id={} with email={}", user.getId(), user.getEmail(), user.getRole());
             return "redirect:/dashboard";
         } catch (AuthenticationException e) {
             logger.warn("Authentication failed for email={}: {}", email, e.getMessage());
@@ -74,6 +75,9 @@ public class AuthController {
 
     @GetMapping("/dashboard")
     public String dashboard(@SessionAttribute(name = "currentUser", required = false) User currentUser, Model model){
+        logger.info("GET /dashboard with currentUser={}, role={}",
+                currentUser != null ? currentUser.getEmail() : "null",
+                currentUser != null ? currentUser.getRole() : "null");
         if(currentUser == null){
             logger.error("Current User is null");
             return "redirect:/login";
@@ -94,6 +98,9 @@ public class AuthController {
 
     @PostMapping("/logout")
     public String logout(HttpServletRequest request, @SessionAttribute(name = "currentUser", required = false) User currentUser){
+        logger.info("Logout requested by user={}, role={}",
+                currentUser != null ? currentUser.getEmail() : "null",
+                currentUser != null ? currentUser.getRole() : "null");
         HttpSession session = request.getSession(false);
         logger.info("Invalidated session for User id={} with email={}", currentUser.getId(), currentUser.getEmail());
         if (session != null) {

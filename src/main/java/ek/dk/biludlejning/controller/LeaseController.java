@@ -64,9 +64,14 @@ public class LeaseController {
     public String leaseCreate(Model model,
                               @SessionAttribute(name = "currentUser", required = false) User currentUser) {
         model.addAttribute("currentUser", currentUser);
+        logger.info("GET /lease-create requested by user={}, role={}",
+                currentUser != null ? currentUser.getEmail() : "null",
+                currentUser != null ? currentUser.getRole() : "null");
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
-            logger.warn("Access check has been denied for User id={} with email={} at @GET /lease-create", currentUser.getId(), currentUser.getEmail());
+            logger.info("Lease access check: user={}, role={}",
+                    currentUser != null ? currentUser.getEmail() : "null",
+                    currentUser != null ? currentUser.getRole() : "null");
             return accessCheck;
         }
         model.addAttribute("activePage", "lease-agreements");
@@ -162,12 +167,23 @@ public class LeaseController {
     }
 
     private String checkAccess(User currentUser) {
+        logger.info("Access check: currentUser={}, role={}",
+                currentUser != null ? currentUser.getEmail() : "null",
+                currentUser != null ? currentUser.getRole() : "null");
+
         if (currentUser == null) {
+            logger.warn("Access denied because currentUser is null");
             return "redirect:/login";
         }
-        if (!("DATAREGISTRERING".equals(currentUser.getRole()) || "ADMIN".equals(currentUser.getRole()))) {
+
+        String role = currentUser.getRole() != null ? currentUser.getRole().trim() : "";
+
+        if (!("DATAREGISTRERING".equals(role) || "ADMIN".equals(role))) {
+            logger.warn("Access denied for user='{}' with role='{}'", currentUser.getEmail(), role);
             return "redirect:/access-denied";
         }
+
+        logger.info("Access granted for user='{}' with role='{}'", currentUser.getEmail(), role);
         return null;
     }
 }
