@@ -15,7 +15,7 @@ public class CarService {
 
     private static final Logger logger = LoggerFactory.getLogger(CarService.class);
 
-    public CarService(ICarRepository carRepository, VinService vinService) {
+    public CarService(ICarRepository carRepository) {
         this.carRepository = carRepository;
     }
 
