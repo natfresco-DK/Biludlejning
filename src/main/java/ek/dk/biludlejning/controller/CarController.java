@@ -76,6 +76,8 @@ public class CarController {
             return accessCheck;
         }
 
+        model.addAttribute("currentUser", currentUser);
+
         model.addAttribute("step", 1);
 
         logger.info("Rendering cars_add_car with step=1");
@@ -90,6 +92,8 @@ public class CarController {
         if (accessCheck != null) {
             return accessCheck;
         }
+
+        model.addAttribute("currentUser", currentUser);
 
         try {
             String rawResponse = vinService.getVehicleInfo(vin);
@@ -138,6 +142,8 @@ public class CarController {
         if (accessCheck != null) {
             return accessCheck;
         }
+
+        model.addAttribute("currentUser", currentUser);
 
         try {
             carService.addCar(vin, regNr, location, odometer, carDescription, make, carModel);
