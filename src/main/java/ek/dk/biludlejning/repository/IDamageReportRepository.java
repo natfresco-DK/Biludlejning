@@ -18,6 +18,8 @@ public interface IDamageReportRepository {
     // update existing damage report
     void update(DamageReport report);
 
+    void updateCost(int reportId);
+
     // delete damage report by id
     int deleteById(int id);
 

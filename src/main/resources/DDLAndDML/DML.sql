@@ -38,8 +38,8 @@ VALUES ('2026-01-01', '2026-06-30', 5000.00, 3200.00, 15000, 1, 2, 1),
 
 INSERT INTO damage_reports
     (return_date, report_date, cost, odometer, agreement_id, registered_by)
-VALUES ('2026-04-29', '2026-04-29', 2500.00, 86500, 4, 2),
-       ('2026-04-29', '2026-04-29', 1200.00, 39000, 5, 3);
+VALUES ('2026-04-29', '2026-04-29', 0.00, 86500, 4, 2),
+       ('2026-04-29', '2026-04-29', 0.00, 39000, 5, 3);
 
 INSERT INTO damage_items (damage_report_id, description, price)
 VALUES (1, 'Scratch on rear bumper', 1500.00),

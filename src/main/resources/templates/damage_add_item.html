@@ -1,28 +1,40 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Tilføj skade til skaderapport</title>
-  <link rel="stylesheet" th:href="@{/style.css}">
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>Tilføj skade til skaderapport</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
-<h2>Tilføj en skade</h2>
+<section class="layout">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-<form th:action="@{/add-damage-item}" method="post">
+    <main class="content">
+        <h2>Tilføj en skade</h2>
 
-  <input type="hidden" name="reportId" th:value="${reportId}" />
+        <p th:if="${successMessage}" th:text="${successMessage}" class="success-message"></p>
+        <p th:if="${errorMessage}" th:text="${errorMessage}" class="error-message"></p>
 
-  <label>Beskrivelse:
-    <input type="text" name="description" required>
-  </label>
+        <form th:action="@{/add-damage-item}" method="post">
+            <input type="hidden" name="reportId" th:value="${reportId}"/>
 
-  <label>Pris:
-    <input type="number" step="1" min="0" name="price" required>
-  </label>
-  <button type="submit">Gem skade</button>
-</form>
+            <label>Beskrivelse:
+                <input type="text" name="description" required>
+            </label>
+
+            <label>Pris:
+                <input type="number" step="1" min="0" name="price" required>
+            </label>
+
+            <button type="submit">Gem skade</button>
+        </form>
+
+        <br>
+        <a th:href="@{/damage-reports}" class="btn-primary">Tilbage</a>
+    </main>
+</section>
 
 </body>
 </html>
