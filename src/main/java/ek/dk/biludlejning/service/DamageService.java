@@ -115,6 +115,7 @@ public class DamageService {
         }
 
         damageItemRepository.createDamageItem(damageItem);
+        damageReportRepository.updateCost(damageItem.getReportId());
         return Optional.empty();
     }
 

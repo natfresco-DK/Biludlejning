@@ -105,6 +105,15 @@ public class DamageReportRepository implements IDamageReportRepository {
     }
 
     @Override
+    public void updateCost(int reportId) {
+        String sql = "UPDATE damage_reports dr " +
+                "SET cost = (SELECT COALESCE(SUM(price), 0) FROM damage_items di WHERE di.damage_report_id = ?) " +
+                "WHERE dr.damage_report_id = ?";
+        jdbcTemplate.update(sql, reportId, reportId);
+        logger.info("Updated DamageReport cost for reportId={}", reportId);
+    }
+
+    @Override
     public int deleteById(int id) {
         String sql = "DELETE FROM damage_reports WHERE damage_report_id = ?";
         logger.info("Successfully deleted DamageReport with id={}", id);
