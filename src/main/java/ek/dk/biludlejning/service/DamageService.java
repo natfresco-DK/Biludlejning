@@ -46,6 +46,7 @@ public class DamageService {
 
         damageReport.setRegisteredBy(userId);
         damageReport.setReportDate(LocalDate.now());
+        damageReport.setCost(0);
 
         damageReportRepository.createDamageReport(damageReport);
         damageReportRepository.setCarToMaintenance(damageReport);
@@ -56,7 +57,18 @@ public class DamageService {
 
     public List<DamageReport> getAllDamageReports(){
         logger.info("Fetching all damage reports. Total: {}", damageReportRepository.getAllDamageReports().size());
-        return damageReportRepository.getAllDamageReports();
+        List<DamageReport> reports = damageReportRepository.getAllDamageReports();
+
+        for (DamageReport report : reports) {
+            double totalCost = 0;
+            List<DamageItem> damageItems = damageItemRepository.getDamageItemsByReportId(report.getDamgeReportId());
+            for (DamageItem item : damageItems) {
+                totalCost += item.getPrice();
+            }
+            report.setCost(totalCost);
+        }
+
+        return reports;
     }
 
     private Optional<String> validateDamageReport(DamageReport damageReport) {
@@ -97,6 +109,7 @@ public class DamageService {
         }
     }
 
+    @Transactional
     public Optional<String> createDamageItem(DamageItem damageItem) {
         if (damageItem.getReportId() == 0) {
             logger.warn("Damage item ID is missing for damage report: {}", damageItem);
@@ -121,7 +134,18 @@ public class DamageService {
 
     public DamageReport getDamageReportById(int reportId) {
         logger.info("Fetching damage report by ID: {}", reportId);
-        return damageReportRepository.getDamageReportById(reportId);
+        DamageReport report = damageReportRepository.getDamageReportById(reportId);
+
+        double totalCost = 0;
+
+        List<DamageItem> damageItems = damageItemRepository.getDamageItemsByReportId(reportId);
+        for (DamageItem item : damageItems) {
+            totalCost += item.getPrice();
+        }
+
+        report.setCost(totalCost);
+
+        return report;
     }
 
     public List<DamageItem> getDamageItemsByReportId(int reportId) {
