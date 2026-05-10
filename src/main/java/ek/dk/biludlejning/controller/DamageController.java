@@ -144,6 +144,7 @@ public class DamageController {
 
         model.addAttribute("reportId", reportId);
         model.addAttribute("damageItem", new DamageItem());
+        model.addAttribute("activePage", "damage-reports");
 
         logger.info("User with User id={} with email={} accessed @GET /damage_add_item", currentUser.getId(), currentUser.getEmail());
         logger.info("Showing add damage item page for report id={}", reportId);
