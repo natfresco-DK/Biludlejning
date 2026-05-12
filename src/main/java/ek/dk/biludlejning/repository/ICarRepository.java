@@ -29,7 +29,8 @@ public interface ICarRepository {
                                String brand,
                                String carModel,
                                String location,
-                               Integer odometer,
+                               Integer odometerMin,
+                               Integer odometerMax,
                                String carDescription,
                                String status,
                                Boolean active);

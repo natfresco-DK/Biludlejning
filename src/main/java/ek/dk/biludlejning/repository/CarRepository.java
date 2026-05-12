@@ -148,7 +148,8 @@ public class CarRepository implements ICarRepository {
                                       String brand,
                                       String carModel,
                                       String location,
-                                      Integer odometer,
+                                      Integer odometerMin,
+                                      Integer odometerMax,
                                       String carDescription,
                                       String status,
                                       Boolean active) {
@@ -180,9 +181,13 @@ public class CarRepository implements ICarRepository {
             sql.append(" AND UPPER(location) LIKE UPPER(?)");
             params.add("%" + location.trim() + "%");
         }
-        if (odometer != null) {
-            sql.append(" AND odometer = ?");
-            params.add(odometer);
+        if (odometerMin != null) {
+            sql.append(" AND odometer >= ?");
+            params.add(odometerMin);
+        }
+        if (odometerMax != null) {
+            sql.append(" AND odometer <= ?");
+            params.add(odometerMax);
         }
         if (carDescription != null && !carDescription.isBlank()) {
             sql.append(" AND UPPER(car_description) LIKE UPPER(?)");

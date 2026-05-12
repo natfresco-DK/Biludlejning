@@ -43,12 +43,13 @@ public class CarService {
                                       String brand,
                                       String carModel,
                                       String location,
-                                      Integer odometer,
+                                      Integer odometerMin,
+                                      Integer odometerMax,
                                       String carDescription,
                                       String status,
                                       Boolean active) {
         logger.info("Filtering cars with criteria - carId: {}, regNr: {}, vin: {}, brand: {}, model: {}, location: {}, odometer: {}, description: {}, status: {}, active: {}",
-                carId, regNr, vin, brand, carModel, location, odometer, carDescription, status, active);
-        return carRepository.findCarsFiltered(carId, regNr, vin, brand, carModel, location, odometer, carDescription, status, active);
+                carId, regNr, vin, brand, carModel, location, odometerMin, odometerMax, carDescription, status, active);
+        return carRepository.findCarsFiltered(carId, regNr, vin, brand, carModel, location, odometerMin, odometerMax, carDescription, status, active);
     }
 }

@@ -42,7 +42,8 @@ public class CarController {
                        @RequestParam(required = false) String brand,
                        @RequestParam(required = false) String carModel,
                        @RequestParam(required = false) String location,
-                       @RequestParam(required = false) Integer odometer,
+                       @RequestParam(required = false) Integer odometerMin,
+                       @RequestParam(required = false) Integer odometerMax,
                        @RequestParam(required = false) String carDescription,
                        @RequestParam(required = false) String status,
                        @RequestParam(required = false) Boolean active,
@@ -51,14 +52,21 @@ public class CarController {
         if (accessCheck != null) {
             return accessCheck;
         }
-        model.addAttribute("currentUser", currentUser);
-        List<Car> cars = carService.findCarsFiltered(carId, regNr, vin, brand, carModel, location, odometer, carDescription, status, active);
-        model.addAttribute("cars", cars);
+
+        List<Car> cars = carService.findCarsFiltered(
+                carId, regNr, vin, brand, carModel, location,
+                odometerMin, odometerMax, carDescription, status, active
+        );
         Map<Integer, Boolean> leaseCompletedMap = new HashMap<>();
         for (Car car : cars) {
             leaseCompletedMap.put(car.getCarId(),
                     rentalAgreementService.isLeaseCompleted(car.getCarId()));
         }
+
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("status", status);
+        model.addAttribute("active", active);
+        model.addAttribute("cars", cars);
         model.addAttribute("leaseCompletedMap", leaseCompletedMap);
         model.addAttribute("activePage", "cars");
         logger.info("User with User id={} with email={} accessed /cars", (currentUser != null ? currentUser.getId() : "null"), (currentUser != null ? currentUser.getEmail() : "null"));

@@ -44,23 +44,26 @@
                     <th><input type="text" name="brand" th:value="${param.brand}" placeholder="Mærke"></th>
                     <th><input type="text" name="carModel" th:value="${param.carModel}" placeholder="Model"></th>
                     <th><input type="text" name="location" th:value="${param.location}" placeholder="Lokation"></th>
-                    <th><input type="number" name="odometer" th:value="${param.odometer}" placeholder="Odometer"></th>
+                    <th>
+                        <input type="number" name="odometerMin" th:value="${param.odometerMin}" placeholder="Min km">
+                        <input type="number" name="odometerMax" th:value="${param.odometerMax}" placeholder="Max km">
+                    </th>
                     <th><input type="text" name="carDescription" th:value="${param.carDescription}"
                                placeholder="Beskrivelse"></th>
                     <th>
                         <select name="status">
-                            <option value="">Alle</option>
-                            <option value="AVAILABLE" th:selected="${param.status == 'AVAILABLE'}">AVAILABLE</option>
-                            <option value="RENTED" th:selected="${param.status == 'RENTED'}">RENTED</option>
-                            <option value="MAINTENANCE" th:selected="${param.status == 'MAINTENANCE'}">MAINTENANCE
-                            </option>
+                            <option value="" th:selected="${status == null or status == ''}">Alle</option>
+                            <option value="AVAILABLE" th:selected="${status == 'AVAILABLE'}">AVAILABLE</option>
+                            <option value="RENTED" th:selected="${status == 'RENTED'}">RENTED</option>
+                            <option value="RETURNED" th:selected="${status == 'RETURNED'}">RETURNED</option>
+                            <option value="MAINTENANCE" th:selected="${status == 'MAINTENANCE'}">MAINTENANCE</option>
                         </select>
                     </th>
                     <th>
                         <select name="active">
-                            <option value="">Alle</option>
-                            <option value="true" th:selected="${param.active == 'true'}">Ja</option>
-                            <option value="false" th:selected="${param.active == 'false'}">Nej</option>
+                            <option value="" th:selected="${active == null}">Begge</option>
+                            <option value="true" th:selected="${active == true}">True</option>
+                            <option value="false" th:selected="${active == false}">False</option>
                         </select>
                     </th>
                     <th>
