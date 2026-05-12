@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -83,10 +84,10 @@ public class CarRepository implements ICarRepository {
         String sql = "SELECT * FROM cars WHERE " + attribute + " = ?";
         try {
             Car car = jdbcTemplate.queryForObject(sql, carRowMapper, data);
-            logger.info("Successfully found car with attribute={} and data={}", attribute,  data);
+            logger.debug("Successfully found car with attribute={} and data={}", attribute, data);
             return Optional.ofNullable(car);
         } catch (EmptyResultDataAccessException e) {
-            logger.error("EmptyResultDataAccessException: No car found with attribute={} and data={}", attribute,  data);
+            logger.error("EmptyResultDataAccessException: No car found with attribute={} and data={}", attribute, data);
             return Optional.empty();
         }
     }
@@ -109,8 +110,9 @@ public class CarRepository implements ICarRepository {
         );
         logger.info("Successfully updated car with id={}: ", car.getCarId());
     }
+
     @Override
-    public List<Car> findAvailableCars(){
+    public List<Car> findAvailableCars() {
         String sql = "SELECT * FROM cars WHERE active = true AND UPPER(status) = ?";
         logger.info("Successfully fetched all available cars. Total count: {}", jdbcTemplate.query(sql, carRowMapper, "AVAILABLE").size());
         return jdbcTemplate.query(sql, carRowMapper,
@@ -119,14 +121,14 @@ public class CarRepository implements ICarRepository {
     }
 
     @Override
-    public List<Car> getAllCars(){
+    public List<Car> getAllCars() {
         String sql = "SELECT * FROM cars";
         logger.info("Successfully fetched all cars. Total count: {}", jdbcTemplate.query(sql, carRowMapper).size());
         return jdbcTemplate.query(sql, carRowMapper);
     }
 
     @Override
-    public List<Car> findReturnedCars(){
+    public List<Car> findReturnedCars() {
         String sql = "SELECT * FROM cars WHERE active = true AND UPPER(status) = ?";
         logger.info("Successfully fetched all returned cars. Total count: {}", jdbcTemplate.query(sql, carRowMapper, "RETURNED").size());
         return jdbcTemplate.query(sql, carRowMapper, "RETURNED");
@@ -137,6 +139,68 @@ public class CarRepository implements ICarRepository {
         String sql = "SELECT COUNT(*) FROM cars WHERE UPPER(status) = ?";
         logger.info("Successfully fetched all rented cars. Total={}", jdbcTemplate.queryForObject(sql, Integer.class, "RENTED"));
         return jdbcTemplate.queryForObject(sql, Integer.class, "RENTED");
+    }
+
+    @Override
+    public List<Car> findCarsFiltered(Integer carId,
+                                      String regNr,
+                                      String vin,
+                                      String brand,
+                                      String carModel,
+                                      String location,
+                                      Integer odometer,
+                                      String carDescription,
+                                      String status,
+                                      Boolean active) {
+
+        StringBuilder sql = new StringBuilder("SELECT * FROM cars WHERE 1=1");
+        List<Object> params = new ArrayList<>();
+
+        if (carId != null) {
+            sql.append(" AND car_id = ?");
+            params.add(carId);
+        }
+        if (regNr != null && !regNr.isBlank()) {
+            sql.append(" AND UPPER(reg_nr) LIKE UPPER(?)");
+            params.add("%" + regNr.trim() + "%");
+        }
+        if (vin != null && !vin.isBlank()) {
+            sql.append(" AND UPPER(vin) LIKE UPPER(?)");
+            params.add("%" + vin.trim() + "%");
+        }
+        if (brand != null && !brand.isBlank()) {
+            sql.append(" AND UPPER(brand) LIKE UPPER(?)");
+            params.add("%" + brand.trim() + "%");
+        }
+        if (carModel != null && !carModel.isBlank()) {
+            sql.append(" AND UPPER(model) LIKE UPPER(?)");
+            params.add("%" + carModel.trim() + "%");
+        }
+        if (location != null && !location.isBlank()) {
+            sql.append(" AND UPPER(location) LIKE UPPER(?)");
+            params.add("%" + location.trim() + "%");
+        }
+        if (odometer != null) {
+            sql.append(" AND odometer = ?");
+            params.add(odometer);
+        }
+        if (carDescription != null && !carDescription.isBlank()) {
+            sql.append(" AND UPPER(car_description) LIKE UPPER(?)");
+            params.add("%" + carDescription.trim() + "%");
+        }
+        if (status != null && !status.isBlank()) {
+            sql.append(" AND UPPER(status) = UPPER(?)");
+            params.add(status.trim());
+        }
+        if (active != null) {
+            sql.append(" AND active = ?");
+            params.add(active);
+        }
+
+        logger.debug("Filtering cars with SQL: {}", sql);
+        logger.debug("Parameters: {}", params);
+
+        return jdbcTemplate.query(sql.toString(), carRowMapper, params.toArray());
     }
 
     public void updateCarStatus(int carId, String status) {

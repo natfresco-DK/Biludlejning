@@ -20,51 +20,84 @@
         <div>
             <a th:href="@{/cars/add}" class="btn-primary">+ Opret ny bil</a>
         </div>
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Car ID</th>
-                <th>Reg nr</th>
-                <th>VIN</th>
-                <th>Mærke</th>
-                <th>Model</th>
-                <th>Lokation</th>
-                <th>Odometer</th>
-                <th>Beskrivelse</th>
-                <th>Status</th>
-                <th>Aktiv</th>
-                <th>Handling</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:if="${#lists.isEmpty(cars)}">
-                <td colspan="10">Ingen biler fundet</td>
-            </tr>
-            <tr th:each="car : ${cars}">
-                <td th:text="${car.carId}"></td>
-                <td th:text="${car.regNr}"></td>
-                <td th:text="${car.vin}"></td>
-                <td th:text="${car.brand}"></td>
-                <td th:text="${car.model}"></td>
-                <td th:text="${car.location}"></td>
-                <td th:text="${car.odometer}"></td>
-                <td th:text="${car.carDescription}"></td>
-                <td th:text="${car.status}"></td>
-                <td th:text="${car.active}"></td>
-                <td>
-                    <form th:action="@{/car-return/{carId}(carId=${car.carId})}" method="post" style="display: inline;">
-                        <button type="submit"
-                                th:disabled="${!#strings.equalsIgnoreCase(car.status, 'RENTED') || !leaseCompletedMap.get(car.carId)}"
-                                class="btn-return"
-                                title="Bilen skal være udlejet og leaset skal være afsluttet">
-                            Returner
-                        </button>
-                    </form>
-                </td>
-            </tr>
-            </tbody>
-        </table>
 
+        <form th:action="@{/cars}" method="get">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Car ID</th>
+                    <th>Reg nr</th>
+                    <th>VIN</th>
+                    <th>Mærke</th>
+                    <th>Model</th>
+                    <th>Lokation</th>
+                    <th>Odometer</th>
+                    <th>Beskrivelse</th>
+                    <th>Status</th>
+                    <th>Aktiv</th>
+                    <th>Handling</th>
+                </tr>
+                <tr>
+                    <th><input type="text" name="carId" th:value="${param.carId}" placeholder="ID"></th>
+                    <th><input type="text" name="regNr" th:value="${param.regNr}" placeholder="Reg nr"></th>
+                    <th><input type="text" name="vin" th:value="${param.vin}" placeholder="VIN"></th>
+                    <th><input type="text" name="brand" th:value="${param.brand}" placeholder="Mærke"></th>
+                    <th><input type="text" name="carModel" th:value="${param.carModel}" placeholder="Model"></th>
+                    <th><input type="text" name="location" th:value="${param.location}" placeholder="Lokation"></th>
+                    <th><input type="number" name="odometer" th:value="${param.odometer}" placeholder="Odometer"></th>
+                    <th><input type="text" name="carDescription" th:value="${param.carDescription}"
+                               placeholder="Beskrivelse"></th>
+                    <th>
+                        <select name="status">
+                            <option value="">Alle</option>
+                            <option value="AVAILABLE" th:selected="${param.status == 'AVAILABLE'}">AVAILABLE</option>
+                            <option value="RENTED" th:selected="${param.status == 'RENTED'}">RENTED</option>
+                            <option value="MAINTENANCE" th:selected="${param.status == 'MAINTENANCE'}">MAINTENANCE
+                            </option>
+                        </select>
+                    </th>
+                    <th>
+                        <select name="active">
+                            <option value="">Alle</option>
+                            <option value="true" th:selected="${param.active == 'true'}">Ja</option>
+                            <option value="false" th:selected="${param.active == 'false'}">Nej</option>
+                        </select>
+                    </th>
+                    <th>
+                        <button type="submit" class="btn-primary">Filter</button>
+                        <a th:href="@{/cars}" class="btn-primary">Reset</a>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(cars)}">
+                    <td colspan="11">Ingen biler fundet</td>
+                </tr>
+                <tr th:each="car : ${cars}">
+                    <td th:text="${car.carId}"></td>
+                    <td th:text="${car.regNr}"></td>
+                    <td th:text="${car.vin}"></td>
+                    <td th:text="${car.brand}"></td>
+                    <td th:text="${car.model}"></td>
+                    <td th:text="${car.location}"></td>
+                    <td th:text="${car.odometer}"></td>
+                    <td th:text="${car.carDescription}"></td>
+                    <td th:text="${car.status}"></td>
+                    <td th:text="${car.active}"></td>
+                    <td>
+                        <form th:action="@{/car-return/{carId}(carId=${car.carId})}" method="post">
+                            <button type="submit"
+                                    th:disabled="${!#strings.equalsIgnoreCase(car.status, 'RENTED') || !leaseCompletedMap.get(car.carId)}"
+                                    class="btn-primary"
+                                    title="Bilen skal være udlejet og leaset skal være afsluttet">
+                                Returner
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
     </main>
 </section>
 

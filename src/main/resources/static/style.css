@@ -81,6 +81,7 @@ body {
 
 .table {
     width: 100%;
+    table-layout: auto;
     border-collapse: collapse;
     margin-top: 1rem;
 }
@@ -93,6 +94,11 @@ body {
 
 .table th {
     background: #f4f4f4;
+}
+
+.table input, .table select {
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .cards {

@@ -24,24 +24,10 @@ public class CarService {
         return carRepository.findAvailableCars();
     }
 
-    public List<Car> getAllCars() {
-        logger.info("Fetching all cars. Total: {}", carRepository.getAllCars().size());
-        return carRepository.getAllCars();
-    }
-
     public int getAllRentedCarsCount() {
-        logger.info("Fetching all rented cars. Total: {}", carRepository.findAllRentedCars());
-        return carRepository.findAllRentedCars();
-    }
-
-    public List<Car> getReturnedCars() {
-        logger.info("Fetching all returned cars. Total: {}", carRepository.findReturnedCars().size());
-        return carRepository.findReturnedCars();
-    }
-
-    public void updateCarStatus(int carId, String status) {
-        logger.info("Updating car status for carId={} to new status={}", carId, status);
-        carRepository.updateCarStatus(carId, status);
+        int rentedCarsCount = carRepository.findAllRentedCars();
+        logger.info("Fetching all rented cars. Total: {}", rentedCarsCount);
+        return rentedCarsCount;
     }
 
     public void addCar(String vin, String regNr, String location, int odometer,
@@ -49,5 +35,20 @@ public class CarService {
         Car car = new Car(regNr, vin, make, carModel, location, odometer, carDescription, "AVAILABLE");
         carRepository.createCar(car);
         logger.info("Car created successfully: vin={}, make={}, model={}, regNr={}", vin, make, carModel, regNr);
+    }
+
+    public List<Car> findCarsFiltered(Integer carId,
+                                      String regNr,
+                                      String vin,
+                                      String brand,
+                                      String carModel,
+                                      String location,
+                                      Integer odometer,
+                                      String carDescription,
+                                      String status,
+                                      Boolean active) {
+        logger.info("Filtering cars with criteria - carId: {}, regNr: {}, vin: {}, brand: {}, model: {}, location: {}, odometer: {}, description: {}, status: {}, active: {}",
+                carId, regNr, vin, brand, carModel, location, odometer, carDescription, status, active);
+        return carRepository.findCarsFiltered(carId, regNr, vin, brand, carModel, location, odometer, carDescription, status, active);
     }
 }
