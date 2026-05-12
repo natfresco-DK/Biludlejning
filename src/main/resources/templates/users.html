@@ -22,39 +22,65 @@
             </a>
         </div>
 
-
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Bruger ID</th>
-                <th>Brugernavn</th>
-                <th>Rolle</th>
-                <th>Fornavn</th>
-                <th>Efternavn</th>
-                <th>Telefon</th>
-                <th>Email</th>
-                <th>Aktiveret</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:if="${#lists.isEmpty(usersList)}">
-                <td colspan="10">Ingen brugere fundet</td>
-            </tr>
-            <tr th:each="brugere : ${usersList}">
-                <td th:text="${brugere.getId}"></td>
-                <td th:text="${brugere.getUsername}"></td>
-                <td th:text="${brugere.getRole}"></td>
-                <td th:text="${brugere.getFirstname}"></td>
-                <td th:text="${brugere.getLastname}"></td>
-                <td th:text="${brugere.getPhone}"></td>
-                <td th:text="${brugere.getEmail}"></td>
-                <td th:text="${brugere.isActive}"></td>
-            </tr>
-            </tbody>
-        </table>
-
-
-
+        <form th:action="@{/users}" method="get">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Bruger ID</th>
+                    <th>Brugernavn</th>
+                    <th>Rolle</th>
+                    <th>Fornavn</th>
+                    <th>Efternavn</th>
+                    <th>Telefon</th>
+                    <th>Email</th>
+                    <th>Aktiv</th>
+                    <th>Handling</th>
+                </tr>
+                <tr>
+                    <th><input type="text" name="userId" th:value="${param.userId}" placeholder="ID"></th>
+                    <th><input type="text" name="username" th:value="${param.username}" placeholder="Brugernavn"></th>
+                    <th>
+                        <select name="role">
+                            <option value="" th:selected="${role == null or role == ''}">Alle</option>
+                            <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"
+                                    th:selected="${role == r}"></option>
+                        </select>
+                    </th>
+                    <th><input type="text" name="firstName" th:value="${param.firstName}" placeholder="Fornavn"></th>
+                    <th><input type="text" name="lastName" th:value="${param.lastName}" placeholder="Efternavn"></th>
+                    <th><input type="text" name="phone" th:value="${param.phone}" placeholder="Telefon"></th>
+                    <th><input type="text" name="email" th:value="${param.email}" placeholder="Email"></th>
+                    <th>
+                        <select name="active">
+                            <option value="" th:selected="${active == null or active == ''}">Begge</option>
+                            <option value="true" th:selected="${active == true}">True</option>
+                            <option value="false" th:selected="${active == false}">False</option>
+                        </select>
+                    </th>
+                    <th>
+                        <button type="submit" class="btn-primary">Filter</button>
+                        <a th:href="@{/users}" class="btn-primary">Reset</a>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(usersList)}">
+                    <td colspan="10">Ingen brugere fundet</td>
+                </tr>
+                <tr th:each="brugere : ${usersList}">
+                    <td th:text="${brugere.getId}"></td>
+                    <td th:text="${brugere.getUsername}"></td>
+                    <td th:text="${brugere.getRole}"></td>
+                    <td th:text="${brugere.getFirstname}"></td>
+                    <td th:text="${brugere.getLastname}"></td>
+                    <td th:text="${brugere.getPhone}"></td>
+                    <td th:text="${brugere.getEmail}"></td>
+                    <td th:text="${brugere.isActive}"></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
 
 
     </main>

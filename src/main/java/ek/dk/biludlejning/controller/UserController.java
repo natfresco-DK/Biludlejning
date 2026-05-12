@@ -6,10 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -35,20 +32,36 @@ public class UserController {
 
     @GetMapping("/users")
     public String users(Model model,
+                        @RequestParam(required = false) Integer userId,
+                        @RequestParam(required = false) String username,
+                        @RequestParam(required = false) String role,
+                        @RequestParam(required = false) String firstName,
+                        @RequestParam(required = false) String lastName,
+                        @RequestParam(required = false) String phone,
+                        @RequestParam(required = false) String email,
+                        @RequestParam(required = false) Boolean active,
                         @SessionAttribute(name = "currentUser", required = false) User currentUser) {
-        model.addAttribute("currentUser", currentUser);
+
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
             logger.warn("Access check has been denied for User id={} with email={} at @GET /users", currentUser.getId(), currentUser.getEmail());
             return accessCheck;
         }
-        model.addAttribute("activePage", "users");
+
         if (!model.containsAttribute("user")) {
             model.addAttribute("user", new User());
         }
-        model.addAttribute("roles", ALLOWED_ROLES);
 
-        model.addAttribute("usersList", userService.getAllUsers());
+        List<User> users = userService.findUsersFiltered(
+                userId, username, role, firstName, lastName, phone, email, active
+        );
+
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("active", active);
+        model.addAttribute("role", role);
+        model.addAttribute("roles", ALLOWED_ROLES);
+        model.addAttribute("usersList", users);
+        model.addAttribute("activePage", "users");
 
         logger.info("User with User id={} with email={} accessed @GET /users", currentUser.getId(), currentUser.getEmail());
         return "users";

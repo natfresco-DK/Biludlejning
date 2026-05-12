@@ -30,10 +30,17 @@ public class UserService {
     }
 
 
-    public List<User> getAllUsers(){
-        List<User> allUsers = userRepository.getAllUsers();
-        logger.info("Fetching all users. Total: {}", allUsers.size());
-        return allUsers;
+    public List<User> findUsersFiltered(Integer userId,
+                                      String username,
+                                      String role,
+                                      String firstName,
+                                      String lastName,
+                                      String phone,
+                                      String email,
+                                      Boolean active) {
+        logger.info("Filtering users with criteria - userId: {}, username: {}, role: {}, firstName: {}, lastName: {}, phone: {}, email: {}, active: {}",
+                userId, username, role, firstName, lastName, phone, email, active);
+        return userRepository.findUsersFiltered(userId, username, role, firstName, lastName, phone, email, active);
     }
 
     public void createUser(User user) {
