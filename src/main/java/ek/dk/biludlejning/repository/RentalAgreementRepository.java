@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -81,6 +83,55 @@ public class RentalAgreementRepository implements IRentalAgreementRepository{
         String sql = "SELECT * FROM rental_agreements";
         logger.info("Successfully fetched all RentalAgreements. Total count: {}", jdbcTemplate.query(sql, this::mapRentalAgreement).size());
         return jdbcTemplate.query(sql, this::mapRentalAgreement);
+    }
+
+    @Override
+    public List<RentalAgreement> getFilteredRentalAgreements(Integer agreementId,
+                                                             Integer customerId,
+                                                             Integer carId,
+                                                             LocalDate startDate,
+                                                             LocalDate endDate,
+                                                             Double downpayment,
+                                                             Double monthlyPayment,
+                                                             Integer maxKm) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM rental_agreements WHERE 1=1");
+        List<Object> params = new ArrayList<>();
+
+        if (agreementId != null) {
+            sql.append(" AND agreement_id = ?");
+            params.add(agreementId);
+        }
+        if (customerId != null) {
+            sql.append(" AND customer_id = ?");
+            params.add(customerId);
+        }
+        if (carId != null) {
+            sql.append(" AND car_id = ?");
+            params.add(carId);
+        }
+        if (startDate != null) {
+            sql.append(" AND start_date = ?");
+            params.add(java.sql.Date.valueOf(startDate));
+        }
+        if (endDate != null) {
+            sql.append(" AND end_date = ?");
+            params.add(java.sql.Date.valueOf(endDate));
+        }
+        if (downpayment != null) {
+            sql.append(" AND down_payment = ?");
+            params.add(downpayment);
+        }
+        if (monthlyPayment != null) {
+            sql.append(" AND monthly_payment = ?");
+            params.add(monthlyPayment);
+        }
+        if (maxKm != null) {
+            sql.append(" AND max_km = ?");
+            params.add(maxKm);
+        }
+
+        logger.info("Executing filtered rental agreements query: {}", sql);
+        return jdbcTemplate.query(sql.toString(), this::mapRentalAgreement, params.toArray());
     }
 
     public List<RentalAgreement> findByCarId(int carId) {

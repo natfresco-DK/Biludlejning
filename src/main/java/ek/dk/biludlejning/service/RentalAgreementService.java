@@ -2,6 +2,7 @@ package ek.dk.biludlejning.service;
 
 import ek.dk.biludlejning.model.Car;
 import ek.dk.biludlejning.model.Customer;
+import ek.dk.biludlejning.model.DamageReport;
 import ek.dk.biludlejning.model.RentalAgreement;
 import ek.dk.biludlejning.repository.ICarRepository;
 import ek.dk.biludlejning.repository.IRentalAgreementRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,14 +22,16 @@ public class RentalAgreementService {
     private final IRentalAgreementRepository rentalAgreementRepository;
     private final ICarRepository carRepository;
     private final CustomerService customerService;
+    private final UserService userService;
 
     private static final Logger logger =  LoggerFactory.getLogger(RentalAgreementService.class);
 
 
-    public RentalAgreementService(IRentalAgreementRepository rentalAgreementRepository, ICarRepository carRepository, CustomerService customerService) {
+    public RentalAgreementService(IRentalAgreementRepository rentalAgreementRepository, ICarRepository carRepository, CustomerService customerService, UserService userService) {
         this.rentalAgreementRepository = rentalAgreementRepository;
         this.carRepository = carRepository;
         this.customerService = customerService;
+        this.userService = userService;
     }
 
     @Transactional
@@ -53,6 +57,45 @@ public class RentalAgreementService {
     public List<RentalAgreement> getAllRentalAgreements(){
         logger.info("Successfully fetched all rental agreements. Total: {}", rentalAgreementRepository.getAllRentalAgreements().size());
         return rentalAgreementRepository.getAllRentalAgreements();
+    }
+
+    public List<RentalAgreement> getFilteredRentalAgreements(Integer agreementId,
+                                                             Integer customerId,
+                                                             Integer carId,
+                                                             LocalDate startDate,
+                                                             LocalDate endDate,
+                                                             Double downpayment,
+                                                             Double monthlyPayment,
+                                                             Integer maxKm,
+                                                             String createdByUsername) {
+        logger.info("Filtering rental agreements with criteria - agreementId: {}, customerId: {}, carId: {}, startDate: {}, endDate: {}, downpayment: {}, monthlyPayment: {}, maxKm: {}, createdByUsername: {}",
+                agreementId, customerId, carId, startDate, endDate, downpayment, monthlyPayment, maxKm, createdByUsername);
+
+        List<RentalAgreement> agreements = rentalAgreementRepository.getFilteredRentalAgreements(
+                agreementId, customerId, carId, startDate, endDate, downpayment, monthlyPayment, maxKm
+        );
+
+        for (RentalAgreement agreement : agreements) {
+            userService.findById(agreement.getCreatedBy()).ifPresent(
+                    user -> agreement.setCreatedByUsername(user.getUsername())
+            );
+        }
+
+        if (createdByUsername != null && !createdByUsername.isBlank()) {
+            List<RentalAgreement> filteredAgreements = new ArrayList<>();
+
+            for (RentalAgreement agreement : filteredAgreements) {
+                if (agreement.getCreatedByUsername() != null &&
+                        agreement.getCreatedByUsername().
+                                toLowerCase().contains(createdByUsername.toLowerCase())) {
+                    agreements.add(agreement);
+                }
+
+                agreements = filteredAgreements;
+            }
+        }
+
+        return agreements;
     }
 
     private Optional<String> validateRentalAgreement(RentalAgreement rentalAgreement) {

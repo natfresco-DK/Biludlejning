@@ -13,6 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Controller
 public class LeaseController {
 
@@ -33,6 +36,15 @@ public class LeaseController {
 
     @GetMapping("/lease-agreements")
     public String leaseAgreements(Model model,
+                                  @RequestParam(required = false) Integer agreementId,
+                                  @RequestParam(required = false) Integer customerId,
+                                  @RequestParam(required = false) Integer carId,
+                                  @RequestParam(required = false) LocalDate startDate,
+                                  @RequestParam(required = false) LocalDate endDate,
+                                  @RequestParam(required = false) Double downpayment,
+                                  @RequestParam(required = false) Double monthlyPayment,
+                                  @RequestParam(required = false) Integer maxKm,
+                                  @RequestParam(required = false) String createdByUsername,
                                   @SessionAttribute(name = "currentUser", required = false) User currentUser) {
         model.addAttribute("currentUser", currentUser);
         String accessCheck = checkAccess(currentUser);
@@ -40,8 +52,11 @@ public class LeaseController {
             logger.warn("Access check has been denied for User id={} with email={} at @GET /lease-agreements", currentUser.getId(), currentUser.getEmail());
             return accessCheck;
         }
+        List<RentalAgreement> rentalAgreements = rentalAgreementService.getFilteredRentalAgreements(
+                agreementId, customerId, carId, startDate, endDate, downpayment, monthlyPayment, maxKm, createdByUsername
+        );
         model.addAttribute("activePage", "lease-agreements");
-        model.addAttribute("rentalAgreementList", rentalAgreementService.getAllRentalAgreements());
+        model.addAttribute("rentalAgreementList", rentalAgreements);
         logger.info("User with User id={} with email={} accessed @GET /lease_agreements", currentUser.getId(), currentUser.getEmail());
         return "lease_agreements";
     }
