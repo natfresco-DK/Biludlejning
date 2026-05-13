@@ -93,7 +93,8 @@ public class RentalAgreementRepository implements IRentalAgreementRepository{
                                                              LocalDate endDate,
                                                              Double downpayment,
                                                              Double monthlyPayment,
-                                                             Integer maxKm) {
+                                                             Integer maxKm,
+                                                             Boolean active) {
         StringBuilder sql = new StringBuilder("SELECT * FROM rental_agreements WHERE 1=1");
         List<Object> params = new ArrayList<>();
 
@@ -118,7 +119,7 @@ public class RentalAgreementRepository implements IRentalAgreementRepository{
             params.add(java.sql.Date.valueOf(endDate));
         }
         if (downpayment != null) {
-            sql.append(" AND down_payment = ?");
+            sql.append(" AND downpayment = ?");
             params.add(downpayment);
         }
         if (monthlyPayment != null) {
@@ -128,6 +129,10 @@ public class RentalAgreementRepository implements IRentalAgreementRepository{
         if (maxKm != null) {
             sql.append(" AND max_km = ?");
             params.add(maxKm);
+        }
+        if (active != null) {
+            sql.append(" AND active = ?");
+            params.add(active);
         }
 
         logger.info("Executing filtered rental agreements query: {}", sql);
