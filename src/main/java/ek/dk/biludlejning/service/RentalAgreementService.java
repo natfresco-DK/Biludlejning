@@ -67,12 +67,13 @@ public class RentalAgreementService {
                                                              Double downpayment,
                                                              Double monthlyPayment,
                                                              Integer maxKm,
-                                                             String createdByUsername) {
-        logger.info("Filtering rental agreements with criteria - agreementId: {}, customerId: {}, carId: {}, startDate: {}, endDate: {}, downpayment: {}, monthlyPayment: {}, maxKm: {}, createdByUsername: {}",
-                agreementId, customerId, carId, startDate, endDate, downpayment, monthlyPayment, maxKm, createdByUsername);
+                                                             String createdByUsername,
+                                                             Boolean active) {
+        logger.info("Filtering rental agreements with criteria - agreementId: {}, customerId: {}, carId: {}, startDate: {}, endDate: {}, downpayment: {}, monthlyPayment: {}, maxKm: {}, createdByUsername: {}, active: {}",
+                agreementId, customerId, carId, startDate, endDate, downpayment, monthlyPayment, maxKm, createdByUsername, active);
 
         List<RentalAgreement> agreements = rentalAgreementRepository.getFilteredRentalAgreements(
-                agreementId, customerId, carId, startDate, endDate, downpayment, monthlyPayment, maxKm
+                agreementId, customerId, carId, startDate, endDate, downpayment, monthlyPayment, maxKm, active
         );
 
         for (RentalAgreement agreement : agreements) {
@@ -82,17 +83,16 @@ public class RentalAgreementService {
         }
 
         if (createdByUsername != null && !createdByUsername.isBlank()) {
+            String search = createdByUsername.trim().toLowerCase();
             List<RentalAgreement> filteredAgreements = new ArrayList<>();
 
-            for (RentalAgreement agreement : filteredAgreements) {
+            for (RentalAgreement agreement : agreements) {
                 if (agreement.getCreatedByUsername() != null &&
-                        agreement.getCreatedByUsername().
-                                toLowerCase().contains(createdByUsername.toLowerCase())) {
-                    agreements.add(agreement);
+                        agreement.getCreatedByUsername().toLowerCase().contains(search)) {
+                    filteredAgreements.add(agreement);
                 }
-
-                agreements = filteredAgreements;
             }
+            agreements = filteredAgreements;
         }
 
         return agreements;

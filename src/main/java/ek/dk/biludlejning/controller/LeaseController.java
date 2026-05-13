@@ -45,6 +45,7 @@ public class LeaseController {
                                   @RequestParam(required = false) Double monthlyPayment,
                                   @RequestParam(required = false) Integer maxKm,
                                   @RequestParam(required = false) String createdByUsername,
+                                  @RequestParam(required = false) Boolean active,
                                   @SessionAttribute(name = "currentUser", required = false) User currentUser) {
         model.addAttribute("currentUser", currentUser);
         String accessCheck = checkAccess(currentUser);
@@ -53,10 +54,11 @@ public class LeaseController {
             return accessCheck;
         }
         List<RentalAgreement> rentalAgreements = rentalAgreementService.getFilteredRentalAgreements(
-                agreementId, customerId, carId, startDate, endDate, downpayment, monthlyPayment, maxKm, createdByUsername
+                agreementId, customerId, carId, startDate, endDate, downpayment, monthlyPayment, maxKm, createdByUsername, active
         );
         model.addAttribute("activePage", "lease-agreements");
         model.addAttribute("rentalAgreementList", rentalAgreements);
+        model.addAttribute("active", active);
         logger.info("User with User id={} with email={} accessed @GET /lease_agreements", currentUser.getId(), currentUser.getEmail());
         return "lease_agreements";
     }

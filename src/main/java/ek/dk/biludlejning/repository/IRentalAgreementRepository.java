@@ -24,7 +24,8 @@ public interface IRentalAgreementRepository {
                                                       LocalDate endDate,
                                                       Double downpayment,
                                                       Double monthlyPayment,
-                                                      Integer maxKm);
+                                                      Integer maxKm,
+                                                      Boolean active);
 
     void updateRentalAgreement(RentalAgreement rentalAgreement);
 
