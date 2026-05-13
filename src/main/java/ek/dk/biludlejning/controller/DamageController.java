@@ -6,29 +6,43 @@ import ek.dk.biludlejning.model.DamageReport;
 import ek.dk.biludlejning.model.User;
 import ek.dk.biludlejning.service.DamageService;
 import ek.dk.biludlejning.service.RentalAgreementService;
+import ek.dk.biludlejning.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
 public class DamageController {
     private final DamageService damageService;
     private final RentalAgreementService rentalAgreementService;
+    private final UserService userService;
 
     private static final Logger logger = LoggerFactory.getLogger(DamageController.class);
 
 
-    public DamageController(DamageService damageService, RentalAgreementService rentalAgreementService) {
+    public DamageController(DamageService damageService, RentalAgreementService rentalAgreementService, UserService userService) {
         this.damageService = damageService;
         this.rentalAgreementService = rentalAgreementService;
+        this.userService = userService;
     }
 
     @GetMapping("/damage-reports")
     public  String damageReports(Model model,
+                                 @RequestParam(required = false) Integer reportId,
+                                 @RequestParam(required = false) LocalDate returnDate,
+                                 @RequestParam(required = false) LocalDate reportDate,
+                                 @RequestParam(required = false) Double cost,
+                                 @RequestParam(required = false) Integer odometer,
+                                 @RequestParam(required = false) Integer rentalAgreementId,
+                                 @RequestParam(required = false) String registeredByUsername,
                                  @SessionAttribute(name = "currentUser", required = false) User currentUser) {
         model.addAttribute("currentUser", currentUser);
         String accessCheck = checkAccess(currentUser);
@@ -36,8 +50,12 @@ public class DamageController {
             logger.warn("Access check has been denied for User id={} with email={} at @GET /damage-reports", currentUser.getId(), currentUser.getEmail());
             return accessCheck;
         }
+        List<DamageReport> reports = damageService.getFilteredDamageReports(
+                reportId, returnDate, reportDate, cost, odometer, rentalAgreementId, registeredByUsername
+        );
         model.addAttribute("activePage", "damage-reports");
-        model.addAttribute("damageReportList", damageService.getAllDamageReports());
+        model.addAttribute("damageReportList", reports);
+
         logger.info("User with User id={} with email={} accessed /damage_reports", currentUser.getId(), currentUser.getEmail());
         return "damage_reports";
     }

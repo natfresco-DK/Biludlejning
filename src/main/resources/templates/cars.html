@@ -38,15 +38,15 @@
                     <th>Handling</th>
                 </tr>
                 <tr>
-                    <th><input type="text" name="carId" th:value="${param.carId}" placeholder="ID"></th>
+                    <th><input type="number" min="0" name="carId" th:value="${param.carId}" placeholder="ID"></th>
                     <th><input type="text" name="regNr" th:value="${param.regNr}" placeholder="Reg nr"></th>
                     <th><input type="text" name="vin" th:value="${param.vin}" placeholder="VIN"></th>
                     <th><input type="text" name="brand" th:value="${param.brand}" placeholder="Mærke"></th>
                     <th><input type="text" name="carModel" th:value="${param.carModel}" placeholder="Model"></th>
                     <th><input type="text" name="location" th:value="${param.location}" placeholder="Lokation"></th>
                     <th>
-                        <input type="number" name="odometerMin" th:value="${param.odometerMin}" placeholder="Min km">
-                        <input type="number" name="odometerMax" th:value="${param.odometerMax}" placeholder="Max km">
+                        <input type="number" min="0" name="odometerMin" th:value="${param.odometerMin}" placeholder="Min km">
+                        <input type="number" min="0" name="odometerMax" th:value="${param.odometerMax}" placeholder="Max km">
                     </th>
                     <th><input type="text" name="carDescription" th:value="${param.carDescription}"
                                placeholder="Beskrivelse"></th>

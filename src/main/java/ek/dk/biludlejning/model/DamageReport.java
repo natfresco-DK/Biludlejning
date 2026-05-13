@@ -12,6 +12,7 @@ public class DamageReport {
     protected int odometer;
     protected int rentalAgreementId;
     protected int registeredBy;
+    protected String registeredByUsername;
     protected List<DamageItem> damages;
 
 
@@ -100,5 +101,13 @@ public class DamageReport {
 
     public void setRegisteredBy(int registeredBy) {
         this.registeredBy = registeredBy;
+    }
+
+    public String getRegisteredByUsername() {
+        return registeredByUsername;
+    }
+
+    public void setRegisteredByUsername(String registeredByUsername) {
+        this.registeredByUsername = registeredByUsername;
     }
 }

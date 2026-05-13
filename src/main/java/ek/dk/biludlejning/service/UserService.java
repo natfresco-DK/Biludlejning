@@ -80,6 +80,11 @@ public class UserService {
         return Optional.empty();
     }
 
+    public Optional<User> findById (int id) {
+        return userRepository.findByXY("user_id", id);
+    }
+
+
     private String hashPassword(String plainPassword) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");

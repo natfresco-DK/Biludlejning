@@ -15,6 +15,13 @@ public interface IDamageReportRepository {
 
     List<DamageReport> getAllDamageReports();
 
+    List<DamageReport> getFilteredDamageReports(Integer reportId,
+                                                java.time.LocalDate returnDate,
+                                                java.time.LocalDate reportDate,
+                                                Double cost,
+                                                Integer odometer,
+                                                Integer rentalAgreementId);
+
     // update existing damage report
     void update(DamageReport report);
 
