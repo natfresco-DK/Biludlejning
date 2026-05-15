@@ -11,6 +11,7 @@ body {
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
+    position: fixed;
 }
 
 .sidebar-header {
@@ -63,6 +64,7 @@ body {
 .content {
     flex: 1;
     padding: 32px;
+    margin-left: 280px;
 }
 
 .btn-primary {
@@ -73,6 +75,8 @@ body {
     text-decoration: none;
     border-radius: 6px;
     font-weight: 600;
+    border: none;
+    cursor: pointer;
 }
 
 .btn-primary:hover {
@@ -173,6 +177,7 @@ body {
     padding: 10px 12px;
     border-radius: 6px;
     font-size: 14px;
+    cursor: pointer;
 }
 
 .logout-btn:hover {
@@ -203,3 +208,209 @@ body {
     color: #333;
 }
 
+.login-page {
+    display: flex;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+.login-content {
+    flex: 1;
+    padding: 64px 40px;
+}
+
+.login-content h1 {
+    font-family: Georgia, serif;
+    font-size: 38px;
+    margin: 0 0 30px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 430px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 35px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    background-color: #fff;
+}
+
+.login-card h2 {
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-size: 24px;
+}
+
+.login-card label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.login-card input {
+    width: 100%;
+    padding: 13px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.login-card input:focus {
+    outline: none;
+    border-color: #1f6feb;
+}
+
+.login-card button {
+    width: 100%;
+    padding: 14px;
+    background: #1f6feb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.login-card button:hover {
+    background: #1859be;
+}
+
+.damage-form {
+    max-width: 650px;
+}
+
+.damage-card {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 24px;
+    background-color: #fafafa;
+    margin-bottom: 24px;
+}
+
+.damage-card h2 {
+    margin-top: 0;
+    margin-bottom: 22px;
+    font-size: 26px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select {
+    height: 40px;
+    padding: 8px 10px;
+    border: 1px solid #cfcfcf;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #1f6feb;
+}
+
+.damage-form button, .lease-form button {
+    padding: 12px 18px;
+    background-color: #1f6feb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.damage-form button:hover {
+    background-color: #1859be;
+}
+
+.lease-form {
+    max-width: 750px;
+}
+
+.lease-form .form-section, .car-form .form-section {
+    padding: 24px;
+    border-radius: 6px;
+    margin-bottom: 24px;
+}
+
+.lease-form .form-section h3 {
+    font-size: 24px;
+    margin-bottom: 22px;
+}
+
+.lease-form .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 24px;
+}
+
+.lease-form .customer-toggle {
+    margin-bottom: 16px;
+}
+
+.lease-form .customer-toggle input {
+    width: auto;
+}
+
+.car-form-wrapper {
+    max-width: 650px;
+}
+
+.car-form {
+    margin-top: 20px;
+}
+
+.car-form .form-section h3 {
+    margin-top: 0;
+    margin-bottom: 18px;
+    font-size: 24px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.btn-secondary {
+    display: inline-block;
+    padding: 12px 18px;
+    color: #333;
+    background-color: #eeeeee;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.btn-secondary:hover {
+    background-color: #dddddd;
+}
+
+.user-form {
+    max-width: 350px;
+}
+
+.user-form .form-section {
+    padding: 24px;
+    border-radius: 6px;
+}
+
+.user-form button {
+    margin-top: 8px;
+}

@@ -14,7 +14,7 @@
     <main class="content">
         <h1>Tilføj ny bil</h1>
 
-        <div>
+        <div class="car-form-wrapper">
 
             <div class="success" th:if="${success}">
                 <strong>Succes!</strong> Bil er blevet tilføjet.
@@ -35,93 +35,94 @@
                 </span>
             </div>
 
-            <!-- STEP 1: Decode VIN -->
-            <form method="post" th:action="@{/car/decode}" th:if="${step == null or step == 1}">
-                <div>
-                    <strong>Trin 1:</strong> Indtast VIN nummeret for at hente bilens oplysninger fra databasen.
-                </div>
+            <div class="form-section">
+                <!-- STEP 1: Decode VIN -->
+                <form class="car-form" method="post" th:action="@{/car/decode}" th:if="${step == null or step == 1}">
+                    <div>
+                        <strong>Trin 1:</strong> Indtast VIN nummeret for at hente bilens oplysninger fra databasen.
+                    </div>
 
-                <div>
-                    <label for="vin">VIN (required)</label>
-                    <input type="text"
-                           id="vin"
-                           name="vin"
-                           placeholder="f.eks. 1GNDT13X64K116165"
-                           required
-                           th:value="${vin}">
-                </div>
+                    <div class="form-group">
+                        <label for="vin">VIN (required)</label>
+                        <input type="text"
+                               id="vin"
+                               name="vin"
+                               placeholder="f.eks. 1GNDT13X64K116165"
+                               required
+                               th:value="${vin}">
+                    </div>
 
-                <div>
-                    <button type="submit">Dekod VIN</button>
-                    <a th:href="@{/cars}" style="padding: 10px 20px; text-decoration: none; display: inline-block;">Annuller</a>
-                </div>
-            </form>
+                    <div>
+                        <button class="btn-primary" type="submit">Dekod VIN</button>
+                        <a class="btn-secondary" th:href="@{/cars}">Annuller</a>
+                    </div>
+                </form>
 
-            <!-- STEP 2: Confirm and add car -->
-            <form method="post" th:action="@{/car/add}" th:if="${step == 2}">
-                <div>
-                    <strong>Trin 2:</strong> Bekræft bilens oplysninger hentet fra VIN, og tilføj yderligere detaljer.
-                </div>
+                <!-- STEP 2: Confirm and add car -->
+                <form class="car-form" method="post" th:action="@{/car/add}" th:if="${step == 2}">
+                    <div>
+                            <strong>Trin 2:</strong> Bekræft bilens oplysninger hentet fra VIN, og tilføj yderligere detaljer.
+                        </div>
 
-                <!-- Display decoded VIN data -->
-                <div>
-                    <h3>Oplysninger fra VIN:</h3>
-                    <p><strong>VIN:</strong> <span th:text="${vin}"></span></p>
-                    <p><strong>Mærke:</strong> <span th:text="${make}"></span></p>
-                    <p><strong>Model:</strong> <span th:text="${model}"></span></p>
-                    <p><strong>År:</strong> <span th:text="${modelYear}"></span></p>
-                </div>
+                        <!-- Display decoded VIN data -->
+                        <div>
+                            <h3>Oplysninger fra VIN:</h3>
+                            <p><strong>VIN:</strong> <span th:text="${vin}"></span></p>
+                            <p><strong>Mærke:</strong> <span th:text="${make}"></span></p>
+                            <p><strong>Model:</strong> <span th:text="${model}"></span></p>
+                            <p><strong>År:</strong> <span th:text="${modelYear}"></span></p>
+                        </div>
 
-                <!-- Hidden fields with decoded data -->
-                <input type="hidden" name="vin" th:value="${vin}">
-                <input type="hidden" name="make" th:value="${make}">
-                <input type="hidden" name="model" th:value="${model}">
+                        <!-- Hidden fields with decoded data -->
+                        <input type="hidden" name="vin" th:value="${vin}">
+                        <input type="hidden" name="make" th:value="${make}">
+                        <input type="hidden" name="model" th:value="${model}">
 
-                <!-- User editable fields -->
-                <div>
-                    <label for="regNr">Registreringsnummer</label>
-                    <input type="text"
-                           id="regNr"
-                           name="regNr"
-                           placeholder="f.eks. AB12345"
-                           th:value="${regNr}">
-                </div>
+                        <!-- User editable fields -->
+                        <div class="form-group">
+                            <label for="regNr">Registreringsnummer</label>
+                            <input type="text"
+                                   id="regNr"
+                                   name="regNr"
+                                   placeholder="f.eks. AB12345"
+                                   th:value="${regNr}">
+                        </div>
 
-                <div>
-                    <label for="location">Lokation (required)</label>
-                    <input type="text"
-                           id="location"
-                           name="location"
-                           placeholder="f.eks. København"
-                           required
-                           th:value="${location}">
-                </div>
+                        <div class="form-group">
+                            <label for="location">Lokation (required)</label>
+                            <input type="text"
+                                   id="location"
+                                   name="location"
+                                   placeholder="f.eks. København"
+                                   required
+                                   th:value="${location}">
+                        </div>
 
-                <div>
-                    <label for="odometer">Odometer (required)</label>
-                    <input type="number"
-                           id="odometer"
-                           name="odometer"
-                           placeholder="f.eks. 50000"
-                           required
-                           th:value="${odometer}">
-                </div>
+                        <div class="form-group">
+                            <label for="odometer">Odometer (required)</label>
+                            <input type="number"
+                                   id="odometer"
+                                   name="odometer"
+                                   placeholder="f.eks. 50000"
+                                   required
+                                   th:value="${odometer}">
+                        </div>
 
-                <div>
-                    <label for="carDescription">Beskrivelse</label>
-                    <textarea id="carDescription"
-                              name="carDescription"
-                              placeholder="Tilføj beskrivelse af bilens tilstand..."
-                              th:text="${carDescription}"></textarea>
-                </div>
+                        <div class="form-group">
+                            <label for="carDescription">Beskrivelse</label>
+                            <textarea id="carDescription"
+                                      name="carDescription"
+                                      placeholder="Tilføj beskrivelse af bilens tilstand..."
+                                      th:text="${carDescription}"></textarea>
+                        </div>
 
-                <div>
-                    <button type="submit">Tilføj bil</button>
-                    <a th:href="@{/cars/add}">Tilbage</a>
-                    <a th:href="@{/cars}" style="padding: 10px 20px; text-decoration: none; display: inline-block;">Annuller</a>
-                </div>
-            </form>
-
+                        <div>
+                            <button class="btn-primary" type="submit">Tilføj bil</button>
+                            <a class="btn-secondary" th:href="@{/cars/add}">Tilbage</a>
+                            <a class="btn-secondary" th:href="@{/cars}">Annuller</a>
+                        </div>
+                    </form>
+            </div>
         </div>
     </main>
 </section>
