@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Opret alarm</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+
+<section class="layout">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="content">
+        <h1>Opret alarm</h1>
+
+        <p th:if="${successMessage}" th:text="${successMessage}" class="success-message"></p>
+        <p th:if="${errorMessage}" th:text="${errorMessage}" class="error-message"></p>
+
+        <form th:action="@{/alarm-create}" th:object="${alarmRule}" method="post">
+            <div>
+                <label for="fieldName">Hvad skal overvåges?</label>
+                <select id="fieldName" th:field="*{fieldName}" required>
+                    <option value="repairCost">Reparationsomkostninger</option>
+                    <option value="availableCarsCount">Antal ledige biler</option>
+                    <option value="activeRevenue">Aktiv omsætning</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="operator">Betingelse</label>
+                <select id="operator" th:field="*{operator}" required>
+                    <option value="" disabled selected>-- Vælg operator --</option>
+                    <option value="GREATER_THAN">Større end</option>
+                    <option value="LESS_THAN">Mindre end</option>
+                    <option value="EQUALS">Lig med</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="compareValue">Værdi</label>
+                <input type="number" id="compareValue" th:field="*{compareValue}" step="any" required>
+            </div>
+
+            <button type="submit">Opret alarm</button>
+        </form>
+    </main>
+</section>
+
+</body>
+</html>
