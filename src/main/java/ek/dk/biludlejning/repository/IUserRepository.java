@@ -19,4 +19,13 @@ public interface IUserRepository {
     int deleteUser(int id);
 
     List<User> getAllUsers();
+
+    List<User> findUsersFiltered(Integer userId,
+                                 String username,
+                                 String role,
+                                 String firstName,
+                                 String lastName,
+                                 String phone,
+                                 String email,
+                                 Boolean active);
 }

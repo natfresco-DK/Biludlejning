@@ -11,6 +11,7 @@ public class RentalAgreement {
     protected int monthly_payment;
     protected int maxKm;
     protected int createdBy;
+    protected String createdByUsername;
     protected int car;
     protected int customer;
     protected Boolean active = true;
@@ -97,6 +98,14 @@ public class RentalAgreement {
 
     public void setCreatedBy(int createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public String getCreatedByUsername() {
+        return createdByUsername;
+    }
+
+    public void setCreatedByUsername(String createdByUsername) {
+        this.createdByUsername = createdByUsername;
     }
 
     public int getCar() {

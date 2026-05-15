@@ -23,6 +23,18 @@ public interface ICarRepository {
 
     int findAllRentedCars();
 
+    List<Car> findCarsFiltered(Integer carId,
+                               String regNr,
+                               String vin,
+                               String brand,
+                               String carModel,
+                               String location,
+                               Integer odometerMin,
+                               Integer odometerMax,
+                               String carDescription,
+                               String status,
+                               Boolean active);
+
     //delete car by ID in table
     int deleteById(int id);
 

@@ -20,39 +20,65 @@
                 + Opret lejeaftale
             </a>
         </div>
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Aftale ID</th>
-                <th>Kunde ID</th>
-                <th>Bil ID</th>
-                <th>Startdato</th>
-                <th>Slutdato</th>
-                <th>Udbetaling</th>
-                <th>Månedlig betaling</th>
-                <th>Maks km</th>
-                <th>Oprettet af</th>
-                <th>Aktiv</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:if="${#lists.isEmpty(rentalAgreementList)}">
-                <td colspan="10">Ingen lejeaftaler fundet</td>
-            </tr>
-            <tr th:each="agreement : ${rentalAgreementList}">
-                <td th:text="${agreement.agreementId}"></td>
-                <td th:text="${agreement.customer}"></td>
-                <td th:text="${agreement.car}"></td>
-                <td th:text="${agreement.startDate}"></td>
-                <td th:text="${agreement.endDate}"></td>
-                <td th:text="${agreement.downpayment}"></td>
-                <td th:text="${agreement.monthly_payment}"></td>
-                <td th:text="${agreement.maxKm}"></td>
-                <td th:text="${agreement.createdBy}"></td>
-                <td th:text="${agreement.active}"></td>
-            </tr>
-            </tbody>
-        </table>
+        <form th:action="@{/lease-agreements}" method="get">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Aftale ID</th>
+                    <th>Kunde ID</th>
+                    <th>Bil ID</th>
+                    <th>Startdato</th>
+                    <th>Slutdato</th>
+                    <th>Udbetaling</th>
+                    <th>Månedlig betaling</th>
+                    <th>Maks km</th>
+                    <th>Oprettet af</th>
+                    <th>Aktiv</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th><input type="number" min="0" name="agreementId" th:value="${param.agreementId}" placeholder="Aftale ID"></th>
+                    <th><input type="number" min="0" name="customerId" th:value="${param.customerId}" placeholder="Kunde ID"></th>
+                    <th><input type="number" min="0" name="carId" th:value="${param.carId}" placeholder="Bil ID"></th>
+                    <th><input type="date" name="startDate" th:value="${param.startDate}" placeholder="Startdato"></th>
+                    <th><input type="date" name="endDate" th:value="${param.endDate}" placeholder="Slutdato"></th>
+                    <th><input type="number" min="0" name="downpayment" th:value="${param.downpayment}" placeholder="Udbetaling"></th>
+                    <th><input type="number" min="0" name="monthlyPayment" th:value="${param.monthlyPayment}" placeholder="Månedlig betaling"></th>
+                    <th><input type="number" min="0" name="maxKm" th:value="${param.maxKm}" placeholder="Maks km"></th>
+                    <th><input type="text" name="createdByUsername" th:value="${param.createdByUsername}" placeholder="Oprettet af"></th>
+                    <th>
+                        <select name="active">
+                            <option value="" th:selected="${active == null or active == ''}">Begge</option>
+                            <option value="true" th:selected="${active == true}">True</option>
+                            <option value="false" th:selected="${active == false}">False</option>
+                        </select>
+                    </th>
+                    <th>
+                        <button type="submit" class="btn-primary">Filter</button>
+                        <a th:href="@{/lease-agreements}" class="btn-primary">Reset</a>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(rentalAgreementList)}">
+                    <td colspan="11">Ingen lejeaftaler fundet</td>
+                </tr>
+                <tr th:each="agreement : ${rentalAgreementList}">
+                    <td th:text="${agreement.agreementId}"></td>
+                    <td th:text="${agreement.customer}"></td>
+                    <td th:text="${agreement.car}"></td>
+                    <td th:text="${agreement.startDate}"></td>
+                    <td th:text="${agreement.endDate}"></td>
+                    <td th:text="${agreement.downpayment}"></td>
+                    <td th:text="${agreement.monthly_payment}"></td>
+                    <td th:text="${agreement.maxKm}"></td>
+                    <td th:text="${agreement.createdByUsername}"></td>
+                    <td th:text="${agreement.active}"></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
 
     </main>
 </section>

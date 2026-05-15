@@ -36,20 +36,38 @@ public class CarController {
 
     @GetMapping("/cars")
     public String cars(Model model,
-                                 @SessionAttribute(name = "currentUser", required = false) User currentUser) {
+                       @RequestParam(required = false) Integer carId,
+                       @RequestParam(required = false) String regNr,
+                       @RequestParam(required = false) String vin,
+                       @RequestParam(required = false) String brand,
+                       @RequestParam(required = false) String carModel,
+                       @RequestParam(required = false) String location,
+                       @RequestParam(required = false) Integer odometerMin,
+                       @RequestParam(required = false) Integer odometerMax,
+                       @RequestParam(required = false) String carDescription,
+                       @RequestParam(required = false) String status,
+                       @RequestParam(required = false) Boolean active,
+                       @SessionAttribute(name = "currentUser", required = false) User currentUser) {
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
             return accessCheck;
         }
-        model.addAttribute("currentUser", currentUser);
-        List<Car> cars = carService.getAllCars();
-        model.addAttribute("cars", cars);
-        Map<Integer, Boolean> leaseCompletedMap =  new HashMap<>();
+
+        List<Car> cars = carService.findCarsFiltered(
+                carId, regNr, vin, brand, carModel, location,
+                odometerMin, odometerMax, carDescription, status, active
+        );
+        Map<Integer, Boolean> leaseCompletedMap = new HashMap<>();
         for (Car car : cars) {
             leaseCompletedMap.put(car.getCarId(),
                     rentalAgreementService.isLeaseCompleted(car.getCarId()));
         }
-        model.addAttribute("leaseCompletedMap",leaseCompletedMap);
+
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("status", status);
+        model.addAttribute("active", active);
+        model.addAttribute("cars", cars);
+        model.addAttribute("leaseCompletedMap", leaseCompletedMap);
         model.addAttribute("activePage", "cars");
         logger.info("User with User id={} with email={} accessed /cars", (currentUser != null ? currentUser.getId() : "null"), (currentUser != null ? currentUser.getEmail() : "null"));
         return "cars";

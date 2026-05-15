@@ -9,8 +9,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -87,6 +89,45 @@ public class DamageReportRepository implements IDamageReportRepository {
         String sql = "SELECT * FROM damage_reports";
         logger.info("Successfully fetched all damage reports. Total count: {}", jdbcTemplate.query(sql, damageReportRowMapper).size());
         return jdbcTemplate.query(sql, damageReportRowMapper);
+    }
+
+    @Override
+    public List<DamageReport> getFilteredDamageReports(Integer reportId,
+                                                       LocalDate returnDate,
+                                                       LocalDate reportDate,
+                                                       Double cost,
+                                                       Integer odometer,
+                                                       Integer rentalAgreementId) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM damage_reports WHERE 1=1");
+        List<Object> params = new java.util.ArrayList<>();
+
+        if (reportId != null) {
+            sql.append(" AND damage_report_id = ?");
+            params.add(reportId);
+        }
+        if (returnDate != null) {
+            sql.append(" AND return_date = ?");
+            params.add(Date.valueOf(returnDate));
+        }
+        if (reportDate != null) {
+            sql.append(" AND report_date = ?");
+            params.add(Date.valueOf(reportDate));
+        }
+        if (cost != null) {
+            sql.append(" AND cost = ?");
+            params.add(cost);
+        }
+        if (odometer != null) {
+            sql.append(" AND odometer = ?");
+            params.add(odometer);
+        }
+        if (rentalAgreementId != null) {
+            sql.append(" AND agreement_id = ?");
+            params.add(rentalAgreementId);
+        }
+
+        logger.info("Executing filtered damage reports query: {}", sql);
+        return jdbcTemplate.query(sql.toString(), damageReportRowMapper, params.toArray());
     }
 
     @Override

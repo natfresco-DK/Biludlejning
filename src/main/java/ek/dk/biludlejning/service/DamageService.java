@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,16 +25,19 @@ public class DamageService {
     private final ICarRepository carRepository;
     private final IRentalAgreementRepository rentalAgreementRepository;
     private final IDamageItemRepository damageItemRepository;
+    private final UserService userService;
 
     private static final Logger logger = LoggerFactory.getLogger(DamageService.class);
 
+
     public DamageService(IDamageReportRepository damageReportRepository,
                          ICarRepository carRepository,
-                         IRentalAgreementRepository rentalAgreementRepository, IDamageItemRepository damageItemRepository) {
+                         IRentalAgreementRepository rentalAgreementRepository, IDamageItemRepository damageItemRepository, UserService userService) {
         this.damageReportRepository = damageReportRepository;
         this.carRepository = carRepository;
         this.rentalAgreementRepository = rentalAgreementRepository;
         this.damageItemRepository = damageItemRepository;
+        this.userService = userService;
     }
 
     @Transactional
@@ -68,6 +72,48 @@ public class DamageService {
             report.setCost(totalCost);
         }
 
+        return reports;
+    }
+
+    public List<DamageReport> getFilteredDamageReports(Integer reportId,
+                                                        LocalDate returnDate,
+                                                        LocalDate reportDate,
+                                                        Double cost,
+                                                        Integer odometer,
+                                                        Integer rentalAgreementId,
+                                                        String registeredByUsername) {
+        logger.info("Filtering damage reports with criteria - reportId: {}, returnDate: {}, reportDate: {}, cost: {}, odometer: {}, rentalAgreementId: {}, registeredBy: {}",
+                reportId, returnDate, reportDate, cost,odometer, rentalAgreementId, registeredByUsername);
+
+        List<DamageReport> reports = damageReportRepository.getFilteredDamageReports(
+                reportId, returnDate, reportDate, cost, odometer, rentalAgreementId);
+
+        for (DamageReport report : reports) {
+            userService.findById(report.getRegisteredBy()).
+                    ifPresent(user -> report.setRegisteredByUsername(user.getUsername()));
+
+            double totalCost = 0;
+            List<DamageItem> damageItems = damageItemRepository.getDamageItemsByReportId(report.getDamgeReportId());
+            for (DamageItem item : damageItems) {
+                totalCost += item.getPrice();
+            }
+            report.setCost(totalCost);
+        }
+
+        if (registeredByUsername != null && !registeredByUsername.isBlank()) {
+            List<DamageReport> filteredReports = new ArrayList<>();
+
+            for (DamageReport report : reports) {
+                if (report.getRegisteredByUsername() != null &&
+                        report.getRegisteredByUsername()
+                                .toLowerCase()
+                                .contains(registeredByUsername.trim().toLowerCase())) {
+                    filteredReports.add(report);
+                }
+            }
+
+            reports = filteredReports;
+        }
         return reports;
     }
 
