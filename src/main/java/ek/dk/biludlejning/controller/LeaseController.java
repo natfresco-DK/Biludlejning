@@ -106,26 +106,16 @@ public class LeaseController {
         model.addAttribute("currentUser", currentUser);
         String accessCheck = checkAccess(currentUser);
         if (accessCheck != null) {
-            logger.warn("Access check has been denied for User id={} with email={} at @POST /lease-create", currentUser.getId(), currentUser.getEmail());
+            logger.warn("Access check has been denied for User id={} with email={} at @POST /lease-create",
+                    currentUser.getId(), currentUser.getEmail());
             return accessCheck;
         }
 
-        boolean shouldCreateCustomer = "true".equalsIgnoreCase(createNewCustomer)
-                || (newCustomerFirstName != null && !newCustomerFirstName.trim().isEmpty());
-
-
-        if (!shouldCreateCustomer) {
-            model.addAttribute("activePage", "lease-agreements");
-            model.addAttribute("errorMessage", "Vælg en eksisterende kunde eller markér 'Opret ny kunde' og udfyld navn");
-            model.addAttribute("rentalAgreement", rentalAgreement);
-            model.addAttribute("customers", customerService.getAllActiveCustomers());
-            model.addAttribute("cars", carService.getAvailableCars());
-            return "lease_create";
-        }
+        boolean shouldCreateCustomer = "true".equalsIgnoreCase(createNewCustomer);
 
         Customer newCustomer = null;
+
         if (shouldCreateCustomer) {
-            // Require first and last name for new customer
             if (newCustomerFirstName == null || newCustomerFirstName.trim().isEmpty()
                     || newCustomerLastName == null || newCustomerLastName.trim().isEmpty()) {
                 model.addAttribute("activePage", "lease-agreements");
@@ -147,8 +137,22 @@ public class LeaseController {
             newCustomer.setCity((newCustomerCity != null && !newCustomerCity.trim().isEmpty()) ? newCustomerCity.trim() : null);
         }
 
+        if (!shouldCreateCustomer && rentalAgreement.getCustomer() == 0) {
+            model.addAttribute("activePage", "lease-agreements");
+            model.addAttribute("errorMessage", "Vælg en eksisterende kunde eller markér 'Opret ny kunde' og udfyld navn");
+            model.addAttribute("rentalAgreement", rentalAgreement);
+            model.addAttribute("customers", customerService.getAllActiveCustomers());
+            model.addAttribute("cars", carService.getAvailableCars());
+            return "lease_create";
+        }
+
+        if (shouldCreateCustomer) {
+            Customer createdCustomer = customerService.createCustomer(newCustomer);
+            rentalAgreement.setCustomer(createdCustomer.getCustomerId());
+        }
+
         var validationError = rentalAgreementService.createRentalAgreement(
-                rentalAgreement, currentUser.getId(), newCustomer
+                rentalAgreement, currentUser.getId(), null
         );
 
         if (validationError.isPresent()) {
