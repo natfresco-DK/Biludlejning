@@ -37,6 +37,7 @@
 
             <div class="form-section">
                 <!-- STEP 1: Decode VIN -->
+                <a class="btn-secondary" href="https://randomvin.com/" target="_blank">Generer VIN</a>
                 <form class="car-form" method="post" th:action="@{/car/decode}" th:if="${step == null or step == 1}">
                     <div>
                         <strong>Trin 1:</strong> Indtast VIN nummeret for at hente bilens oplysninger fra databasen.
