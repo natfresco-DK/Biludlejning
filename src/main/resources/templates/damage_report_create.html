@@ -18,36 +18,38 @@
         <p th:if="${successMessage}" th:text="${successMessage}" class="success-message"></p>
         <p th:if="${errorMessage}" th:text="${errorMessage}" class="error-message"></p>
 
-        <form th:action="@{/damage-report-create}" th:object="${damageReport}" method="post">
+        <form class="damage-form" th:action="@{/damage-report-create}" th:object="${damageReport}" method="post">
 
             <div th:if="${#lists.isEmpty(rentalAgreements)}" class="error-message">
-                Der findes ingen lejeaftaler med en bil i status RETURNED.
+                Der findes ingen lejeaftaler, hvor bilen har status <strong>RETURNED</strong>.
             </div>
+            <section class="damage-card">
 
-            <div>
                 <h2>Skadeoplysninger</h2>
 
-                <label for="rentalAgreement">Lejeaftale / returneret bil:</label>
-                <select id="rentalAgreement" th:field="*{rentalAgreementId}" required>
-                    <option value="0" disabled selected>-- Vælg returneret bil --</option>
+                <div class="form-group">
+                    <label for="rentalAgreement">Lejeaftale / returneret bil:</label>
+                    <select id="rentalAgreement" th:field="*{rentalAgreementId}" required>
+                        <option value="0" disabled selected>-- Vælg returneret bil --</option>
 
-                    <option th:each="agreement : ${rentalAgreements}"
-                            th:value="${agreement.agreementId}"
-                            th:text="${'Aftale ' + agreement.agreementId + ' - Bil ID: ' + agreement.car}">
-                    </option>
-                </select>
-            </div>
+                        <option th:each="agreement : ${rentalAgreements}"
+                                th:value="${agreement.agreementId}"
+                                th:text="${'Aftale ' + agreement.agreementId + ' - Bil ID: ' + agreement.car}">
+                        </option>
+                    </select>
+                </div>
 
-            <div>
-                <label for="returnDate">Returneringsdato:</label>
-                <input type="date" id="returnDate" th:field="*{returnDate}" required>
-            </div>
+                <div class="form-group">
+                    <label for="returnDate">Returneringsdato:</label>
+                    <input type="date" id="returnDate" th:field="*{returnDate}" required>
+                </div>
 
-            <div>
-                <label for="odometer">Kilometertæller:</label>
-                <input type="number" id="odometer" th:field="*{odometer}" min="0" step="1" required>
-            </div>
+                <div class="form-group">
+                    <label for="odometer">Kilometertæller:</label>
+                    <input type="number" id="odometer" th:field="*{odometer}" min="0" step="1" required>
+                </div>
 
+            </section>
             <button type="submit">Opret skaderapport</button>
         </form>
     </main>
