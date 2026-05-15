@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
@@ -50,26 +51,30 @@ public class CustomerRepository implements ICustomerRepository {
     public Customer createCustomer(Customer customer) {
         String sql = "INSERT INTO customers (first_name, last_name, email, phone, licence_no, street_address, zip_code, city) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql,
-                customer.getFirstName(),
-                customer.getLastName(),
-                customer.getEmail(),
-                customer.getPhone(),
-                customer.getLicenceNo(),
-                customer.getStreetAddress(),
-                customer.getZipCode(),
-                customer.getCity()
-        );
 
-        String querySql = "SELECT customer_id FROM customers WHERE first_name = ? AND last_name = ? ORDER BY customer_id DESC LIMIT 1";
-        Integer customerId = jdbcTemplate.queryForObject(querySql, Integer.class,
-                customer.getFirstName(),
-                customer.getLastName());
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 
+        jdbcTemplate.update(connection -> {
+            java.sql.PreparedStatement ps = connection.prepareStatement(sql, new String[]{"customer_id"});
+            ps.setString(1, customer.getFirstName());
+            ps.setString(2, customer.getLastName());
+            ps.setString(3, customer.getEmail());
+            ps.setString(4, customer.getPhone());
+            ps.setString(5, customer.getLicenceNo());
+            ps.setString(6, customer.getStreetAddress());
+            ps.setInt(7, customer.getZipCode());
+            ps.setString(8, customer.getCity());
+            return ps;
+        }, keyHolder);
 
-        customer.setCustomerId(customerId);
+        Number generatedId = keyHolder.getKey();
+        if (generatedId == null) {
+            throw new IllegalStateException("Could not retrieve generated customer ID");
+        }
 
-        logger.info("Successfully created customer with id={}: ", customer.getCustomerId());
+        customer.setCustomerId(generatedId.intValue());
+
+        logger.info("Successfully created customer with id={}", customer.getCustomerId());
         return customer;
     }
 
@@ -94,10 +99,10 @@ public class CustomerRepository implements ICustomerRepository {
         String sql = "SELECT * FROM customers WHERE " + attribute + " = ?";
         try {
             Customer customer = jdbcTemplate.queryForObject(sql, customerRowMapper, data);
-            logger.info("Successfully found customer with attribute={} and data={}", attribute,  data);
+            logger.info("Successfully found customer with attribute={} and data={}", attribute, data);
             return Optional.ofNullable(customer);
         } catch (EmptyResultDataAccessException e) {
-            logger.error("EmptyResultDataAccessException: No customer found with attribute={} and data={}", attribute,  data);
+            logger.error("EmptyResultDataAccessException: No customer found with attribute={} and data={}", attribute, data);
             return Optional.empty();
         }
     }
