@@ -201,7 +201,7 @@ public class CarController {
 
         String role = currentUser.getRole() != null ? currentUser.getRole().trim() : "";
 
-        if (!("DATAREGISTRERING".equals(role) || "ADMIN".equals(role))) {
+        if (!("DATAREGISTRERING".equals(role) || "ADMIN".equals(role) || "FORETNINGSUDVIKLING".equals(role))) {
             logger.warn("Access denied for user='{}' with role='{}'", currentUser.getEmail(), role);
             return "redirect:/access-denied";
         }

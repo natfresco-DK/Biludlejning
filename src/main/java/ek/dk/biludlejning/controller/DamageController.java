@@ -204,7 +204,7 @@ public class DamageController {
 
         String role = currentUser.getRole() != null ? currentUser.getRole().trim() : "";
 
-        if (!("DATAREGISTRERING".equals(role) || "ADMIN".equals(role))) {
+        if (!("SKADE/UDBEDRING".equals(role) || "ADMIN".equals(role))) {
             logger.warn("Access denied for user='{}' with role='{}'", currentUser.getEmail(), role);
             return "redirect:/access-denied";
         }
