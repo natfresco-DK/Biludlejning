@@ -7,8 +7,8 @@ public class RentalAgreement {
     protected int agreementId;
     protected LocalDate startDate;
     protected LocalDate endDate;
-    protected int downpayment;
-    protected int monthly_payment;
+    protected Double downpayment;
+    protected Double monthlyPayment;
     protected int maxKm;
     protected int createdBy;
     protected String createdByUsername;
@@ -18,7 +18,7 @@ public class RentalAgreement {
 
     public RentalAgreement() {}
 
-    public RentalAgreement(int agreementId, LocalDate startDate, LocalDate endDate, int downpayment, int maxKm, int createdBy, int car, int customer, int monthly_payment) {
+    public RentalAgreement(int agreementId, LocalDate startDate, LocalDate endDate, Double downpayment, int maxKm, int createdBy, int car, int customer, Double monthly_payment) {
         this.agreementId = agreementId;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -27,10 +27,10 @@ public class RentalAgreement {
         this.createdBy = createdBy;
         this.car = car;
         this.customer = customer;
-        this.monthly_payment = monthly_payment;
+        this.monthlyPayment = monthly_payment;
     }
 
-    public RentalAgreement(int agreementId, LocalDate startDate, LocalDate endDate, int downpayment, int maxKm, int createdBy, int car, int customer, int monthly_payment, Boolean active) {
+    public RentalAgreement(int agreementId, LocalDate startDate, LocalDate endDate, Double downpayment, int maxKm, int createdBy, int car, int customer, Double monthly_payment, Boolean active) {
         this.agreementId = agreementId;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -39,7 +39,7 @@ public class RentalAgreement {
         this.createdBy = createdBy;
         this.car = car;
         this.customer = customer;
-        this.monthly_payment = monthly_payment;
+        this.monthlyPayment = monthly_payment;
         this.active = active;
     }
 
@@ -67,20 +67,20 @@ public class RentalAgreement {
         this.endDate = endDate;
     }
 
-    public int getDownpayment() {
+    public Double getDownpayment() {
         return downpayment;
     }
 
-    public void setDownpayment(int downpayment) {
+    public void setDownpayment(Double downpayment) {
         this.downpayment = downpayment;
     }
 
-    public int  getMonthly_payment() {
-        return monthly_payment;
+    public Double  getMonthly_payment() {
+        return monthlyPayment;
     }
 
-    public void setMonthly_payment(int monthly_payment) {
-        this.monthly_payment = monthly_payment;
+    public void setMonthly_payment(Double monthly_payment) {
+        this.monthlyPayment = monthly_payment;
     }
 
 

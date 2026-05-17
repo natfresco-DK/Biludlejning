@@ -5,7 +5,7 @@
 <nav th:fragment="sidebar" class="sidebar">
     <div class="sidebar-header">
         <a th:href="@{/dashboard}">
-        <img th:src="@{/images/logo.png}" alt="logo" />
+            <img th:src="@{/images/logo.png}" alt="logo"/>
         </a>
         <div>
             <strong>Bilabonnement.dk</strong><br>
@@ -20,31 +20,31 @@
 
     <a th:href="@{/lease-agreements}" class="sidebar-item"
        th:classappend="${activePage == 'lease-agreements'} ? ' active'">
-    <i class="fa-regular fa-calendar-check"></i>
+        <i class="fa-regular fa-calendar-check"></i>
         Lejeaftaler
     </a>
 
     <a th:href="@{/damage-reports}" class="sidebar-item"
        th:classappend="${activePage == 'damage-reports'} ? ' active'">
-    <i class="fa-solid fa-triangle-exclamation"></i>
+        <i class="fa-solid fa-triangle-exclamation"></i>
         Skader
     </a>
 
     <a th:href="@{/cars}" class="sidebar-item"
        th:classappend="${activePage == 'cars'} ? ' active'">
-    <i class="fa-solid fa-car"></i>
+        <i class="fa-solid fa-car"></i>
         Biler
     </a>
 
     <a th:href="@{/reports}" class="sidebar-item"
        th:classappend="${activePage == 'reports'} ? ' active'">
-    <i class="fa-solid fa-chart-simple"></i>
+        <i class="fa-solid fa-chart-simple"></i>
         Rapporter
     </a>
 
     <a th:href="@{/users}" class="sidebar-item"
        th:classappend="${activePage == 'users'} ? ' active'">
-    <i class="fa-solid fa-users"></i>
+        <i class="fa-solid fa-users"></i>
         Brugere
     </a>
     <div th:if="${currentUser != null}" class="sidebar-user">
@@ -53,8 +53,8 @@
             <div>
                 <span class="user-label">Bruger:
                     <strong>
-                        <text th:text="${currentUser.firstname}">Fornavn</text>
-                        <text th:text="${currentUser.lastname}">Efternavn</text>
+                        <text th:text="${currentUser.firstName}">Fornavn</text>
+                        <text th:text="${currentUser.lastName}">Efternavn</text>
                     </strong>
                 </span>
 
@@ -68,12 +68,12 @@
             </div>
         </div>
     </div>
-        <form th:action="@{/logout}" method="post">
-            <button type="submit" class="logout-btn">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                Log ud
-            </button>
-        </form>
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" class="logout-btn">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Log ud
+        </button>
+    </form>
 </nav>
 
 </body>

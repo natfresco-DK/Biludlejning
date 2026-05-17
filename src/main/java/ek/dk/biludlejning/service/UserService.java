@@ -51,8 +51,8 @@ public class UserService {
     }
 
     public Optional<String> validateUser(User user) {
-        if (isBlank(user.getFirstname()) ||
-                isBlank(user.getLastname()) ||
+        if (isBlank(user.getFirstName()) ||
+                isBlank(user.getLastName()) ||
                 isBlank(user.getUsername()) ||
                 isBlank(user.getPassword()) ||
                 isBlank(user.getPhone()) ||
