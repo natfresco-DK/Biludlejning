@@ -29,7 +29,7 @@ public class UserRepository implements IUserRepository {
         User user = new User();
         user.setId(rs.getInt("user_id"));
         user.setFirstname(rs.getString("first_name"));
-        user.setLastname(rs.getString("last_name"));
+        user.setLastName(rs.getString("last_name"));
         user.setUsername(rs.getString("username"));
         user.setPassword(rs.getString("password"));
         user.setEmail(rs.getString("email"));
@@ -49,8 +49,8 @@ public class UserRepository implements IUserRepository {
     public void createUser(User user) {
         jdbcTemplate.update(
                 "INSERT INTO users (first_name, last_name, username, password, email, phone, role, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                user.getFirstname(),
-                user.getLastname(),
+                user.getFirstName(),
+                user.getLastName(),
                 user.getUsername(),
                 user.getPassword(),
                 user.getEmail(),
@@ -86,8 +86,8 @@ public class UserRepository implements IUserRepository {
     public void updateUser(User user) {
         jdbcTemplate.update(
                 "UPDATE users SET first_name = ?, last_name = ?, username = ?, password = ?, email = ?, phone = ?, role = ?, active = ? WHERE user_id = ?",
-                user.getFirstname(),
-                user.getLastname(),
+                user.getFirstName(),
+                user.getLastName(),
                 user.getUsername(),
                 user.getPassword(),
                 user.getEmail(),
