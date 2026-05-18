@@ -7,6 +7,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -32,8 +33,8 @@ public class RentalAgreementRepository implements IRentalAgreementRepository{
         rentalAgreement.setAgreementId(rs.getInt("agreement_id"));
         rentalAgreement.setStartDate(rs.getDate("start_date").toLocalDate());
         rentalAgreement.setEndDate(rs.getDate("end_date").toLocalDate());
-        rentalAgreement.setDownpayment(rs.getInt("downpayment"));
-        rentalAgreement.setMonthly_payment(rs.getInt("monthly_payment"));
+        rentalAgreement.setDownpayment(rs.getDouble("downpayment"));
+        rentalAgreement.setMonthly_payment(rs.getDouble("monthly_payment"));
         rentalAgreement.setMaxKm(rs.getInt("max_km"));
         rentalAgreement.setCreatedBy(rs.getInt("created_by"));
         rentalAgreement.setCar(rs.getInt("car_id"));
@@ -112,11 +113,11 @@ public class RentalAgreementRepository implements IRentalAgreementRepository{
         }
         if (startDate != null) {
             sql.append(" AND start_date = ?");
-            params.add(java.sql.Date.valueOf(startDate));
+            params.add(Date.valueOf(startDate));
         }
         if (endDate != null) {
             sql.append(" AND end_date = ?");
-            params.add(java.sql.Date.valueOf(endDate));
+            params.add(Date.valueOf(endDate));
         }
         if (downpayment != null) {
             sql.append(" AND downpayment = ?");

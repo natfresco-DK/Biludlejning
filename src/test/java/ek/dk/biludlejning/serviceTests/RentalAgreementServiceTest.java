@@ -47,8 +47,9 @@ class RentalAgreementServiceTest {
         rentalAgreement.setCar(2);
         rentalAgreement.setStartDate(LocalDate.now());
         rentalAgreement.setEndDate(LocalDate.now().plusDays(7));
-        rentalAgreement.setDownpayment(1000);
-        rentalAgreement.setMonthly_payment(5000);
+        rentalAgreement.setDownpayment(1000.0);
+        rentalAgreement.setMonthly_payment(5000.0
+        );
         rentalAgreement.setMaxKm(20000);
 
         car = new Car();

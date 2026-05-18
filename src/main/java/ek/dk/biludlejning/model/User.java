@@ -2,8 +2,8 @@ package ek.dk.biludlejning.model;
 
 public class User {
         protected int id;
-        protected String firstname;
-        protected String lastname;
+        protected String firstName;
+        protected String lastName;
         protected String username;
         protected String password;
         protected String email;
@@ -14,10 +14,10 @@ public class User {
 
     public User(){}
 
-        public User(int id, String firstname, String lastname, String username, String password, String email, String phone, String role,  boolean active) {
+        public User(int id, String firstName, String lastName, String username, String password, String email, String phone, String role, boolean active) {
             this.id = id;
-            this.firstname = firstname;
-            this.lastname = lastname;
+            this.firstName = firstName;
+            this.lastName = lastName;
             this.username = username;
             this.password = password;
             this.email = email;
@@ -33,18 +33,18 @@ public class User {
             this.id = id;
         }
 
-        public String getFirstname() {
-            return firstname;
+        public String getFirstName() {
+            return firstName;
         }
         public void setFirstname(String firstname) {
-            this.firstname = firstname;
+            this.firstName = firstname;
         }
 
-        public String getLastname() {
-            return lastname;
+        public String getLastName() {
+            return lastName;
         }
-        public void setLastname(String lastname) {
-            this.lastname = lastname;
+        public void setLastName(String lastname) {
+            this.lastName = lastname;
         }
 
         public String getUsername() {
