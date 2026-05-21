@@ -1,3 +1,10 @@
+DELETE FROM rental_agreements;
+DELETE FROM users;
+DELETE FROM customers;
+DELETE FROM cars;
+DELETE FROM damage_reports;
+DELETE FROM damage_items;
+
 CREATE TABLE IF NOT EXISTS users
 (
     user_id    INT AUTO_INCREMENT PRIMARY KEY,
