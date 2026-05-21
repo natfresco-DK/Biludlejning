@@ -1,9 +1,9 @@
-DELETE FROM rental_agreements;
-DELETE FROM users;
-DELETE FROM customers;
-DELETE FROM cars;
-DELETE FROM damage_reports;
-DELETE FROM damage_items;
+DROP TABLE IF EXISTS damage_items;
+DROP TABLE IF EXISTS damage_reports;
+DROP TABLE IF EXISTS rental_agreements;
+DROP TABLE IF EXISTS cars;
+DROP TABLE IF EXISTS customers;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE IF NOT EXISTS users
 (
