@@ -1,0 +1,71 @@
+@startuml
+actor User
+participant Browser
+participant DamageController
+participant RentalAgreementService
+participant DamageService
+participant "IRentalAgreementRepository" as RentalAgreementRepo
+participant "ICarRepository" as CarRepo
+participant "IDamageReportRepository" as DamageReportRepo
+
+== Load Create Damage Report Page ==
+
+User -> Browser : Open damage report form
+Browser -> DamageController : GET /damage-report-create
+
+activate DamageController
+
+DamageController -> DamageController : checkAccess()
+DamageController -> RentalAgreementService : getReturnedRentalAgreements()
+
+activate RentalAgreementService
+RentalAgreementService --> DamageController : Returned agreements
+deactivate RentalAgreementService
+
+DamageController --> Browser : damage_report_create.html
+deactivate DamageController
+
+== Submit Damage Report ==
+
+User -> Browser : Submit form
+Browser -> DamageController : POST /damage-report-create
+
+activate DamageController
+
+DamageController -> DamageController : checkAccess()
+DamageController -> DamageService : createDamageReport()
+
+activate DamageService
+
+DamageService -> DamageService : validateDamageReport()
+
+note right of DamageService
+Verify rentalAgreementId exists
+end note
+
+DamageService -> RentalAgreementRepo : findByXY()
+DamageService -> CarRepo : findByXY()
+
+note right of DamageService
+Validate car status = "RETURNED"
+end note
+
+DamageService -> DamageReportRepo : createDamageReport()
+DamageService -> DamageReportRepo : setCarToMaintenance()
+
+note right of DamageReportRepo
+Updates car status
+end note
+
+alt Error occurred
+    DamageService --> DamageController : Optional<String> error
+    DamageController --> Browser : Redirect with errorMessage
+else Success
+    DamageService --> DamageController : Empty Optional
+    DamageController --> Browser : Redirect with successMessage
+end
+
+deactivate DamageService
+deactivate DamageController
+
+@enduml

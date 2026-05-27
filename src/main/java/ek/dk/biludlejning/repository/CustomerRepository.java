@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -49,13 +50,19 @@ public class CustomerRepository implements ICustomerRepository {
 
     @Override
     public Customer createCustomer(Customer customer) {
-        String sql = "INSERT INTO customers (first_name, last_name, email, phone, licence_no, street_address, zip_code, city) " +
+        String sql = "INSERT INTO customers (first_name, " +
+                "last_name, " +
+                "email, " +
+                "phone, " +
+                "licence_no, " +
+                "street_address, " +
+                "zip_code, city) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
-            java.sql.PreparedStatement ps = connection.prepareStatement(sql, new String[]{"customer_id"});
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"customer_id"});
             ps.setString(1, customer.getFirstName());
             ps.setString(2, customer.getLastName());
             ps.setString(3, customer.getEmail());
