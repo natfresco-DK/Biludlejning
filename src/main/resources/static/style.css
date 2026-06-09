@@ -83,6 +83,17 @@ body {
     background: #1859be;
 }
 
+.btn-primary:disabled {
+    background: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn-primary:disabled:hover {
+    background: #ccc;
+}
+
 .table {
     width: 100%;
     table-layout: auto;
