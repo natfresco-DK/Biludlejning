@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Skaderapporter</title>
     <link rel="stylesheet" th:href="@{/style.css}">
-
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
@@ -22,68 +21,81 @@
             </a>
         </div>
 
-        <form th:action="@{/damage-reports}" method="get">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Skade raport ID</th>
-                    <th>Afleverings Dato</th>
-                    <th>Raport Dato</th>
-                    <th>pris</th>
-                    <th>odometer</th>
-                    <th>lejeaftale ID</th>
-                    <th>registreret af</th>
-                    <th>Handling</th>
-                </tr>
-                <tr>
-                    <th><input type="number" min="0" name="reportId" th:value="${param.reportId}" placeholder="Car ID"></th>
-                    <th><input type="date" name="returnDate" th:value="${param.returnDate}" placeholder="Afleverings Dato"></th>
-                    <th><input type="date" name="reportDate" th:value="${param.reportDate}" placeholder="Raport Dato"></th>
-                    <th><input type="number" min="0" name="cost" th:value="${param.cost}" placeholder="pris"></th>
-                    <th><input type="number" min="0" name="odometer" th:value="${param.odometer}" placeholder="odometer"></th>
-                    <th><input type="number" min="0" name="rentalAgreementId" th:value="${param.rentalAgreementId}" placeholder="lejeaftale ID"></th>
-                    <th><input type="text" name="registeredByUsername" th:value="${param.registeredByUsername}" placeholder="registreret af"></th>
-                    <th>
-                        <button type="submit" class="btn-primary">Filter</button>
-                        <a th:href="@{/damage-reports}" class="btn-primary">Reset</a>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:if="${#lists.isEmpty(damageReportList)}">
-                    <td colspan="10">Ingen skaderapporter fundet</td>
-                </tr>
-                <tr th:each="report : ${damageReportList}">
-                    <td th:text="${report.damgeReportId}"></td>
-                    <td th:text="${report.returnDate}"></td>
-                    <td th:text="${report.reportDate}"></td>
-                    <td th:text="${report.cost}"></td>
-                    <td th:text="${report.odometer}"></td>
-                    <td th:text="${report.rentalAgreementId}"></td>
-                    <td th:text="${report.registeredByUsername}"></td>
-                    <td>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Skade raport ID</th>
+                <th>Afleverings Dato</th>
+                <th>Raport Dato</th>
+                <th>pris</th>
+                <th>odometer</th>
+                <th>lejeaftale ID</th>
+                <th>registreret af</th>
+                <th>Handling</th>
+            </tr>
+            <tr>
+                <th>
+                    <form th:action="@{/damage-reports}" method="get">
+                        <input type="number" min="0" name="reportId" th:value="${param.reportId}" placeholder="Car ID">
+                </th>
+                <th>
+                    <input type="date" name="returnDate" th:value="${param.returnDate}" placeholder="Afleverings Dato">
+                </th>
+                <th>
+                    <input type="date" name="reportDate" th:value="${param.reportDate}" placeholder="Raport Dato">
+                </th>
+                <th>
+                    <input type="number" min="0" name="cost" th:value="${param.cost}" placeholder="pris">
+                </th>
+                <th>
+                    <input type="number" min="0" name="odometer" th:value="${param.odometer}" placeholder="odometer">
+                </th>
+                <th>
+                    <input type="number" min="0" name="rentalAgreementId" th:value="${param.rentalAgreementId}"
+                           placeholder="lejeaftale ID">
+                </th>
+                <th>
+                    <input type="text" name="registeredByUsername" th:value="${param.registeredByUsername}"
+                           placeholder="registreret af">
+                </th>
+                <th class="table-actions">
+                    <button type="submit" class="btn-primary">Filter</button>
+                    <a th:href="@{/damage-reports}" class="btn-primary">Reset</a>
+                    </form>
+                </th>
+            </tr>
+            </thead>
 
-                <form th:action="@{/add-damage-item/{id}(id=${report.damgeReportId})}" method="get" style="display: inline;">
-                    <button type="submit" class="btn-primary">
+            <tbody>
+            <tr th:if="${#lists.isEmpty(damageReportList)}">
+                <td>Ingen skaderapporter fundet</td>
+            </tr>
+
+            <tr th:each="report : ${damageReportList}">
+                <td th:text="${report.damgeReportId}"></td>
+                <td th:text="${report.returnDate}"></td>
+                <td th:text="${report.reportDate}"></td>
+                <td th:text="${report.cost}"></td>
+                <td th:text="${report.odometer}"></td>
+                <td th:text="${report.rentalAgreementId}"></td>
+                <td th:text="${report.registeredByUsername}"></td>
+                <td class="table-actions">
+                    <a th:href="@{/add-damage-item/{id}(id=${report.damgeReportId})}"
+                       class="btn-primary">
                         Tilføj skade
-                    </button>
-                </form>
+                    </a>
 
-                <form th:action="@{/damage-report/{id}(id=${report.damgeReportId})}" method="get" style="display: inline;">
-                    <button type="submit" class="btn-primary">
+                    <a th:href="@{/damage-report/{id}(id=${report.damgeReportId})}"
+                       class="btn-primary">
                         Vis
-                    </button>
-                </form>
-
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </form>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
     </main>
 </section>
-
 
 </body>
 </html>
