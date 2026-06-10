@@ -68,7 +68,7 @@
 
             <tbody>
             <tr th:if="${#lists.isEmpty(damageReportList)}">
-                <td colspan="8">Ingen skaderapporter fundet</td>
+                <td>Ingen skaderapporter fundet</td>
             </tr>
 
             <tr th:each="report : ${damageReportList}">

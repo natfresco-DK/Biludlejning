@@ -104,7 +104,6 @@
                 <td th:text="${car.carDescription}"></td>
                 <td th:text="${car.status}"></td>
                 <td th:text="${car.active}"></td>
-                <td></td>
                 <td>
                     <form th:action="@{/car-return/{carId}(carId=${car.carId})}" method="post" style="display:inline;">
                         <button type="submit"
