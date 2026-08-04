@@ -37,7 +37,6 @@ public class AuthService {
             logger.info("Successfully found user with id='{}', starts comparing passwords", user.getId());
             String hashedInput = hashPassword(password);
             logger.debug("Hashed password: '{}'", hashedInput);
-            logger.debug("Plain password: '{}'", password);
             logger.debug("Matching results: stored='{}', input='{}'", user.getPassword(), hashedInput);
 
             //checks if password and hashedpassword matches
